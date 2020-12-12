@@ -1,0 +1,27 @@
+version: '3.7'
+services:
+  api:
+    image: kopernick/hhapp-api
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile
+    ports:
+      - 8300:3000
+      - 9229:9229 # Node debug
+    volumes:
+      - '..:/app'
+    command: sh -c 'npx wait-on tcp:database:5432 && npm run start:debug'
+    restart: 'unless-stopped'
+
+  database:
+    image: postgres
+    restart: 'unless-stopped'
+    volumes:
+      - 'database:/var/lib/postgresql/data'
+    environment: 
+      - POSTGRES_PASSWORD=p455word
+    ports:
+      - '5432'
+
+volumes:
+  database:

@@ -2,9 +2,9 @@ version: '3.7'
 services:
   api:
     image: kopernick/hhapp-api
-    build:
+    build:  
       context: ..
-      dockerfile: ./docker/Dockerfile
+      dockerfile: ./docker/api/Dockerfile
     ports:
       - 8300:3000
       - 9229:9229 # Node debug
@@ -12,9 +12,16 @@ services:
       - '..:/app'
     command: sh -c 'npx wait-on tcp:database:5432 && npm run start:debug'
     restart: 'unless-stopped'
+    environment: 
+      - DB_USERNAME=hhapp
+      - DB_PASSWORD=p455word
+      - DB_DATABASE=hhapp
 
   database:
-    image: postgres
+    image: kopernick/hhapp-database
+    build:
+      context: ..
+      dockerfile: ./docker/database/Dockerfile
     restart: 'unless-stopped'
     volumes:
       - 'database:/var/lib/postgresql/data'
@@ -22,6 +29,19 @@ services:
       - POSTGRES_PASSWORD=p455word
     ports:
       - '5432'
+
+  database-admin:
+    image: dpage/pgadmin4
+    ports:
+      - "8301:8111"
+    volumes:
+      - "${PWD}/docker/database/servers.json:/pgadmin4/servers.json"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=xd@xd.pl
+      - PGADMIN_LISTEN_PORT=8111
+      - PGADMIN_DEFAULT_PASSWORD=p455word
+      - PGADMIN_SERVER_JSON_FILE=/pgadmin4/servers.json
+    restart: unless-stopped
 
 volumes:
   database:

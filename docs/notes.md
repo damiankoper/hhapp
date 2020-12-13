@@ -10,9 +10,9 @@
 * Username
 * Password
 * Color
-* Avatar
+* Sex
   
-## Shopping cCategory
+## Shopping Category
 * CRUD
 
 ### Fields

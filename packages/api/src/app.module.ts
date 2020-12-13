@@ -4,6 +4,7 @@ import { ConfigModule } from './config/config.module';
 import { ConfigService } from './config/config.service';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { ShoppingModule } from './shopping/shopping.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { AuthModule } from './auth/auth.module';
     }),
     UserModule,
     AuthModule,
+    ShoppingModule,
   ],
   controllers: [],
   providers: [],

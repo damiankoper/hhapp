@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { JwtModuleOptions, JwtOptionsFactory } from '@nestjs/jwt';
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
+import { Category } from 'src/shopping/entities/category.entity';
+import { Shop } from 'src/shopping/entities/shop.entity';
 import { User } from 'src/user/entities/user.entity';
 
 @Injectable()
@@ -19,7 +21,7 @@ export class ConfigService implements TypeOrmOptionsFactory, JwtOptionsFactory {
       username: process.env['DB_USERNAME'] || 'root',
       password: process.env['DB_PASSWORD'] || 'password',
       database: process.env['DB_DATABASE'] || 'main',
-      entities: [User],
+      entities: [User, Shop, Category],
       synchronize: true,
       logging:
         process.env['NODE_ENV'] !== 'production'

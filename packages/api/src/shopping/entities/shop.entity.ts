@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString } from 'class-validator';
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Item } from './item.entity';
 
 @Entity()
 export class Shop {
@@ -10,4 +11,7 @@ export class Shop {
   @IsString()
   @Column()
   name: string;
+
+  @OneToMany(() => Item, (item) => item.shop)
+  items: Item[];
 }

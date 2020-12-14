@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsBoolean, IsString } from 'class-validator';
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
-
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Item } from './item.entity';
 @Entity()
 export class Category {
   @PrimaryGeneratedColumn() id: number;
@@ -15,4 +15,7 @@ export class Category {
   @IsBoolean()
   @Column()
   sharedByDefault: boolean;
+
+  @OneToMany(() => Item, (item) => item.category)
+  items: Item[];
 }

@@ -14,8 +14,8 @@ import { UserCrudService } from './user-crud.service';
     alwaysPaginate: true,
   },
 })
-@ApiTags('user')
-@Controller('user')
+@ApiTags('users')
+@Controller('users')
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
 export class UserCrudController implements CrudController<User> {

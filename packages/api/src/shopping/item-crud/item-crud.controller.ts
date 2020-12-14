@@ -2,21 +2,22 @@ import { Controller, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Crud, CrudController } from '@nestjsx/crud';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { Category } from '../entities/category.entity';
-import { CategoryCrudService } from './category-crud.service';
+import { Item } from '../entities/item.entity';
+import { Shop } from '../entities/shop.entity';
+import { ItemCrudService } from './item-crud.service';
 
 @Crud({
   model: {
-    type: Category,
+    type: Shop,
   },
   query: {
     alwaysPaginate: true,
   },
 })
-@ApiTags('categories')
-@Controller('categories')
+@ApiTags('items')
+@Controller('items')
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
-export class CategoryCrudController implements CrudController<Category> {
-  constructor(public service: CategoryCrudService) {}
+export class ItemCrudController implements CrudController<Item> {
+  constructor(public service: ItemCrudService) {}
 }

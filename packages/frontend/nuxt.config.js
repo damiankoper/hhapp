@@ -17,7 +17,7 @@ export default {
   css: [],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
-  plugins: [],
+  plugins: ['@/plugins/composition-api'],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,
@@ -48,8 +48,8 @@ export default {
       themes: {
         light: {
           primary: '#f56d1e',
+          accent: '#f89861',
           /*
-          accent: colors.grey.darken3,
           secondary: colors.amber.darken3,
           info: colors.teal.lighten1,
           warning: colors.amber.base,

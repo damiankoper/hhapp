@@ -28,15 +28,16 @@
               mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}
             </v-icon>
           </v-list-item-action>
-          <v-list-item-content>Mini menu</v-list-item-content>
+          <v-list-item-content>Mini&nbsp;menu</v-list-item-content>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar clipped-left fixed app dense>
+    <v-app-bar clipped-left fixed app>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
+      <Title class="ml-1" :subtitle="title" :size="8" />
     </v-app-bar>
     <v-main class="main">
-      <v-container>
+      <v-container fluid>
         <nuxt />
       </v-container>
     </v-main>
@@ -46,15 +47,25 @@
   </v-app>
 </template>
 
-<script>
+<script lang="ts">
 import Vue from 'vue'
+import { navigationStore } from '~/store'
+
 export default Vue.extend({
   data() {
     return {
+      items: [
+        { icon: 'mdi-apps', title: 'Dashboard', to: '/' },
+        { icon: 'mdi-account', title: 'Users', to: '/users' },
+      ],
       drawer: true,
-      items: [{ icon: 'mdi-apps', title: 'Dashboard', to: '/' }],
-      miniVariant: false,
+      miniVariant: true,
     }
+  },
+  computed: {
+    title(): string {
+      return navigationStore.title // TODO LEFT HERE
+    },
   },
 })
 </script>

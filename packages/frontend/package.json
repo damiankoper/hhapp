@@ -16,11 +16,13 @@
     "@nuxtjs/axios": "^5.12.2",
     "@nuxtjs/pwa": "^3.0.2",
     "@types/animejs": "^3.1.2",
+    "@vue/composition-api": "^1.0.0-beta.21",
     "animejs": "^3.2.1",
     "core-js": "^3.6.5",
     "nuxt": "^2.14.6",
     "vue": "^2.6.12",
-    "vuetify": "^2.3.21"
+    "vuetify": "^2.3.21",
+    "vuex-module-decorators": "^1.0.1"
   },
   "devDependencies": {
     "@nuxt/types": "^2.14.6",

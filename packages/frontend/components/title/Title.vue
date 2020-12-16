@@ -1,6 +1,6 @@
 <template>
   <div class="title">
-    <block-reveal>
+    <block-reveal :color="$vuetify.theme.themes.light.primary" :duration="900">
       <div class="upper" :style="{ fontSize: size * 4 + 'px' }">
         <span>HOUSE</span>
         <span>HOLD</span>
@@ -10,18 +10,26 @@
       class="lower"
       :style="{ marginLeft: size * 13.2 + 'px', fontSize: size * 2.5 + 'px' }"
     >
-      <span>{{ subtitleUpper }}</span>
+      <block-reveal
+        :color="$vuetify.theme.themes.light.accent"
+        :delay="400"
+        :duration="500"
+        :visible="subtitleVisible"
+        @after-leave="subtitleVisible = true"
+      >
+        <span class="lower">{{ subtitleUpper }}</span>
+      </block-reveal>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue, { PropOptions } from 'vue'
-import BlockReveal from './style/BlockReveal.vue'
+import BlockReveal from '../style/BlockReveal.vue'
 
 export default Vue.extend({
-  components: { BlockReveal },
   name: 'Title',
+  components: { BlockReveal },
   props: {
     subtitle: {
       type: String,
@@ -33,9 +41,18 @@ export default Vue.extend({
     } as PropOptions<number>,
   },
 
+  data() {
+    return { subtitleVisible: true }
+  },
+
   computed: {
     subtitleUpper(): string {
       return this.subtitle.toUpperCase()
+    },
+  },
+  watch: {
+    subtitle() {
+      this.subtitleVisible = false
     },
   },
 })
@@ -46,7 +63,7 @@ export default Vue.extend({
   line-height: 0.85;
   font-weight: 900;
   .upper {
-    display: flex;
+    display: inline-flex;
     span:first-child {
       color: $color-primary;
     }

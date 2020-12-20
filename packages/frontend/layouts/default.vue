@@ -55,8 +55,8 @@ export default Vue.extend({
   data() {
     return {
       items: [
-        { icon: 'mdi-apps', title: 'Dashboard', to: '/' },
-        { icon: 'mdi-account', title: 'Users', to: '/users' },
+        { icon: 'mdi-apps', title: 'Dashboard', to: '/app' },
+        { icon: 'mdi-account', title: 'Users', to: '/app/users' },
       ],
       drawer: true,
       miniVariant: true,
@@ -64,13 +64,13 @@ export default Vue.extend({
   },
   computed: {
     title(): string {
-      return navigationStore.title // TODO LEFT HERE
+      return navigationStore.title
     },
   },
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .main {
   background-image: url(~assets/bg.jpg);
   background-color: hsla(0, 0%, 100%, 0.9);

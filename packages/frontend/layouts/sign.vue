@@ -3,7 +3,7 @@
     <v-main
       style="height: 100vh"
       class="d-flex"
-      :class="{ 'align-center': big }"
+      :class="{ 'align-center': isBig }"
     >
       <v-container>
         <nuxt />
@@ -16,13 +16,15 @@
 </template>
 
 <script lang="ts">
+import { computed, useContext } from '@nuxtjs/composition-api'
 import Vue from 'vue'
 
 export default Vue.extend({
-  computed: {
-    big(): boolean {
-      return this.$vuetify.breakpoint.lgAndUp
-    },
+  middleware: ['auth'],
+  setup() {
+    const context = useContext()
+    const isBig = computed(() => context.$vuetify.breakpoint.lgAndUp)
+    return { isBig }
   },
 })
 </script>

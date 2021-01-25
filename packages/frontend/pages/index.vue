@@ -7,16 +7,31 @@
       <v-card>
         <v-card-title>Sign in</v-card-title>
         <v-card-text>
-          <v-text-field label="Username" prepend-icon="mdi-account" />
-          <v-text-field
-            label="Password"
-            type="password"
-            prepend-icon="mdi-lock"
-          />
+          <v-alert v-model="alertVisible" dense type="error" dismissible>
+            {{ alertText }}
+          </v-alert>
+          <v-form>
+            <v-text-field
+              v-model="username"
+              label="Username"
+              prepend-icon="mdi-account"
+              :error-messages="$v.username.$errors.map((e) => e.$message)"
+              @keydown.enter="submit"
+            />
+            <v-text-field
+              v-model="password"
+              label="Password"
+              type="password"
+              prepend-icon="mdi-lock"
+              :error-messages="$v.password.$errors.map((e) => e.$message)"
+              @keydown.enter="submit"
+            />
+            <v-checkbox v-model="rememberMe" label="Remember me" />
+          </v-form>
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn color="primary">Sign in</v-btn>
+          <v-btn color="primary" @click="submit">Sign in</v-btn>
         </v-card-actions>
       </v-card>
     </v-col>
@@ -24,8 +39,17 @@
 </template>
 
 <script lang="ts">
-import { onBeforeUnmount, onMounted, ref } from '@vue/composition-api'
 import Vue from 'vue'
+import {
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  useContext,
+} from '@nuxtjs/composition-api'
+import { required } from '@vuelidate/validators'
+import { useVuelidate } from '@vuelidate/core'
+import { sessionStore } from '~/store'
+
 export default Vue.extend({
   layout: 'sign',
   computed: {
@@ -38,6 +62,7 @@ export default Vue.extend({
       }
     },
   },
+
   head() {
     return {
       title: 'Welcome',
@@ -65,7 +90,51 @@ export default Vue.extend({
       clearInterval(interval)
     })
 
-    return { titles, titleNum }
+    const username = ref('')
+    const password = ref('')
+    const rememberMe = ref(false)
+    const alertVisible = ref(false)
+    const alertText = ref('')
+    const $v = useVuelidate(
+      {
+        username: { required },
+        password: { required },
+      },
+      { username, password }
+    )
+    const context = useContext()
+    async function submit() {
+      $v.value.$touch()
+      if (!$v.value.$invalid) {
+        try {
+          await sessionStore.login({
+            username: username.value,
+            password: password.value,
+            rememberMe: rememberMe.value,
+          })
+          context.app.router?.push({ name: 'app' })
+        } catch (e) {
+          alertVisible.value = true
+          if (e.response.status === 404) {
+            alertText.value = 'Invalid username or password'
+          } else {
+            alertText.value = 'Server error'
+          }
+        }
+      }
+    }
+
+    return {
+      $v,
+      titles,
+      titleNum,
+      username,
+      password,
+      rememberMe,
+      alertVisible,
+      alertText,
+      submit,
+    }
   },
 })
 </script>

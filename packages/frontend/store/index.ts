@@ -1,3 +1,4 @@
+import 'reflect-metadata'
 import { Store } from 'vuex'
 import { initialiseStores } from '~/utils/store-accessor'
 const initializer = (store: Store<any>) => initialiseStores(store)

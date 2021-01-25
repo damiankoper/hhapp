@@ -14,6 +14,7 @@
           :to="item.to"
           router
           exact
+          @click.stop="item.click"
         >
           <v-list-item-action>
             <v-icon>{{ item.icon }}</v-icon>
@@ -49,14 +50,28 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { navigationStore } from '~/store'
+import { navigationStore, sessionStore } from '~/store'
 
 export default Vue.extend({
+  middleware: ['auth'],
   data() {
     return {
       items: [
-        { icon: 'mdi-apps', title: 'Dashboard', to: '/app' },
-        { icon: 'mdi-account', title: 'Users', to: '/app/users' },
+        { icon: 'mdi-apps', title: 'Dashboard', to: '/app', click: () => {} },
+        {
+          icon: 'mdi-account',
+          title: 'Users',
+          to: '/app/users',
+          click: () => {},
+        },
+        {
+          icon: 'mdi-logout',
+          title: 'Sign out',
+          click: () => {
+            sessionStore.logout()
+            this.$router.push('/')
+          },
+        },
       ],
       drawer: true,
       miniVariant: true,

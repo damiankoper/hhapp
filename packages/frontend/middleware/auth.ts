@@ -13,5 +13,9 @@ export default function ({ route, redirect, req }: Context) {
     if (route.path !== '/') return redirect('/')
   } else if (!route.path.startsWith('/app')) {
     return redirect('/app')
+  } else {
+    sessionStore.renew()
   }
+
+  // TODO: refresh when first load
 }

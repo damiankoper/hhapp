@@ -51,7 +51,7 @@ import { useVuelidate } from '@vuelidate/core'
 import { sessionStore } from '~/store'
 
 export default Vue.extend({
-  layout: 'sign',
+  layout: 'login',
   computed: {
     titleSize(): number {
       switch (true) {

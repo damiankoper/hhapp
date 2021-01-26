@@ -1,10 +1,10 @@
-import Axios from 'axios'
 import { Action, Module, Mutation, VuexModule } from 'vuex-module-decorators'
 import jwtDecode from 'jwt-decode'
 import { plainToClass } from 'class-transformer'
 import Cookies from 'js-cookie'
 import Token from './token.model'
 import User from './user.model'
+import { $axios } from '~/utils/api'
 
 @Module({
   name: 'session',
@@ -25,6 +25,8 @@ export default class Session extends VuexModule {
     if (process.browser) localStorage.setItem('access_token', token)
     Cookies.set('access_token', token)
     this.accessToken = token
+    $axios.setToken(token, 'Bearer')
+
     const decoded = plainToClass(Token, jwtDecode(token) as object)
     this.user = decoded.user
     this.rememberMe = decoded.rememberMe
@@ -41,11 +43,17 @@ export default class Session extends VuexModule {
 
   @Action({ rawError: true, commit: 'setAccessToken' })
   async login({ username, password, rememberMe }: any) {
-    const response = await Axios.post('session', {
+    const response = await $axios.post('session', {
       username,
       password,
       rememberMe,
     })
+    return response.data.access_token
+  }
+
+  @Action({ rawError: true, commit: 'setAccessToken' })
+  async renew() {
+    const response = await $axios.put('session')
     return response.data.access_token
   }
 }

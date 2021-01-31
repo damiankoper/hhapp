@@ -1,6 +1,6 @@
 import { Expose } from 'class-transformer'
 
-enum Sex {
+export enum Sex {
   MALE = 'MALE',
   FEMALE = 'FEMALE',
 }

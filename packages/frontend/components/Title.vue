@@ -25,7 +25,7 @@
 
 <script lang="ts">
 import Vue, { PropOptions } from 'vue'
-import BlockReveal from '../style/BlockReveal.vue'
+import BlockReveal from './style/BlockReveal.vue'
 
 export default Vue.extend({
   name: 'Title',

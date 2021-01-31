@@ -1,4 +1,4 @@
-import Title from '@/components/Title.vue'
+import Title from './Title.vue'
 export default {
   title: 'Title',
   component: Title,

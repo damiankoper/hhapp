@@ -16,6 +16,7 @@
     "@nuxtjs/axios": "^5.12.2",
     "@nuxtjs/composition-api": "^0.18.1",
     "@nuxtjs/pwa": "^3.0.2",
+    "@storybook/vue": "^6.1.15",
     "@types/animejs": "^3.1.2",
     "@types/js-cookie": "^2.2.6",
     "@vuelidate/core": "^2.0.0-alpha.8",

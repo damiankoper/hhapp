@@ -14,7 +14,7 @@
           :to="item.to"
           router
           exact
-          @click.stop="item.click"
+          @click.stop="() => (item.click ? item.click() : null)"
         >
           <v-list-item-action>
             <v-icon>{{ item.icon }}</v-icon>
@@ -36,6 +36,9 @@
     <v-app-bar clipped-left fixed app>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <Title class="ml-1" :subtitle="title" :size="8" />
+      <v-spacer />
+      <h4 v-if="$vuetify.breakpoint.smAndUp">Hello {{ user.firstname }}</h4>
+      <Avatar :size="48" :color="user.color" :sex="user.sex" class="ml-2" />
     </v-app-bar>
     <v-main class="main">
       <v-container fluid>
@@ -49,38 +52,35 @@
 </template>
 
 <script lang="ts">
+import { computed, ref, useContext } from '@nuxtjs/composition-api'
 import Vue from 'vue'
 import { navigationStore, sessionStore } from '~/store'
 
 export default Vue.extend({
   middleware: ['auth'],
-  data() {
-    return {
-      items: [
-        { icon: 'mdi-apps', title: 'Dashboard', to: '/app', click: () => {} },
-        {
-          icon: 'mdi-account',
-          title: 'Users',
-          to: '/app/users',
-          click: () => {},
+  setup() {
+    const ctx = useContext()
+    const items = [
+      { icon: 'mdi-apps', title: 'Dashboard', to: '/app' },
+      {
+        icon: 'mdi-account',
+        title: 'Users',
+        to: '/app/users',
+      },
+      {
+        icon: 'mdi-logout',
+        title: 'Sign out',
+        click: () => {
+          sessionStore.logout()
+          ctx.app.$router.push('/')
         },
-        {
-          icon: 'mdi-logout',
-          title: 'Sign out',
-          click: () => {
-            sessionStore.logout()
-            this.$router.push('/')
-          },
-        },
-      ],
-      drawer: true,
-      miniVariant: true,
-    }
-  },
-  computed: {
-    title(): string {
-      return navigationStore.title
-    },
+      },
+    ]
+    const title = computed(() => navigationStore.title)
+    const drawer = ref(true)
+    const miniVariant = ref(true)
+    const user = sessionStore.user
+    return { title, drawer, miniVariant, items, user }
   },
 })
 </script>

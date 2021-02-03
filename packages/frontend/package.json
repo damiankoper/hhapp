@@ -12,6 +12,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@nestjsx/crud-request": "^4.6.2",
     "@nuxt/typescript-runtime": "^2.0.0",
     "@nuxtjs/axios": "^5.12.2",
     "@nuxtjs/composition-api": "^0.18.1",

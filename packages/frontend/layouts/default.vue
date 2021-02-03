@@ -41,7 +41,7 @@
       <Avatar :size="48" :color="user.color" :sex="user.sex" class="ml-2" />
     </v-app-bar>
     <v-main class="main">
-      <v-container fluid>
+      <v-container>
         <nuxt />
       </v-container>
     </v-main>
@@ -72,7 +72,7 @@ export default Vue.extend({
         title: 'Sign out',
         click: () => {
           sessionStore.logout()
-          ctx.app.$router.push('/')
+          ctx.app.router?.push('/')
         },
       },
     ]

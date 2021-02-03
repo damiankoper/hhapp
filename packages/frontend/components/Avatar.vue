@@ -24,9 +24,9 @@
         width: size / 2 + 'px',
         height: size / 2 + 'px',
 
-        right: -2 * resizeFactor + 'px',
-        bottom: -2 * resizeFactor + 'px',
-        borderWidth: 8 * resizeFactor + 'px',
+        right: -1 * resizeFactor + 'px',
+        bottom: -1 * resizeFactor + 'px',
+        borderWidth: 6 * resizeFactor + 'px',
       }"
     ></div>
   </div>
@@ -68,7 +68,6 @@ export default Vue.extend({
 @import '~vuetify/src/styles/styles.sass';
 .avatar-container {
   position: relative;
-  display: inline;
   background-color: map-get($grey, 'lighten-4');
   border-radius: 999px;
 

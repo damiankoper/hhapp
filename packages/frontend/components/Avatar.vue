@@ -70,6 +70,7 @@ export default Vue.extend({
   position: relative;
   background-color: map-get($grey, 'lighten-4');
   border-radius: 999px;
+  display: inline-block;
 
   .avatar {
     border-style: solid;

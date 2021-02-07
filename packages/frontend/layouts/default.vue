@@ -37,8 +37,20 @@
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <Title class="ml-1" :subtitle="title" :size="8" />
       <v-spacer />
-      <h4 v-if="$vuetify.breakpoint.smAndUp">Hello {{ user.firstname }}</h4>
-      <Avatar :size="48" :color="user.color" :sex="user.sex" class="ml-2" />
+      <v-btn
+        v-if="$vuetify.breakpoint.smAndUp"
+        outlined
+        :to="{ path: `/app/users/${user.id}` }"
+      >
+        Hello {{ user.firstname }}
+        <Avatar
+          style="z-index: 1"
+          :size="48"
+          :color="user.color"
+          :sex="user.sex"
+          class="ml-2"
+        />
+      </v-btn>
     </v-app-bar>
     <v-main class="main">
       <v-container>

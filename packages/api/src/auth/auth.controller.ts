@@ -24,7 +24,7 @@ export class AuthController {
       dto.password,
     );
     if (user) {
-      return await this.authService.login(user, dto.rememberMe);
+      return await this.authService.login(user.id, dto.rememberMe);
     } else {
       throw new NotFoundException();
     }

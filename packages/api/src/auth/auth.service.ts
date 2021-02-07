@@ -23,8 +23,8 @@ export class AuthService {
     return null;
   }
 
-  async login(user: User, rememberMe = false) {
-    const payload = { user, sub: user.id, rememberMe };
+  async login(userId: number, rememberMe = false) {
+    const payload = { sub: userId, rememberMe };
     return {
       access_token: this.jwtService.sign(payload, {
         expiresIn: rememberMe ? '7d' : '1d',
@@ -35,7 +35,7 @@ export class AuthService {
   async renew(token: string) {
     const payload = this.jwtService.decode(token);
     if (typeof payload == 'object') {
-      return await this.login(payload.user, payload.rememberMe);
+      return await this.login(payload.sub, payload.rememberMe);
     }
     throw new NotFoundException();
   }

@@ -1,7 +1,14 @@
-import { Action, Module, Mutation, VuexModule } from 'vuex-module-decorators'
+import {
+  Action,
+  Module,
+  Mutation,
+  MutationAction,
+  VuexModule,
+} from 'vuex-module-decorators'
 import jwtDecode from 'jwt-decode'
 import { plainToClass } from 'class-transformer'
 import Cookies from 'js-cookie'
+import { Context } from '@nuxt/types'
 import Token from './token.model'
 import User from './user.model'
 import { $axios } from '~/utils/api'
@@ -14,6 +21,8 @@ import { $axios } from '~/utils/api'
 export default class Session extends VuexModule {
   accessToken: string | null = null
   rememberMe: boolean = false
+  sub: number = 0
+
   user: User | null = null
 
   get isLoggedIn() {
@@ -28,8 +37,13 @@ export default class Session extends VuexModule {
     $axios.setToken(token, 'Bearer')
 
     const decoded = plainToClass(Token, jwtDecode(token) as object)
-    this.user = decoded.user
     this.rememberMe = decoded.rememberMe
+    this.sub = decoded.sub
+  }
+
+  @Mutation
+  setUser(user: User) {
+    this.user = user
   }
 
   @Mutation
@@ -55,5 +69,13 @@ export default class Session extends VuexModule {
   async renew() {
     const response = await $axios.put('session')
     return response.data.access_token
+  }
+
+  @Action({ commit: 'setUser' })
+  async fetchUser() {
+    const response = await $axios.get(`users/${this.sub}`)
+    const user = plainToClass(User, response.data)
+
+    return user
   }
 }

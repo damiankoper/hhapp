@@ -112,6 +112,7 @@ export default Vue.extend({
             password: password.value,
             rememberMe: rememberMe.value,
           })
+          await sessionStore.fetchUser()
           context.app.router?.push({ name: 'app' })
         } catch (e) {
           alertVisible.value = true

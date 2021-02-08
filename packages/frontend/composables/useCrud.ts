@@ -16,10 +16,15 @@ export function useCrud<T>(url: string, entity: ClassConstructor<T>) {
       loading.value = true
       const response = await $axios.get(`${url}/${id}`)
       const model = plainToClass(entity, response.data)
-      setTimeout(() => {
-        findOneResult.value = model
-        loading.value = false
-      }, 1500)
+      findOneResult.value = model
+      loading.value = false
+    },
+    async updateOne(id: number, updatedModel: T) {
+      loading.value = true
+      const response = await $axios.patch(`${url}/${id}`, updatedModel)
+      const model = plainToClass(entity, response.data)
+      findOneResult.value = model
+      loading.value = false
     },
   }
 }

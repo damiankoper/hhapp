@@ -41,7 +41,7 @@ export default {
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {
-    baseURL: process.env.BASE_URL || 'http://localhost:8300/',
+    baseURL: process.env.BASE_URL || 'http://192.168.0.161:8300/',
   },
 
   // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)
@@ -75,5 +75,9 @@ export default {
       '<v-app><story/></v-app>',
     ],
     addons: ['@storybook/addon-controls'],
+  },
+
+  server: {
+    host: '0',
   },
 }

@@ -115,6 +115,8 @@ export default Vue.extend({
           await sessionStore.fetchUser()
           context.app.router?.push({ name: 'app' })
         } catch (e) {
+          console.log(e)
+
           alertVisible.value = true
           if (e.response.status === 404) {
             alertText.value = 'Invalid username or password'

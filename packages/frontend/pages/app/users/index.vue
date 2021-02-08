@@ -43,6 +43,7 @@ export default {
         text: '',
         value: 'avatar',
         width: 1,
+        sortable: false,
       },
       {
         text: 'First name',

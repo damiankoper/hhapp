@@ -5,12 +5,17 @@ export enum Sex {
   FEMALE = 'FEMALE',
 }
 
+export const SexValues = [
+  { text: 'Male', value: Sex.MALE },
+  { text: 'Female', value: Sex.FEMALE },
+]
+
 @Expose()
 export default class User {
   id?: number
   firstname = ''
   surname = ''
-  password = ''
+  password?: string
   color = '#bada55'
   sex: Sex = Sex.MALE
 }

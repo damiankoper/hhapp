@@ -19,6 +19,31 @@
                 />
                 <h1 v-else key="3">{{ user.firstname }} {{ user.surname }}</h1>
               </v-fade-transition>
+              <color-picker v-model="formUser.color">
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    x-small
+                    text
+                    class="mt-1 ml-n2"
+                    v-bind="attrs"
+                    v-on="on"
+                  >
+                    <v-row dense align="center">
+                      <v-col cols="auto">
+                        <div
+                          :style="{
+                            backgroundColor: formUser.color,
+                            width: 16 + 'px',
+                            height: 16 + 'px',
+                            borderRadius: 4 + 'px',
+                          }"
+                        ></div>
+                      </v-col>
+                      <v-col> Pick color </v-col>
+                    </v-row>
+                  </v-btn>
+                </template>
+              </color-picker>
             </v-col>
           </v-row>
           <v-row>
@@ -38,7 +63,13 @@
                   :error-messages="$v.surname.$errors.map((e) => e.$message)"
                   @keydown.enter="submit"
                 />
-                color
+                <v-select
+                  v-model="formUser.sex"
+                  :items="sexSelect"
+                  prepend-icon="mdi-gender-male-female"
+                  label="Sex"
+                  single-line
+                ></v-select>
                 <v-text-field
                   v-model="formUser.password"
                   label="Password"
@@ -73,24 +104,19 @@
 </template>
 
 <script lang="ts">
-import {
-  reactive,
-  ref,
-  toRefs,
-  useContext,
-  watch,
-} from '@nuxtjs/composition-api'
+import { reactive, toRefs, useContext, watch } from '@nuxtjs/composition-api'
 import useVuelidate from '@vuelidate/core'
 import { required, sameAs } from '@vuelidate/validators'
 import { navigationStore } from '~/store'
 import Avatar from '~/components/Avatar.vue'
 import { useCrud } from '~/composables/useCrud'
-import User from '~/store/session/user.model'
+import User, { SexValues } from '~/store/session/user.model'
+import ColorPicker from '~/components/ColorPicker.vue'
 
 const title = 'Users'
 
 export default {
-  components: { Avatar },
+  components: { Avatar, ColorPicker },
   head() {
     return {
       title,
@@ -102,7 +128,9 @@ export default {
   setup() {
     const ctx = useContext()
     const userCrud = useCrud('users', User)
-    const formUser = reactive(Object.assign(new User(), { passRepeat: '' }))
+    const formUser = reactive(
+      Object.assign(new User(), { passRepeat: undefined })
+    )
     const $v = useVuelidate(
       {
         firstname: { required },
@@ -123,9 +151,15 @@ export default {
       user: userCrud.findOneResult,
       formUser,
       loading: userCrud.loading,
+      sexSelect: SexValues,
       $v,
       submit() {
         $v.value.$touch()
+        if (!$v.value.$invalid && formUser.id) {
+          delete formUser.passRepeat
+          if (formUser.password === '') delete formUser.password
+          userCrud.updateOne(formUser.id, formUser)
+        }
       },
     }
   },

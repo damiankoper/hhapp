@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts">
-import { ref, toRefs, watch } from '@nuxtjs/composition-api'
+import { ref, watch } from '@nuxtjs/composition-api'
 import Vue, { PropOptions } from 'vue'
 export default Vue.extend({
   props: {
@@ -32,11 +32,10 @@ export default Vue.extend({
     } as PropOptions<string>,
   },
   setup(props: any, { emit }) {
-    props = toRefs(props)
     const inputColor = ref<string>(props.value)
     const visible = ref(false)
 
-    watch(props.value, () => (inputColor.value = props.value.value))
+    watch(props.value, () => (inputColor.value = props.value))
     return {
       inputColor,
       visible,

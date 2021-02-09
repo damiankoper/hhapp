@@ -3,6 +3,7 @@ import { ref, watch } from '@nuxtjs/composition-api'
 import { AxiosInstance } from 'axios'
 import { ClassConstructor, plainToClass } from 'class-transformer'
 import { DataOptions } from 'vuetify'
+import { snackbarStore } from '~/store'
 export function useDatatable<T>(
   $axios: AxiosInstance,
   entity: ClassConstructor<T>,
@@ -36,11 +37,15 @@ export function useDatatable<T>(
 
     if (options.value.itemsPerPage >= 0) qb.setLimit(options.value.itemsPerPage)
 
-    const response = await $axios.get(`${baseUrl}?${qb.query()}`)
-    const data = response.data
-    items.value = plainToClass(entity, data.data) as any
-    serverItemsLength.value = data.total
-    loading.value = false
+    try {
+      const response = await $axios.get(`${baseUrl}?${qb.query()}`)
+      const data = response.data
+      items.value = plainToClass(entity, data.data) as any
+      serverItemsLength.value = data.total
+      loading.value = false
+    } catch {
+      snackbarStore.showError('Error while loading data!')
+    }
   })
 
   return { items, options, serverItemsLength, loading }

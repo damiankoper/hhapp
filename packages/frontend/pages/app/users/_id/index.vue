@@ -76,6 +76,7 @@
                   type="password"
                   prepend-icon="mdi-lock"
                   :error-messages="$v.password.$errors.map((e) => e.$message)"
+                  autocomplete="new-password"
                   @keydown.enter="submit"
                 />
                 <v-text-field
@@ -84,6 +85,7 @@
                   type="password"
                   prepend-icon="mdi-lock"
                   :error-messages="$v.passRepeat.$errors.map((e) => e.$message)"
+                  autocomplete="new-password"
                   @keydown.enter="submit"
                 />
               </v-form>
@@ -98,21 +100,29 @@
     </v-col>
 
     <v-col cols="12" md="6">
-      <v-card> <v-card-text></v-card-text> </v-card>
+      <v-card>
+        <v-card-text> </v-card-text>
+      </v-card>
     </v-col>
   </v-row>
 </template>
 
 <script lang="ts">
-import { reactive, toRefs, useContext, watch } from '@nuxtjs/composition-api'
+import _ from 'lodash'
+import {
+  computed,
+  reactive,
+  toRef,
+  useContext,
+  watch,
+} from '@nuxtjs/composition-api'
 import useVuelidate from '@vuelidate/core'
 import { required, sameAs } from '@vuelidate/validators'
-import { navigationStore } from '~/store'
+import { navigationStore, snackbarStore } from '~/store'
 import Avatar from '~/components/Avatar.vue'
 import { useCrud } from '~/composables/useCrud'
 import User, { SexValues } from '~/store/session/user.model'
 import ColorPicker from '~/components/ColorPicker.vue'
-
 const title = 'Users'
 
 export default {
@@ -123,7 +133,7 @@ export default {
     }
   },
   middleware() {
-    navigationStore.setTitle('Users')
+    navigationStore.setTitle(title)
   },
   setup() {
     const ctx = useContext()
@@ -136,7 +146,7 @@ export default {
         firstname: { required },
         surname: { required },
         password: {},
-        passRepeat: { sameAs: sameAs(toRefs(formUser).password, 'Password') },
+        passRepeat: { sameAs: sameAs(toRef(formUser, 'password'), 'Password') },
       },
       formUser
     )
@@ -153,12 +163,21 @@ export default {
       loading: userCrud.loading,
       sexSelect: SexValues,
       $v,
+      visible: computed(() => snackbarStore.visible),
       submit() {
         $v.value.$touch()
-        if (!$v.value.$invalid && formUser.id) {
-          delete formUser.passRepeat
-          if (formUser.password === '') delete formUser.password
-          userCrud.updateOne(formUser.id, formUser)
+        const submitUser = _.cloneDeep(formUser)
+        if (!$v.value.$invalid && submitUser.id) {
+          delete submitUser.passRepeat
+          if (submitUser.password === '') delete submitUser.password
+
+          try {
+            userCrud.updateOne(submitUser.id, submitUser)
+            snackbarStore.showSuccess('User updated successfully!')
+            $v.value.$reset()
+          } catch {
+            snackbarStore.showError('Error while updating user!')
+          }
         }
       },
     }

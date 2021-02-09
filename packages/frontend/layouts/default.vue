@@ -57,6 +57,7 @@
         <nuxt />
       </v-container>
     </v-main>
+    <Snackbar />
     <v-footer absolute app>
       <span>Damian Koper &copy; {{ new Date().getFullYear() }}</span>
     </v-footer>
@@ -66,9 +67,11 @@
 <script lang="ts">
 import { computed, ref, useContext } from '@nuxtjs/composition-api'
 import Vue from 'vue'
-import { navigationStore, sessionStore } from '~/store'
+import Snackbar from '~/components/Snackbar.vue'
+import { navigationStore, sessionStore, snackbarStore } from '~/store'
 
 export default Vue.extend({
+  components: { Snackbar },
   middleware: ['auth'],
   setup() {
     const ctx = useContext()

@@ -1,5 +1,9 @@
 <template>
-  <v-menu v-model="visible" :close-on-content-click="false">
+  <v-menu
+    v-model="visible"
+    :close-on-content-click="false"
+    :disabled="readonly"
+  >
     <template v-slot:activator="{ on, attrs }">
       <slot :on="on" v-bind="attrs" name="activator" />
     </template>
@@ -30,12 +34,17 @@ export default Vue.extend({
       required: true,
       type: String,
     } as PropOptions<string>,
+    readonly: {
+      required: false,
+      default: false,
+      type: Boolean,
+    } as PropOptions<boolean>,
   },
   setup(props: any, { emit }) {
     const inputColor = ref<string>(props.value)
     const visible = ref(false)
 
-    watch(props.value, () => (inputColor.value = props.value))
+    watch(props, () => (inputColor.value = props.value))
     return {
       inputColor,
       visible,

@@ -1,5 +1,5 @@
 import { QuerySortOperator, RequestQueryBuilder } from '@nestjsx/crud-request'
-import { ref, watch } from '@nuxtjs/composition-api'
+import { ref, watch, triggerRef } from '@nuxtjs/composition-api'
 import { AxiosInstance } from 'axios'
 import { ClassConstructor, plainToClass } from 'class-transformer'
 import { DataOptions } from 'vuetify'
@@ -22,7 +22,7 @@ export function useDatatable<T>(
   })
   const serverItemsLength = ref(0)
   const loading = ref(false)
-  /* TODO: add sort */
+
   watch(options, async () => {
     loading.value = true
     const qb = new RequestQueryBuilder()
@@ -48,5 +48,13 @@ export function useDatatable<T>(
     }
   })
 
-  return { items, options, serverItemsLength, loading }
+  return {
+    items,
+    options,
+    serverItemsLength,
+    loading,
+    reload() {
+      triggerRef(options)
+    },
+  }
 }

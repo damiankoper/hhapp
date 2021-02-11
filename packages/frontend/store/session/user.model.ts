@@ -19,3 +19,8 @@ export default class User {
   color = '#bada55'
   sex: Sex = Sex.MALE
 }
+
+export class FormUser extends User {
+  password: string = ''
+  passRepeat: string = ''
+}

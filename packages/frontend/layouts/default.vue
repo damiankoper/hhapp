@@ -68,7 +68,7 @@
 import { computed, ref, useContext } from '@nuxtjs/composition-api'
 import Vue from 'vue'
 import Snackbar from '~/components/Snackbar.vue'
-import { navigationStore, sessionStore, snackbarStore } from '~/store'
+import { navigationStore, sessionStore } from '~/store'
 
 export default Vue.extend({
   components: { Snackbar },

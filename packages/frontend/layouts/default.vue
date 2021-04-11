@@ -72,7 +72,6 @@ import { navigationStore, sessionStore } from '~/store'
 
 export default Vue.extend({
   components: { Snackbar },
-  middleware: ['auth'],
   setup() {
     const ctx = useContext()
     const items = [

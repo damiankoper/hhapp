@@ -33,42 +33,41 @@
 </template>
 
 <script lang="ts">
-import { computed } from '@nuxtjs/composition-api'
-import Vue, { PropOptions } from 'vue'
-import { Sex } from '~/store/session/user.model'
-export default Vue.extend({
+import { computed, defineComponent, PropType } from "@nuxtjs/composition-api";
+import { Sex } from "~/store/session/user.model";
+export default defineComponent({
   props: {
     color: {
-      default: '#ffffff',
+      default: "#ffffff",
       type: String,
-    } as PropOptions<string>,
+    },
     size: {
       default: 48,
       type: Number,
-    } as PropOptions<number>,
+    },
     sex: {
       default: Sex.MALE,
-      type: String,
-    } as PropOptions<Sex>,
+      type: String as PropType<Sex>,
+    },
   },
   setup(props) {
-    const isMale = computed(() => props.sex === Sex.MALE)
+    const isMale = computed(() => props.sex === Sex.MALE);
     const resizeFactor = computed(() =>
       Math.max(1, Math.round((props.size as number) / 48))
-    )
+    );
     return {
       isMale,
       resizeFactor,
-    }
+    };
   },
-})
+});
 </script>
 
 <style lang="scss" scoped>
-@import '~vuetify/src/styles/styles.sass';
+@import "~vuetify/src/styles/styles.sass";
 .avatar-container {
   position: relative;
-  background-color: map-get($grey, 'lighten-4');
+  background-color: map-get($grey, "lighten-4");
   border-radius: 999px;
   display: inline-block;
 

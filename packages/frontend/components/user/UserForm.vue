@@ -90,13 +90,19 @@
 </template>
 
 <script lang="ts">
-import useVuelidate from '@vuelidate/core'
-import { required, sameAs } from '@vuelidate/validators'
-import { reactive, toRef, watch } from '@nuxtjs/composition-api'
-import ColorPicker from '../ColorPicker.vue'
-import Avatar from '../Avatar.vue'
-import { FormUser, SexValues } from '~/store/session/user.model'
-export default {
+import useVuelidate from "@vuelidate/core";
+import { required, sameAs } from "@vuelidate/validators";
+import {
+  defineComponent,
+  reactive,
+  toRef,
+  watch,
+} from "@nuxtjs/composition-api";
+import ColorPicker from "../ColorPicker.vue";
+import Avatar from "../Avatar.vue";
+import { FormUser, SexValues } from "~/store/session/user.model";
+import _ from "lodash";
+export default defineComponent({
   components: { ColorPicker, Avatar },
   props: {
     value: {
@@ -116,9 +122,9 @@ export default {
     },
   },
   setup(props: any, { emit }) {
-    const user = toRef(props, 'value')
-    const formUser = reactive(Object.assign(new FormUser()))
-    watch(user, () => Object.assign(formUser, user.value))
+    const user = toRef(props, "value");
+    const formUser = reactive(Object.assign(new FormUser()));
+    watch(user, () => Object.assign(formUser, user.value));
 
     const $v = useVuelidate(
       {
@@ -126,31 +132,31 @@ export default {
         surname: { required },
         password: {},
         passRepeat: {
-          sameAs: sameAs(toRef(formUser, 'password'), 'Password'),
+          sameAs: sameAs(toRef(formUser, "password"), "Password"),
         },
       },
       formUser
-    )
+    );
     return {
       $v,
       user,
       formUser,
       sexSelect: SexValues,
       submit() {
-        $v.value.$touch()
-        const submitUser = _.cloneDeep(formUser)
+        $v.value.$touch();
+        const submitUser = _.cloneDeep(formUser);
         if (!$v.value.$invalid && submitUser.id) {
-          if (submitUser.password === '') {
-            delete submitUser.passRepeat
-            delete submitUser.password
+          if (submitUser.password === "") {
+            delete submitUser.passRepeat;
+            delete submitUser.password;
           }
-          emit('submit', formUser)
-          $v.value.$reset()
+          emit("submit", formUser);
+          $v.value.$reset();
         }
       },
-    }
+    };
   },
-}
+});
 </script>
 
 <style scoped></style>

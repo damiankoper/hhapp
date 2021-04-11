@@ -20,7 +20,7 @@ import { computed, useContext } from '@nuxtjs/composition-api'
 import Vue from 'vue'
 
 export default Vue.extend({
-  middleware: ['auth'],
+  auth: 'guest',
   setup() {
     const context = useContext()
     const isBig = computed(() => context.$vuetify.breakpoint.lgAndUp)

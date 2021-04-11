@@ -3,21 +3,21 @@
 export default {
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
-    titleTemplate: '%s - HouseholdApp',
-    title: 'Home',
+    titleTemplate: "%s - HouseholdApp",
+    title: "Home",
     meta: [
-      { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' },
+      { charset: "utf-8" },
+      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { hid: "description", name: "description", content: "" },
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
   },
 
   // Global CSS (https://go.nuxtjs.dev/config-css)
   css: [],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
-  plugins: ['@/plugins/vuelidate', '@/plugins/axios', '@/plugins/authRenew'],
+  plugins: ["@/plugins/axios", "@/plugins/authRenew"],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,
@@ -25,33 +25,34 @@ export default {
   // Modules for dev and build (recommended) (https://go.nuxtjs.dev/config-modules)
   buildModules: [
     // https://go.nuxtjs.dev/typescript
-    '@nuxt/typescript-build',
+    "@nuxt/typescript-build",
     // https://go.nuxtjs.dev/vuetify
-    '@nuxtjs/vuetify',
-    '@nuxtjs/composition-api',
+    "@nuxtjs/vuetify",
+    "@nuxtjs/composition-api",
   ],
 
   // Modules (https://go.nuxtjs.dev/config-modules)
   modules: [
     // https://go.nuxtjs.dev/axios
-    '@nuxtjs/axios',
+    "@nuxtjs/axios",
+    "@nuxtjs/auth-next",
     // https://go.nuxtjs.dev/pwa
-    '@nuxtjs/pwa',
+    "@nuxtjs/pwa",
   ],
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {
-    baseURL: process.env.BASE_URL || 'http://192.168.0.161:8300/',
+    baseURL: process.env.BASE_URL || "http://192.168.0.161:8300/",
   },
 
   // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)
   vuetify: {
-    customVariables: ['~/assets/variables.scss'],
+    customVariables: ["~/assets/variables.scss"],
     theme: {
       themes: {
         light: {
-          primary: '#f56d1e',
-          accent: '#f89861',
+          primary: "#f56d1e",
+          accent: "#f89861",
           /*
           secondary: colors.amber.darken3,
           info: colors.teal.lighten1,
@@ -72,12 +73,41 @@ export default {
     // Options
     decorators: [
       // VApp decorator for Vuetify
-      '<v-app><story/></v-app>',
+      "<v-app><story/></v-app>",
     ],
-    addons: ['@storybook/addon-controls'],
+    addons: ["@storybook/addon-controls"],
   },
 
   server: {
-    host: '0',
+    host: "0",
   },
-}
+
+  middleware: ["auth"],
+
+  auth: {
+    redirect: {
+      login: "/",
+      logout: "/",
+      callback: false,
+      home: "/app",
+    },
+    strategies: {
+      local: {
+        token: {
+          property: "access_token",
+          required: true,
+          type: "Bearer",
+        },
+        user: {
+          property: "user",
+          autoFetch: true,
+        },
+        endpoints: {
+          login: { url: "/session", method: "post" },
+          logout: { url: "/sesion", method: "delete" },
+          user: { url: "/users", method: "get" },
+        },
+      },
+    },
+  },
+};

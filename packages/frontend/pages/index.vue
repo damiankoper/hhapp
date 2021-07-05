@@ -4,7 +4,7 @@
       <Title class="title" :subtitle="titles[titleNum]" :size="titleSize" />
     </v-col>
     <v-col lg="6" md="8" sm="8" cols="12">
-      <v-card>
+      <v-card rounded="xl" max-width=300>
         <v-card-title>Sign in</v-card-title>
         <v-card-text>
           <v-alert v-model="alertVisible" dense type="error" dismissible>

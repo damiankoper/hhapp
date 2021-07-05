@@ -1,7 +1,6 @@
 {
   "folders": [
 	{
-		"name": "🚀 api",
 		"path": "packages/api"
 	},
 	{
@@ -11,5 +10,7 @@
 		"path": "."
 	}
 ],
-  "settings": {}
+  "settings": {
+	  "jest.disabledWorkspaceFolders": ["api", "frontend", "hhapp"]
+  }
 }

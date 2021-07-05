@@ -8,9 +8,21 @@ import { User } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class ConfigService implements TypeOrmOptionsFactory, JwtOptionsFactory {
+  createJwtSecretOptions() {
+    return {
+      secret: process.env.JWT_SECRET || 'secret0',
+      secretExpiresIn: process.env.JWT_SECRET_EXPIRES_IN || '1h',
+      secretRefresh: process.env.JWT_SECRET_REFRESH || 'secret1',
+      secretRefreshExpiresIn: process.env.JWT_SECRET_REFRESH_EXPIRES_IN || '1d',
+      secretRefreshRememberExpiresIn:
+        process.env.JWT_SECRET_REFRESH_REMEMBER_EXPIRES_IN || '7d',
+    };
+  }
+
   createJwtOptions(): JwtModuleOptions {
     return {
-      secret: process.env['JWT_SECRET'] || 'secret',
+      /** Default secret */
+      secret: process.env.JWT_SECRET || 'secret1',
     };
   }
 
@@ -18,14 +30,14 @@ export class ConfigService implements TypeOrmOptionsFactory, JwtOptionsFactory {
     return {
       type: 'postgres',
       host: 'database',
-      port: +process.env['DB_PORT'] || 5432,
-      username: process.env['DB_USERNAME'] || 'root',
-      password: process.env['DB_PASSWORD'] || 'password',
-      database: process.env['DB_DATABASE'] || 'main',
+      port: +process.env.DB_PORT || 5432,
+      username: process.env.DB_USERNAME || 'root',
+      password: process.env.DB_PASSWORD || 'password',
+      database: process.env.DB_DATABASE || 'main',
       entities: [User, Shop, Category, Item],
       synchronize: true,
       logging:
-        process.env['NODE_ENV'] !== 'production'
+        process.env.NODE_ENV !== 'production'
           ? 'all'
           : ['error', 'warn', 'info', 'log', 'migration'],
     };

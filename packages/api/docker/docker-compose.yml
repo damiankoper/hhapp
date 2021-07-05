@@ -10,23 +10,16 @@ services:
       - 9229:9229 # Node debug
     volumes:
       - '..:/app'
-    command: sh -c 'npx wait-on tcp:database:5432 && npm run start:debug'
+    command: sh -c 'wait-on tcp:database:5432 && npm run start:debug'
     restart: 'unless-stopped'
-    environment: 
-      - DB_USERNAME=hhapp
-      - DB_PASSWORD=p455word
-      - DB_DATABASE=hhapp
+    env_file: '.env'
 
   database:
-    image: kopernick/hhapp-database
-    build:
-      context: ..
-      dockerfile: ./docker/database/Dockerfile
+    image: postgres:13-alpine
     restart: 'unless-stopped'
     volumes:
       - 'database:/var/lib/postgresql/data'
-    environment: 
-      - POSTGRES_PASSWORD=p455word
+    env_file: '.env'
     ports:
       - '5432'
 

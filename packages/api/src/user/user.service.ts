@@ -10,7 +10,6 @@ export class UserService {
   ) {}
 
   async findOneWithPass(username: string): Promise<User | null> {
-    console.trace();
     return this.userRepository
       .createQueryBuilder('user')
       .where({ username })

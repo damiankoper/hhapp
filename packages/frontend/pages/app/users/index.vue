@@ -7,13 +7,14 @@
         :options.sync="datatable.options"
         :loading="datatable.loading"
       >
-        <template v-slot:item.avatar="{ item }">
+        <template #[`item.avatar`]="{ item }">
           <Avatar :size="36" :color="item.color" :sex="item.sex" />
         </template>
-        <template v-slot:item.actions="{ item }">
+        <template #[`item.actions`]="{ item }">
           <action-buttons
             :item-id="item.id"
             :delete-one="userCrud.deleteOne"
+            :delete-enabled="$auth.user.id !== item.id"
             :show-one="userCrud.showOne"
             :reload-datatable="datatable.reload"
           />
@@ -36,11 +37,6 @@ const title = 'Users'
 
 export default {
   components: { ActionButtons },
-  head() {
-    return {
-      title,
-    }
-  },
   middleware() {
     navigationStore.setTitle('Users')
   },
@@ -52,8 +48,8 @@ export default {
       'users',
       User,
       'user',
-      (msg: string) => snackbarStore.showSuccess(msg),
-      (msg: string) => snackbarStore.showError(msg)
+      snackbarStore.showSuccess,
+      snackbarStore.showError
     )
 
     const headers: DataTableHeader[] = [
@@ -82,6 +78,11 @@ export default {
     ]
 
     return { users, datatable: reactive(datatable), headers, userCrud }
+  },
+  head() {
+    return {
+      title,
+    }
   },
 }
 </script>

@@ -1,10 +1,14 @@
 <template>
   <v-row dense>
     <v-col cols="6">
-      <v-btn icon @click="showOneFn"> <v-icon>mdi-eye</v-icon> </v-btn>
+      <v-btn :disabled="!showEnabled" icon @click="showOneFn">
+        <v-icon>mdi-eye</v-icon>
+      </v-btn>
     </v-col>
     <v-col cols="6">
-      <v-btn icon @click="deleteOneFn"> <v-icon>mdi-delete</v-icon> </v-btn>
+      <v-btn :disabled="!deleteEnabled" icon @click="deleteOneFn">
+        <v-icon>mdi-delete</v-icon>
+      </v-btn>
     </v-col>
   </v-row>
 </template>

@@ -14,7 +14,7 @@
             <h1 v-else key="3">{{ user.firstname }} {{ user.surname }}</h1>
           </v-fade-transition>
           <color-picker v-model="formUser.color" :readonly="readonly">
-            <template v-slot:activator="{ on, attrs }">
+            <template #activator="{ on, attrs }">
               <v-btn x-small text class="mt-1 ml-n2" v-bind="attrs" v-on="on">
                 <v-row dense align="center">
                   <v-col cols="auto">
@@ -90,18 +90,18 @@
 </template>
 
 <script lang="ts">
-import useVuelidate from "@vuelidate/core";
-import { required, sameAs } from "@vuelidate/validators";
+import useVuelidate from '@vuelidate/core'
+import { required, sameAs } from '@vuelidate/validators'
 import {
   defineComponent,
   reactive,
   toRef,
   watch,
-} from "@nuxtjs/composition-api";
-import ColorPicker from "../ColorPicker.vue";
-import Avatar from "../Avatar.vue";
-import { FormUser, SexValues } from "~/store/session/user.model";
-import _ from "lodash";
+} from '@nuxtjs/composition-api'
+import _ from 'lodash'
+import ColorPicker from '../ColorPicker.vue'
+import Avatar from '../Avatar.vue'
+import { FormUser, SexValues } from '~/store/session/user.model'
 export default defineComponent({
   components: { ColorPicker, Avatar },
   props: {
@@ -122,9 +122,9 @@ export default defineComponent({
     },
   },
   setup(props: any, { emit }) {
-    const user = toRef(props, "value");
-    const formUser = reactive(Object.assign(new FormUser()));
-    watch(user, () => Object.assign(formUser, user.value));
+    const user = toRef(props, 'value')
+    const formUser = reactive<FormUser>(Object.assign(new FormUser()))
+    watch(user, () => Object.assign(formUser, user.value))
 
     const $v = useVuelidate(
       {
@@ -132,31 +132,33 @@ export default defineComponent({
         surname: { required },
         password: {},
         passRepeat: {
-          sameAs: sameAs(toRef(formUser, "password"), "Password"),
+          sameAs: sameAs(toRef(formUser, 'password'), 'Password'),
         },
       },
       formUser
-    );
+    )
     return {
       $v,
       user,
       formUser,
       sexSelect: SexValues,
       submit() {
-        $v.value.$touch();
-        const submitUser = _.cloneDeep(formUser);
+        $v.value.$touch()
+        const submitUser = _.cloneDeep(formUser)
         if (!$v.value.$invalid && submitUser.id) {
-          if (submitUser.password === "") {
-            delete submitUser.passRepeat;
-            delete submitUser.password;
-          }
-          emit("submit", formUser);
-          $v.value.$reset();
+          if (submitUser.password === '') delete submitUser.password
+          delete submitUser.passRepeat
+
+          formUser.password = ''
+          formUser.passRepeat = ''
+
+          emit('submit', submitUser)
+          $v.value.$reset()
         }
       },
-    };
+    }
   },
-});
+})
 </script>
 
 <style scoped></style>

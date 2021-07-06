@@ -1,7 +1,6 @@
-import { ref } from '@nuxtjs/composition-api'
+import { ref, useContext } from '@nuxtjs/composition-api'
 import { ClassConstructor, plainToClass } from 'class-transformer'
 import _ from 'lodash'
-import { $axios } from '~/utils/api'
 export function useCrud<T>(
   url: string,
   entity: ClassConstructor<T>,
@@ -9,6 +8,7 @@ export function useCrud<T>(
   onSuccess: (msg: string) => void,
   onError: (msg: string) => void
 ) {
+  const {$axios} = useContext()
   const loading = ref(false)
   const error = ref(false)
 

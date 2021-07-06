@@ -19,7 +19,7 @@
 
 <script lang="ts">
 import { computed, useContext } from '@nuxtjs/composition-api'
-import { navigationStore, sessionStore, snackbarStore } from '~/store'
+import { navigationStore, snackbarStore } from '~/store'
 import { useCrud } from '~/composables/useCrud'
 import User from '~/store/session/user.model'
 import UserForm from '~/components/user/UserForm.vue'
@@ -27,11 +27,6 @@ const title = 'Users'
 
 export default {
   components: { UserForm },
-  head() {
-    return {
-      title,
-    }
-  },
   middleware() {
     navigationStore.setTitle(title)
   },
@@ -41,8 +36,8 @@ export default {
       'users',
       User,
       'user',
-      (msg: string) => snackbarStore.showSuccess(msg),
-      (msg: string) => snackbarStore.showError(msg)
+      snackbarStore.showSuccess,
+      snackbarStore.showError
     )
     const user = userCrud.findOneResult
 
@@ -52,11 +47,19 @@ export default {
       user,
       loading: userCrud.loading,
       readonly: computed(
-        () => user.value && sessionStore.user?.id !== user.value.id
+        () => user.value && ctx.$auth.user?.id !== user.value.id
       ),
-      submit(user: User) {
-        if (user.id) userCrud.updateOne(user.id, user)
+      async submit(submitUser: User) {
+        if (submitUser.id) {
+          await userCrud.updateOne(submitUser.id, submitUser)
+          if (ctx.$auth.user?.id === submitUser.id) ctx.$auth.fetchUser()
+        }
       },
+    }
+  },
+  head() {
+    return {
+      title,
     }
   },
 }

@@ -8,7 +8,7 @@
       @input="(v) => setVisible(v)"
     >
       {{ text }}
-      <template v-slot:action="{ attrs }">
+      <template #action="{ attrs }">
         <v-btn color="white" text v-bind="attrs" @click="setVisible(false)">
           Close
         </v-btn>

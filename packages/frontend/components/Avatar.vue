@@ -33,12 +33,12 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType } from "@nuxtjs/composition-api";
-import { Sex } from "~/store/session/user.model";
+import { computed, defineComponent, PropType } from '@nuxtjs/composition-api'
+import { Sex } from '~/store/session/user.model'
 export default defineComponent({
   props: {
     color: {
-      default: "#ffffff",
+      default: '#ffffff',
       type: String,
     },
     size: {
@@ -51,23 +51,23 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const isMale = computed(() => props.sex === Sex.MALE);
+    const isMale = computed(() => props.sex === Sex.MALE)
     const resizeFactor = computed(() =>
       Math.max(1, Math.round((props.size as number) / 48))
-    );
+    )
     return {
       isMale,
       resizeFactor,
-    };
+    }
   },
-});
+})
 </script>
 
 <style lang="scss" scoped>
-@import "~vuetify/src/styles/styles.sass";
+@import '~vuetify/src/styles/styles.sass';
 .avatar-container {
   position: relative;
-  background-color: map-get($grey, "lighten-4");
+  background-color: map-get($grey, 'lighten-4');
   border-radius: 999px;
   display: inline-block;
 
@@ -83,6 +83,7 @@ export default defineComponent({
     border-right-style: solid;
     position: absolute;
     overflow: hidden;
+    //box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.33);
   }
   img {
     margin-top: 4px;

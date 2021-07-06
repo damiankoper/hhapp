@@ -1,9 +1,9 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 
-export const Token = createParamDecorator(
+export const BodyToken = createParamDecorator(
   (data: string, ctx: ExecutionContext) => {
     const request = ctx.switchToHttp().getRequest();
-    const token = request.headers?.authorization?.replace('Bearer ', '');
+    const token = request.body.refresh_token;
     return token || '';
   },
 );

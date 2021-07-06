@@ -4,7 +4,7 @@
     :close-on-content-click="false"
     :disabled="readonly"
   >
-    <template v-slot:activator="{ on, attrs }">
+    <template #activator="{ on, attrs }">
       <slot :on="on" v-bind="attrs" name="activator" />
     </template>
     <v-card>

@@ -21,6 +21,6 @@ export default class User {
 }
 
 export class FormUser extends User {
-  password: string = ''
-  passRepeat: string = ''
+  password?: string = ''
+  passRepeat?: string = ''
 }

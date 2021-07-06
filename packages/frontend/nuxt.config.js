@@ -17,7 +17,7 @@ export default {
   css: [],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
-  plugins: ["@/plugins/axios", "@/plugins/authRenew"],
+  plugins: [],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,
@@ -88,24 +88,25 @@ export default {
     redirect: {
       login: "/",
       logout: "/",
-      callback: false,
+      callback: "/app",
       home: "/app",
     },
     strategies: {
       local: {
+        scheme: 'refresh',
         token: {
           property: "access_token",
           required: true,
           type: "Bearer",
         },
         user: {
-          property: "user",
+          property: "",
           autoFetch: true,
         },
         endpoints: {
-          login: { url: "/session", method: "post" },
-          logout: { url: "/sesion", method: "delete" },
-          user: { url: "/users", method: "get" },
+          login: { url: "/auth/login", method: "post" },
+          refresh: { url: '/auth/refresh', method: 'post' },
+          user: { url: "/auth/me", method: "get" },
         },
       },
     },

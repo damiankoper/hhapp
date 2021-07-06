@@ -10,7 +10,7 @@
       </v-container>
     </v-main>
     <v-footer absolute app>
-      <span>Damian Koper &copy; {{ new Date().getFullYear() }}</span>
+      <span>Copyright © Damian Koper {{ new Date().getFullYear() }}</span>
     </v-footer>
   </v-app>
 </template>

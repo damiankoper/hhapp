@@ -4,7 +4,7 @@
       <Title class="title" :subtitle="titles[titleNum]" :size="titleSize" />
     </v-col>
     <v-col lg="6" md="8" sm="8" cols="12">
-      <v-card rounded="xl" max-width=300>
+      <v-card rounded="xl" max-width="300">
         <v-card-title>Sign in</v-card-title>
         <v-card-text>
           <v-alert v-model="alertVisible" dense type="error" dismissible>
@@ -48,26 +48,9 @@ import {
 } from '@nuxtjs/composition-api'
 import { required } from '@vuelidate/validators'
 import { useVuelidate } from '@vuelidate/core'
-import { sessionStore } from '~/store'
 
 export default Vue.extend({
   layout: 'login',
-  computed: {
-    titleSize(): number {
-      switch (true) {
-        case this.$vuetify.breakpoint.mdAndUp:
-          return 18
-        default:
-          return 12
-      }
-    },
-  },
-
-  head() {
-    return {
-      title: 'Welcome',
-    }
-  },
   setup(_props, _ctx) {
     const titles = [
       'app',
@@ -107,16 +90,15 @@ export default Vue.extend({
       $v.value.$touch()
       if (!$v.value.$invalid) {
         try {
-          await sessionStore.login({
-            username: username.value,
-            password: password.value,
-            rememberMe: rememberMe.value,
+          await context.$auth.loginWith('local', {
+            data: {
+              username: username.value,
+              password: password.value,
+              rememberMe: rememberMe.value,
+            },
           })
-          await sessionStore.fetchUser()
-          context.app.router?.push({ name: 'app' })
         } catch (e) {
           console.log(e)
-
           alertVisible.value = true
           if (e.response.status === 404) {
             alertText.value = 'Invalid username or password'
@@ -138,6 +120,22 @@ export default Vue.extend({
       alertText,
       submit,
     }
+  },
+
+  head() {
+    return {
+      title: 'Welcome',
+    }
+  },
+  computed: {
+    titleSize(): number {
+      switch (true) {
+        case this.$vuetify.breakpoint.mdAndUp:
+          return 18
+        default:
+          return 12
+      }
+    },
   },
 })
 </script>

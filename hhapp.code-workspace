@@ -11,6 +11,12 @@
 	}
 ],
   "settings": {
-	  "jest.disabledWorkspaceFolders": ["api", "frontend", "hhapp"]
+	  "jest.disabledWorkspaceFolders": ["api", "frontend", "hhapp"],
+	  "files.watcherExclude": {
+		"**/.git/objects/**": true,
+		"**/.git/subtree-cache/**": true,
+		"**/node_modules/**": true,
+		"**/.hg/store/**": true
+	  }
   }
 }

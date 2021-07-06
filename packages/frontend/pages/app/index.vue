@@ -7,13 +7,13 @@
 <script>
 import { navigationStore } from '~/store'
 export default {
+  middleware() {
+    navigationStore.setTitle('App')
+  },
   head() {
     return {
       title: 'Dashboard',
     }
-  },
-  middleware() {
-    navigationStore.setTitle('App')
   },
 }
 </script>

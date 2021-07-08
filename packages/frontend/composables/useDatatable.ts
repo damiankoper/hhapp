@@ -1,14 +1,10 @@
 import { QuerySortOperator, RequestQueryBuilder } from '@nestjsx/crud-request'
-import { ref, watch, triggerRef } from '@nuxtjs/composition-api'
-import { AxiosInstance } from 'axios'
+import { ref, watch, useContext } from '@nuxtjs/composition-api'
 import { ClassConstructor, plainToClass } from 'class-transformer'
 import { DataOptions } from 'vuetify'
 import { snackbarStore } from '~/store'
-export function useDatatable<T>(
-  $axios: AxiosInstance,
-  entity: ClassConstructor<T>,
-  baseUrl: string
-) {
+export function useDatatable<T>(entity: ClassConstructor<T>, baseUrl: string) {
+  const { $axios } = useContext()
   const items = ref<T[]>([])
   const options = ref<DataOptions>({
     page: 1,
@@ -23,7 +19,7 @@ export function useDatatable<T>(
   const serverItemsLength = ref(0)
   const loading = ref(false)
 
-  watch(options, async () => {
+  async function fetch() {
     loading.value = true
     const qb = new RequestQueryBuilder()
     qb.setPage(options.value.page)
@@ -46,15 +42,15 @@ export function useDatatable<T>(
     } catch {
       snackbarStore.showError('Error while loading data!')
     }
-  })
+  }
+
+  watch(options, () => fetch())
 
   return {
     items,
     options,
     serverItemsLength,
     loading,
-    reload() {
-      triggerRef(options)
-    },
+    fetch,
   }
 }

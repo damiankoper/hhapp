@@ -21,7 +21,7 @@ const Template = (_args: any, { argTypes }: any) => {
 }
 export const Default = Template.bind({}) as any
 Default.args = {
-  color: '#bada55',
+  color: '#0197F6',
   size: 48,
   sex: Sex.MALE,
 }

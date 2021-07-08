@@ -16,11 +16,12 @@ export default class User {
   firstname = ''
   surname = ''
   password?: string
-  color = '#bada55'
+  color = '#0197F6'
   sex: Sex = Sex.MALE
 }
 
 export class FormUser extends User {
+  username?: string = ''
   password?: string = ''
   passRepeat?: string = ''
 }

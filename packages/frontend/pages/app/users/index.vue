@@ -1,31 +1,45 @@
 <template>
-  <v-row justify="center" align="center" fluid>
-    <v-col>
-      <v-data-table
-        :headers="headers"
-        :items="datatable.items"
-        :options.sync="datatable.options"
-        :loading="datatable.loading"
-      >
-        <template #[`item.avatar`]="{ item }">
-          <Avatar :size="36" :color="item.color" :sex="item.sex" />
-        </template>
-        <template #[`item.actions`]="{ item }">
-          <action-buttons
-            :item-id="item.id"
-            :delete-one="userCrud.deleteOne"
-            :delete-enabled="$auth.user.id !== item.id"
-            :show-one="userCrud.showOne"
-            :reload-datatable="datatable.reload"
-          />
-        </template>
-      </v-data-table>
-    </v-col>
-  </v-row>
+  <v-sheet style="position: relative" class="pt-8 mt-8">
+    <v-data-table
+      :headers="headers"
+      :items="items"
+      :options.sync="options"
+      :loading="loading"
+      @dblclick:row="(e, { item }) => $router.push(userCrud.showOne(item.id))"
+    >
+      <template #[`item.avatar`]="{ item }">
+        <Avatar :size="36" :color="item.color" :sex="item.sex" />
+      </template>
+      <template #[`item.actions`]="{ item }">
+        <action-buttons
+          :item-id="item.id"
+          :delete-one="userCrud.deleteOne"
+          :delete-enabled="$auth.user.id !== item.id"
+          :show-one="userCrud.showOne"
+          :reload-datatable="fetch"
+        />
+      </template>
+    </v-data-table>
+    <v-btn color="secondary" absolute top right fab :to="createUrl">
+      <v-icon>mdi-plus</v-icon>
+    </v-btn>
+    <v-btn
+      color="secondary lighten-2"
+      style="margin-right: 72px"
+      small
+      absolute
+      top
+      right
+      fab
+      :disabled="loading"
+      @click="fetch"
+    >
+      <v-icon>mdi-refresh</v-icon>
+    </v-btn>
+  </v-sheet>
 </template>
 
 <script lang="ts">
-import { reactive, ref, useContext } from '@nuxtjs/composition-api'
 import { DataTableHeader } from 'vuetify'
 import { navigationStore, snackbarStore } from '~/store'
 import { useDatatable } from '~/composables/useDatatable'
@@ -41,9 +55,10 @@ export default {
     navigationStore.setTitle('Users')
   },
   setup() {
-    const ctx = useContext()
-    const users = ref('')
-    const datatable = useDatatable(ctx.$axios, User, 'users')
+    const { items, fetch, loading, serverItemsLength, options } = useDatatable(
+      User,
+      'users'
+    )
     const userCrud = useCrud(
       'users',
       User,
@@ -77,7 +92,16 @@ export default {
       },
     ]
 
-    return { users, datatable: reactive(datatable), headers, userCrud }
+    return {
+      items,
+      headers,
+      userCrud,
+      loading,
+      serverItemsLength,
+      options,
+      fetch,
+      createUrl: userCrud.createUrl,
+    }
   },
   head() {
     return {

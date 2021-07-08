@@ -9,10 +9,13 @@
           </v-fade-transition>
         </v-col>
         <v-col cols="auto">
-          <v-fade-transition leave-absolute>
-            <v-skeleton-loader v-if="!user" key="1" type="text" />
-            <h1 v-else key="3">{{ user.firstname }} {{ user.surname }}</h1>
-          </v-fade-transition>
+          <template v-if="create"> <h1>New user</h1> </template>
+          <template v-else>
+            <v-fade-transition leave-absolute>
+              <v-skeleton-loader v-if="!user" key="1" type="text" />
+              <h1 v-else key="3">{{ user.firstname }} {{ user.surname }}</h1>
+            </v-fade-transition>
+          </template>
           <color-picker v-model="formUser.color" :readonly="readonly">
             <template #activator="{ on, attrs }">
               <v-btn x-small text class="mt-1 ml-n2" v-bind="attrs" v-on="on">
@@ -37,6 +40,14 @@
       <v-row>
         <v-col>
           <v-form :readonly="readonly">
+            <v-text-field
+              v-if="create"
+              v-model="formUser.username"
+              label="Username"
+              prepend-icon="mdi-text"
+              :error-messages="$v.username.$errors.map((e) => e.$message)"
+              @keydown.enter="submit"
+            />
             <v-text-field
               v-model="formUser.firstname"
               label="First name"
@@ -84,14 +95,17 @@
     </v-card-text>
     <v-card-actions>
       <v-spacer />
-      <v-btn :disabled="readonly" color="primary" @click="submit"> Save </v-btn>
+      <v-btn :disabled="readonly" color="primary" @click="submit">
+        <template v-if="create"> Createe </template>
+        <template v-else> Save </template>
+      </v-btn>
     </v-card-actions>
   </v-card>
 </template>
 
 <script lang="ts">
 import useVuelidate from '@vuelidate/core'
-import { required, sameAs } from '@vuelidate/validators'
+import { required, requiredIf, sameAs } from '@vuelidate/validators'
 import {
   defineComponent,
   reactive,
@@ -120,6 +134,11 @@ export default defineComponent({
       default: false,
       type: Boolean,
     },
+    create: {
+      required: false,
+      default: false,
+      type: Boolean,
+    },
   },
   setup(props: any, { emit }) {
     const user = toRef(props, 'value')
@@ -128,6 +147,7 @@ export default defineComponent({
 
     const $v = useVuelidate(
       {
+        username: { requiredif: requiredIf(props.create) },
         firstname: { required },
         surname: { required },
         password: {},
@@ -145,7 +165,7 @@ export default defineComponent({
       submit() {
         $v.value.$touch()
         const submitUser = _.cloneDeep(formUser)
-        if (!$v.value.$invalid && submitUser.id) {
+        if (!$v.value.$invalid && (submitUser.id || props.create)) {
           if (submitUser.password === '') delete submitUser.password
           delete submitUser.passRepeat
 

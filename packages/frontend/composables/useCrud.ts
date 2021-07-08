@@ -1,4 +1,4 @@
-import { ref, useContext } from '@nuxtjs/composition-api'
+import { computed, ref, useContext } from '@nuxtjs/composition-api'
 import { ClassConstructor, plainToClass } from 'class-transformer'
 import _ from 'lodash'
 export function useCrud<T>(
@@ -8,7 +8,7 @@ export function useCrud<T>(
   onSuccess: (msg: string) => void,
   onError: (msg: string) => void
 ) {
-  const {$axios} = useContext()
+  const { $axios } = useContext()
   const loading = ref(false)
   const error = ref(false)
 
@@ -33,8 +33,10 @@ export function useCrud<T>(
     loading,
     error,
     findOneResult,
+    createUrl: computed(() => `/app/${url}/create`),
+
     showOne(id: number) {
-      return `${url}/${id}`
+      return `/app/${url}/${id}`
     },
 
     async findOne(id: number) {
@@ -43,6 +45,18 @@ export function useCrud<T>(
       const model = plainToClass(entity, response.data)
       findOneResult.value = model
       loading.value = false
+    },
+
+    async createOne(newModel: T) {
+      await actionWrapper(
+        async () => {
+          const response = await $axios.post(`${url}`, newModel)
+          const model = plainToClass(entity, response.data)
+          findOneResult.value = model
+        },
+        (e: string) => `${_.capitalize(e)} created successfully!`,
+        (e: string) => `Error while creating ${e.toLowerCase()}!`
+      )
     },
 
     async updateOne(id: number, updatedModel: T) {

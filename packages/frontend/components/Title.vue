@@ -1,14 +1,22 @@
 <template>
   <div class="title">
-    <block-reveal :color="$vuetify.theme.themes.light.primary" :duration="900">
-      <div class="upper" :style="{ fontSize: size * 4 + 'px' }">
-        <span>HOUSE</span>
-        <span>HOLD</span>
-      </div>
-    </block-reveal>
+    <div>
+      <block-reveal
+        :color="$vuetify.theme.themes.light.primary"
+        :duration="900"
+      >
+        <div class="upper" :style="{ fontSize: size * 4 + 'px' }">
+          <span>HOUSE</span>
+          <span>HOLD</span>
+        </div>
+      </block-reveal>
+    </div>
     <div
       class="lower"
-      :style="{ marginLeft: size * 13.2 + 'px', fontSize: size * 2.5 + 'px' }"
+      :style="{
+        paddingLeft: size * 13.2 + 'px',
+        fontSize: size * 2.5 + 'px',
+      }"
     >
       <block-reveal
         :color="$vuetify.theme.themes.light.accent"
@@ -60,13 +68,21 @@ export default Vue.extend({
 
 <style scoped lang="scss">
 .title {
-  line-height: 0.85;
+  * {
+    line-height: 1em;
+  }
   font-weight: 900;
+  position: relative;
+  text-align: left;
   .upper {
-    display: inline-flex;
+    display: flex;
     span:first-child {
       color: $color-primary;
     }
+  }
+  .lower {
+    position: relative;
+    top: -0.125em;
   }
 }
 </style>

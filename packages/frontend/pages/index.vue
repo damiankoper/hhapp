@@ -1,10 +1,10 @@
 <template>
   <v-row justify="center" align="center">
-    <v-col lg="6" cols="12" class="col-left">
+    <v-col :lg="6" :cols="12" class="text-center">
       <Title class="title" :subtitle="titles[titleNum]" :size="titleSize" />
     </v-col>
-    <v-col lg="6" md="8" sm="8" cols="12">
-      <v-card rounded="xl" max-width="300">
+    <v-col :lg="6" cols="auto">
+      <v-card elevation="4" class="pa-4" rounded="xl" max-width="400">
         <v-card-title>Sign in</v-card-title>
         <v-card-text>
           <v-alert v-model="alertVisible" dense type="error" dismissible>
@@ -27,12 +27,9 @@
               @keydown.enter="submit"
             />
             <v-checkbox v-model="rememberMe" label="Remember me" />
+            <v-btn color="primary" block @click="submit">Sign in</v-btn>
           </v-form>
         </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn color="primary" @click="submit">Sign in</v-btn>
-        </v-card-actions>
       </v-card>
     </v-col>
   </v-row>
@@ -139,9 +136,3 @@ export default Vue.extend({
   },
 })
 </script>
-<style lang="scss" scoped>
-.col-left {
-  display: flex;
-  align-items: center;
-}
-</style>

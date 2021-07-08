@@ -46,7 +46,7 @@ export default Vue.extend({
     } as PropOptions<number>,
     color: {
       type: String,
-      default: '#bada55',
+      default: '#0197F6',
     } as PropOptions<string>,
   },
   computed: {

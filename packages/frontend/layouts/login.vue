@@ -1,11 +1,7 @@
 <template>
   <v-app>
-    <v-main
-      style="height: 100vh"
-      class="d-flex"
-      :class="{ 'align-center': isBig }"
-    >
-      <v-container>
+    <v-main>
+      <v-container class="fill-height">
         <nuxt />
       </v-container>
     </v-main>
@@ -28,11 +24,3 @@ export default Vue.extend({
   },
 })
 </script>
-
-<style lang="scss" scoped>
-.main {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-}
-</style>

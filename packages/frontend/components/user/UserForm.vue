@@ -96,7 +96,7 @@
     <v-card-actions>
       <v-spacer />
       <v-btn :disabled="readonly" color="primary" @click="submit">
-        <template v-if="create"> Createe </template>
+        <template v-if="create"> Create </template>
         <template v-else> Save </template>
       </v-btn>
     </v-card-actions>
@@ -115,7 +115,7 @@ import {
 import _ from 'lodash'
 import ColorPicker from '../ColorPicker.vue'
 import Avatar from '../Avatar.vue'
-import { FormUser, SexValues } from '~/store/session/user.model'
+import { FormUser, SexValues } from '~/store/models/user.model'
 export default defineComponent({
   components: { ColorPicker, Avatar },
   props: {

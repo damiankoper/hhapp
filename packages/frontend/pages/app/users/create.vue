@@ -10,7 +10,7 @@
 import { useContext } from '@nuxtjs/composition-api'
 import { navigationStore, snackbarStore } from '~/store'
 import { useCrud } from '~/composables/useCrud'
-import User from '~/store/session/user.model'
+import {User} from '~/store/models/user.model'
 import UserForm from '~/components/user/UserForm.vue'
 const title = 'Users'
 

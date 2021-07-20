@@ -1,5 +1,5 @@
 import { Meta } from '@storybook/vue'
-import { Sex } from '../store/session/user.model'
+import { Sex } from '../store/models/user.model'
 import Avatar from './Avatar.vue'
 export default {
   title: 'Avatar',

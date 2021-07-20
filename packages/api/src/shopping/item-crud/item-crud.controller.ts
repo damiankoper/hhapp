@@ -14,8 +14,8 @@ import { ItemCrudService } from './item-crud.service';
     alwaysPaginate: true,
   },
 })
-@ApiTags('items')
-@Controller('items')
+@ApiTags('shopping/items')
+@Controller('shopping/items')
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
 export class ItemCrudController implements CrudController<Item> {

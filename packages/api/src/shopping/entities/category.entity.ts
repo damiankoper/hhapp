@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsString } from 'class-validator';
+import { IsBoolean, IsHexColor, IsString } from 'class-validator';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { Item } from './item.entity';
 @Entity()
@@ -10,6 +10,16 @@ export class Category {
   @IsString()
   @Column()
   name: string;
+
+  @ApiProperty({ required: true })
+  @IsString()
+  @Column()
+  icon: string;
+
+  @ApiProperty({ required: false, default: '#ffffff' })
+  @Column({ default: '#ffffff' })
+  @IsHexColor()
+  color: string;
 
   @ApiProperty({ default: false })
   @IsBoolean()

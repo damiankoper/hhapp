@@ -8,34 +8,48 @@
       app
     >
       <v-list>
-        <v-list-item
-          v-for="(item, i) in items"
-          :key="i"
-          :to="item.to"
-          router
-          exact
-          @click.stop="() => (item.click ? item.click() : null)"
-        >
-          <v-list-item-action>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title v-text="item.title" />
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item @click.stop="miniVariant = !miniVariant">
-          <v-list-item-action>
-            <v-icon>
-              mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}
-            </v-icon>
-          </v-list-item-action>
-          <v-list-item-content>Mini&nbsp;menu</v-list-item-content>
-        </v-list-item>
+        <v-scroll-y-transition group hide-on-leave>
+          <template v-for="(item, i) in items">
+            <v-subheader
+              v-if="item.header && !miniVariant"
+              :key="i"
+              v-text="item.header"
+            />
+            <v-divider
+              v-else-if="item.divider || (item.header && miniVariant)"
+              :key="i"
+            />
+            <v-list-item
+              v-else
+              :key="i"
+              :title="item.title"
+              :to="item.to"
+              router
+              exact
+              @click.stop="() => (item.click ? item.click() : null)"
+            >
+              <v-list-item-action>
+                <v-icon>{{ item.icon }}</v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title v-text="item.title" />
+              </v-list-item-content>
+            </v-list-item>
+          </template>
+          <v-list-item key="minimenu" @click.stop="miniVariant = !miniVariant">
+            <v-list-item-action>
+              <v-icon>
+                mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}
+              </v-icon>
+            </v-list-item-action>
+            <v-list-item-content>Mini&nbsp;menu</v-list-item-content>
+          </v-list-item>
+        </v-scroll-y-transition>
       </v-list>
     </v-navigation-drawer>
     <v-app-bar clipped-left fixed app>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <Title class="ml-1" :subtitle="title" :size="8" />
+      <Title class="ml-1 mb-4" :subtitle="title" :size="8" />
       <v-spacer />
       <v-slide-x-transition>
         <v-btn
@@ -72,7 +86,7 @@ import { computed, ref, useContext } from '@nuxtjs/composition-api'
 import Vue from 'vue'
 import Snackbar from '~/components/Snackbar.vue'
 import { navigationStore } from '~/store'
-import User from '~/store/session/user.model'
+import { User } from '~/store/models/user.model'
 
 export default Vue.extend({
   components: { Snackbar },
@@ -80,6 +94,26 @@ export default Vue.extend({
     const ctx = useContext()
     const items = [
       { icon: 'mdi-apps', title: 'Dashboard', to: '/app' },
+
+      { divider: true },
+      { header: 'Shopping' },
+      {
+        icon: 'mdi-inbox-multiple',
+        title: 'Categories',
+        to: '/app/shopping/categories',
+      },
+      {
+        icon: 'mdi-storefront',
+        title: 'Shops',
+        to: '/app/shopping/shops',
+      },
+      {
+        icon: 'mdi-basket',
+        title: 'Items',
+        to: '/app/shopping/items',
+      },
+      { divider: true },
+      { header: 'System' },
       {
         icon: 'mdi-account',
         title: 'Users',

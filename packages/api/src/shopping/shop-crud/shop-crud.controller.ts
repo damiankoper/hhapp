@@ -13,8 +13,8 @@ import { ShopCrudService } from './shop-crud.service';
     alwaysPaginate: true,
   },
 })
-@ApiTags('shops')
-@Controller('shops')
+@ApiTags('shopping/shops')
+@Controller('shopping/shops')
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
 export class ShopCrudController implements CrudController<Shop> {

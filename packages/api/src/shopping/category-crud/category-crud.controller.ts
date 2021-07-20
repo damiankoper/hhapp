@@ -13,8 +13,8 @@ import { CategoryCrudService } from './category-crud.service';
     alwaysPaginate: true,
   },
 })
-@ApiTags('categories')
-@Controller('categories')
+@ApiTags('shopping/categories')
+@Controller('shopping/categories')
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
 export class CategoryCrudController implements CrudController<Category> {

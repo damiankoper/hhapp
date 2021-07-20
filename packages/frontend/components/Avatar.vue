@@ -34,7 +34,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, PropType } from '@nuxtjs/composition-api'
-import { Sex } from '~/store/session/user.model'
+import { Sex } from '~/store/models/user.model'
 export default defineComponent({
   props: {
     color: {

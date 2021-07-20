@@ -1,12 +1,7 @@
 <template>
   <v-row>
     <v-col cols="12" md="6">
-      <user-form
-        v-model="user"
-        :readonly="readonly"
-        :loading="loading"
-        @submit="submit"
-      />
+      <category-form v-model="user" :loading="loading" @submit="submit" />
     </v-col>
 
     <v-col cols="12" md="6">
@@ -33,41 +28,37 @@
 </template>
 
 <script lang="ts">
-import { computed, useContext } from '@nuxtjs/composition-api'
+import { useContext } from '@nuxtjs/composition-api'
 import { navigationStore, snackbarStore } from '~/store'
 import { useCrud } from '~/composables/useCrud'
-import {User} from '~/store/models/user.model'
-import UserForm from '~/components/user/UserForm.vue'
-const title = 'Users'
+import CategoryForm from '~/components/category/CategoryForm.vue'
+import { Category } from '~/store/models/category.model'
+const title = 'Categories'
 
 export default {
-  components: { UserForm },
+  components: { CategoryForm },
   middleware() {
     navigationStore.setTitle(title)
   },
   setup() {
     const ctx = useContext()
-    const userCrud = useCrud(
-      'users',
-      User,
-      'user',
+    const categoryCrud = useCrud(
+      'shopping/categories',
+      Category,
+      'category',
       snackbarStore.showSuccess,
       snackbarStore.showError
     )
-    const user = userCrud.findOneResult
+    const user = categoryCrud.findOneResult
 
-    userCrud.findOne(+ctx.route.value.params.id)
+    categoryCrud.findOne(+ctx.route.value.params.id)
 
     return {
       user,
-      loading: userCrud.loading,
-      readonly: computed(
-        () => user.value && ctx.$auth.user?.id !== user.value.id
-      ),
-      async submit(submitUser: User) {
-        if (submitUser.id) {
-          await userCrud.updateOne(submitUser.id, submitUser)
-          if (ctx.$auth.user?.id === submitUser.id) ctx.$auth.fetchUser()
+      loading: categoryCrud.loading,
+      async submit(submitCategory: Category) {
+        if (submitCategory.id) {
+          await categoryCrud.updateOne(submitCategory.id, submitCategory)
         }
       },
     }

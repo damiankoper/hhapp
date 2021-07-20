@@ -5,17 +5,24 @@
       :items="items"
       :options.sync="options"
       :loading="loading"
-      @dblclick:row="(e, { item }) => $router.push(userCrud.showOne(item.id))"
+      @dblclick:row="
+        (e, { item }) => $router.push(categoryCrud.showOne(item.id))
+      "
     >
-      <template #[`item.avatar`]="{ item }">
-        <Avatar :size="36" :color="item.color" :sex="item.sex" />
+      <template #[`item.icon`]="{ item }">
+        <v-icon color="primary">{{ item.icon }}</v-icon>
+      </template>
+      <template #[`item.color`]="{ item }">
+        <v-icon :color="item.color">mdi-checkbox-blank</v-icon>
+      </template>
+      <template #[`item.sharedByDefault`]="{ item }">
+        <v-simple-checkbox :value="item.sharedByDefault" />
       </template>
       <template #[`item.actions`]="{ item }">
         <action-buttons
           :item-id="item.id"
-          :delete-one="userCrud.deleteOne"
-          :delete-enabled="$auth.user.id !== item.id"
-          :show-one="userCrud.showOne"
+          :delete-one="categoryCrud.deleteOne"
+          :show-one="categoryCrud.showOne"
           :reload-datatable="fetch"
         />
       </template>
@@ -43,26 +50,26 @@
 import { DataTableHeader } from 'vuetify'
 import { navigationStore, snackbarStore } from '~/store'
 import { useDatatable } from '~/composables/useDatatable'
-import { User } from '~/store/models/user.model'
 import ActionButtons from '~/components/datatable/ActionButtons.vue'
 import { useCrud } from '~/composables/useCrud'
+import { Category } from '~/store/models/category.model'
 
-const title = 'Users'
+const title = 'Categories'
 
 export default {
   components: { ActionButtons },
   middleware() {
-    navigationStore.setTitle('Users')
+    navigationStore.setTitle(title)
   },
   setup() {
     const { items, fetch, loading, serverItemsLength, options } = useDatatable(
-      User,
-      'users'
+      Category,
+      'shopping/categories'
     )
-    const userCrud = useCrud(
-      'users',
-      User,
-      'user',
+    const categoryCrud = useCrud(
+      'shopping/categories',
+      Category,
+      'category',
       snackbarStore.showSuccess,
       snackbarStore.showError
     )
@@ -70,17 +77,29 @@ export default {
     const headers: DataTableHeader[] = [
       {
         text: '',
-        value: 'avatar',
+        value: 'icon',
         width: 1,
         sortable: false,
       },
       {
-        text: 'First name',
-        value: 'firstname',
+        text: 'Name',
+        value: 'name',
       },
       {
-        text: 'Surname',
-        value: 'surname',
+        text: 'Color',
+        value: 'color',
+        align: 'center',
+        class: 'text-center',
+        width: 80,
+        sortable: false,
+      },
+      {
+        text: 'Shared',
+        value: 'sharedByDefault',
+        align: 'center',
+        class: 'text-center',
+        width: 80,
+        sortable: false,
       },
       {
         text: 'Actions',
@@ -95,12 +114,12 @@ export default {
     return {
       items,
       headers,
-      userCrud,
+      categoryCrud,
       loading,
       serverItemsLength,
       options,
       fetch,
-      createUrl: userCrud.createUrl,
+      createUrl: categoryCrud.createUrl,
     }
   },
   head() {

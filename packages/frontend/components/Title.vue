@@ -1,5 +1,5 @@
 <template>
-  <div class="title">
+  <div class="h-title">
     <div>
       <block-reveal
         :color="$vuetify.theme.themes.light.primary"
@@ -25,7 +25,9 @@
         :visible="subtitleVisible"
         @after-leave="subtitleVisible = true"
       >
-        <span class="lower">{{ subtitleUpper }}</span>
+        <span style="position: relative; top: -0.125em">{{
+          subtitleUpper
+        }}</span>
       </block-reveal>
     </div>
   </div>
@@ -67,7 +69,7 @@ export default Vue.extend({
 </script>
 
 <style scoped lang="scss">
-.title {
+.h-title {
   * {
     line-height: 1em;
   }
@@ -81,8 +83,8 @@ export default Vue.extend({
     }
   }
   .lower {
-    position: relative;
-    top: -0.125em;
+    position: absolute;
+    top: 1.5em;
   }
 }
 </style>

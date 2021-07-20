@@ -1,9 +1,13 @@
 <template>
   <v-row justify="center" align="center">
-    <v-col :lg="6" :cols="12" class="text-center">
-      <Title class="title" :subtitle="titles[titleNum]" :size="titleSize" />
+    <v-col :xl="6" :lg="6" :sm="12" cols="auto" class="d-flex justify-center">
+      <Title
+        class="title pr-sm-16 mb-md-0 mb-12"
+        :subtitle="titles[titleNum]"
+        :size="titleSize"
+      />
     </v-col>
-    <v-col :lg="6" cols="auto">
+    <v-col :xl="6" :lg="6" sm="auto" cols="auto">
       <v-card elevation="4" class="pa-4" rounded="xl" max-width="400">
         <v-card-title>Sign in</v-card-title>
         <v-card-text>
@@ -38,6 +42,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import {
+  computed,
   onBeforeUnmount,
   onMounted,
   ref,
@@ -48,7 +53,7 @@ import { useVuelidate } from '@vuelidate/core'
 
 export default Vue.extend({
   layout: 'login',
-  setup(_props, _ctx) {
+  setup() {
     const titles = [
       'app',
       'shopping',
@@ -82,12 +87,15 @@ export default Vue.extend({
       },
       { username, password }
     )
-    const context = useContext()
+    const {
+      $auth,
+      app: { vuetify },
+    } = useContext()
     async function submit() {
       $v.value.$touch()
       if (!$v.value.$invalid) {
         try {
-          await context.$auth.loginWith('local', {
+          await $auth.loginWith('local', {
             data: {
               username: username.value,
               password: password.value,
@@ -95,7 +103,6 @@ export default Vue.extend({
             },
           })
         } catch (e) {
-          console.log(e)
           alertVisible.value = true
           if (e.response.status === 404) {
             alertText.value = 'Invalid username or password'
@@ -105,6 +112,15 @@ export default Vue.extend({
         }
       }
     }
+
+    const titleSize = computed(() => {
+      switch (true) {
+        case vuetify?.framework.breakpoint.smAndUp:
+          return 18
+        default:
+          return 12
+      }
+    })
 
     return {
       $v,
@@ -116,6 +132,7 @@ export default Vue.extend({
       alertVisible,
       alertText,
       submit,
+      titleSize,
     }
   },
 
@@ -123,16 +140,6 @@ export default Vue.extend({
     return {
       title: 'Welcome',
     }
-  },
-  computed: {
-    titleSize(): number {
-      switch (true) {
-        case this.$vuetify.breakpoint.mdAndUp:
-          return 18
-        default:
-          return 12
-      }
-    },
   },
 })
 </script>

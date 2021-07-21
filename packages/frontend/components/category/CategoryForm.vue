@@ -1,5 +1,5 @@
 <template>
-  <v-card :loading="loading">
+  <v-card :loading="loading" :disabled="loading">
     <v-card-text>
       <v-row align="center">
         <v-col cols="auto">
@@ -10,17 +10,30 @@
             </v-avatar>
           </v-fade-transition>
         </v-col>
-        <v-col cols="auto">
-          <template v-if="create"> <h1>New category</h1> </template>
+        <v-col
+          cols="auto"
+          class="flex-grow-1 text-h5 font-weight-bold"
+          style="line-height: 1.375rem"
+        >
+          <template v-if="create"> New category </template>
           <template v-else>
-            <v-fade-transition leave-absolute>
-              <v-skeleton-loader v-if="!category" key="1" type="text" />
-              <h1 v-else key="3">{{ category.name }}</h1>
+            <v-fade-transition mode="out-in">
+              <v-skeleton-loader v-if="!category" type="text" width="300" />
+              <div v-else class="mb-0">
+                {{ category.name }}
+              </div>
             </v-fade-transition>
           </template>
           <color-picker v-model="formCategory.color" :readonly="readonly">
             <template #activator="{ on, attrs }">
-              <v-btn x-small text class="mt-1 ml-n2" v-bind="attrs" v-on="on">
+              <v-btn
+                x-small
+                text
+                class="ml-n2"
+                v-bind="attrs"
+                :disabled="!category"
+                v-on="on"
+              >
                 <v-row dense align="center">
                   <v-col cols="auto">
                     <div
@@ -41,7 +54,7 @@
       </v-row>
       <v-row>
         <v-col>
-          <v-form :readonly="readonly">
+          <v-form :readonly="readonly" :disabled="!category">
             <v-text-field
               v-model="formCategory.name"
               label="Name"

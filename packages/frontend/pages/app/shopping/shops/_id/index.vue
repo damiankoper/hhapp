@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col cols="12" md="6">
-      <category-form v-model="user" :loading="loading" @submit="submit" />
+      <shop-form v-model="user" :loading="loading" @submit="submit" />
     </v-col>
 
     <v-col cols="12" md="6">
@@ -31,34 +31,34 @@
 import { useContext } from '@nuxtjs/composition-api'
 import { navigationStore, snackbarStore } from '~/store'
 import { useCrud } from '~/composables/useCrud'
-import CategoryForm from '~/components/category/CategoryForm.vue'
-import { Category } from '~/store/models/category.model'
-const title = 'Categories'
+import ShopForm from '~/components/shop/ShopForm.vue'
+import { Shop } from '~/store/models/shop.model'
+const title = 'Shops'
 
 export default {
-  components: { CategoryForm },
+  components: { ShopForm },
   middleware() {
     navigationStore.setTitle(title)
   },
   setup() {
     const ctx = useContext()
-    const categoryCrud = useCrud(
-      'shopping/categories',
-      Category,
-      'category',
+    const shopCrud = useCrud(
+      'shopping/shops',
+      Shop,
+      'shop',
       snackbarStore.showSuccess,
       snackbarStore.showError
     )
-    const user = categoryCrud.findOneResult
+    const user = shopCrud.findOneResult
 
-    categoryCrud.findOne(+ctx.route.value.params.id)
+    shopCrud.findOne(+ctx.route.value.params.id)
 
     return {
       user,
-      loading: categoryCrud.loading,
-      async submit(submitCategory: Category) {
-        if (submitCategory.id) {
-          await categoryCrud.updateOne(submitCategory.id, submitCategory)
+      loading: shopCrud.loading,
+      async submit(submitShop: Shop) {
+        if (submitShop.id) {
+          await shopCrud.updateOne(submitShop.id, submitShop)
         }
       },
     }

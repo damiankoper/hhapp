@@ -16,7 +16,7 @@
             mdi-home-lightbulb-outline
           </v-icon>
           <br />
-          <span class="text-h4 font-weight-bold">Card placeholder</span>
+          <span class="text-h4">Card placeholder</span>
         </v-card-text>
       </v-card>
       <v-card>
@@ -25,7 +25,7 @@
             mdi-home-heart
           </v-icon>
           <br />
-          <span class="text-h4 font-weight-bold">Card placeholder</span>
+          <span class="text-h4">Card placeholder</span>
         </v-card-text>
       </v-card>
     </v-col>
@@ -36,7 +36,7 @@
 import { computed, useContext } from '@nuxtjs/composition-api'
 import { navigationStore, snackbarStore } from '~/store'
 import { useCrud } from '~/composables/useCrud'
-import {User} from '~/store/models/user.model'
+import { User } from '~/store/models/user.model'
 import UserForm from '~/components/user/UserForm.vue'
 const title = 'Users'
 

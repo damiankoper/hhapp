@@ -1,5 +1,5 @@
 <template>
-  <v-card :loading="loading">
+  <v-card :loading="loading" :disabled="loading">
     <v-card-text>
       <v-row align="center">
         <v-col cols="auto">
@@ -8,17 +8,28 @@
             <avatar v-else :size="48" :color="user.color" :sex="user.sex" />
           </v-fade-transition>
         </v-col>
-        <v-col cols="auto">
-          <template v-if="create"> <h1>New user</h1> </template>
+        <v-col
+          cols="auto"
+          class="flex-grow-1 text-h5 font-weight-bold"
+          style="line-height: 1.375rem"
+        >
+          <template v-if="create"> New user </template>
           <template v-else>
-            <v-fade-transition leave-absolute>
-              <v-skeleton-loader v-if="!user" key="1" type="text" />
-              <h1 v-else key="3">{{ user.firstname }} {{ user.surname }}</h1>
+            <v-fade-transition mode="out-in">
+              <v-skeleton-loader v-if="!user" type="text" width="300" />
+              <div v-else>{{ user.firstname }} {{ user.surname }}</div>
             </v-fade-transition>
           </template>
           <color-picker v-model="formUser.color" :readonly="readonly">
             <template #activator="{ on, attrs }">
-              <v-btn x-small text class="mt-1 ml-n2" v-bind="attrs" v-on="on">
+              <v-btn
+                x-small
+                text
+                class="ml-n2"
+                v-bind="attrs"
+                :disabled="!user"
+                v-on="on"
+              >
                 <v-row dense align="center">
                   <v-col cols="auto">
                     <div
@@ -39,7 +50,7 @@
       </v-row>
       <v-row>
         <v-col>
-          <v-form :readonly="readonly">
+          <v-form :readonly="readonly" :disabled="!user">
             <v-text-field
               v-if="create"
               v-model="formUser.username"

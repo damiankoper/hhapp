@@ -26,6 +26,9 @@ export class Category {
   @Column()
   sharedByDefault: boolean;
 
-  @OneToMany(() => Item, (item) => item.category)
+  @OneToMany(() => Item, (item) => item.category, {
+    onDelete: 'RESTRICT',
+    nullable: false,
+  })
   items: Item[];
 }

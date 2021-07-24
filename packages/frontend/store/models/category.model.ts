@@ -1,11 +1,13 @@
-import { Expose } from 'class-transformer'
+import { Expose, Type } from 'class-transformer'
+import { Item } from './item.model'
 
 @Expose()
 export class Category {
-  id?: number
-  name = ''
+  id?: number = undefined
+  name = undefined
   icon = 'mdi-progress-question'
   color = '#bada55'
   sharedByDefault = false
-  items = [] // TODO: transform nested
+  @Type(() => Item)
+  items?: Item[]
 }

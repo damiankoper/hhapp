@@ -29,7 +29,7 @@
 
 <script lang="ts">
 import { useContext } from '@nuxtjs/composition-api'
-import { navigationStore, snackbarStore } from '~/store'
+import { navigationStore } from '~/store'
 import { useCrud } from '~/composables/useCrud'
 import ShopForm from '~/components/shop/ShopForm.vue'
 import { Shop } from '~/store/models/shop.model'
@@ -42,13 +42,7 @@ export default {
   },
   setup() {
     const ctx = useContext()
-    const shopCrud = useCrud(
-      'shopping/shops',
-      Shop,
-      'shop',
-      snackbarStore.showSuccess,
-      snackbarStore.showError
-    )
+    const shopCrud = useCrud('shopping/shops', Shop, 'shop')
     const user = shopCrud.findOneResult
 
     shopCrud.findOne(+ctx.route.value.params.id)

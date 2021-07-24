@@ -3,7 +3,11 @@ import { ref, watch, useContext } from '@nuxtjs/composition-api'
 import { ClassConstructor, plainToClass } from 'class-transformer'
 import { DataOptions } from 'vuetify'
 import { snackbarStore } from '~/store'
-export function useDatatable<T>(entity: ClassConstructor<T>, baseUrl: string) {
+export function useDatatable<T>(
+  entity: ClassConstructor<T>,
+  baseUrl: string,
+  qbFn: (qb: RequestQueryBuilder) => void = () => {}
+) {
   const { $axios } = useContext()
   const items = ref<T[]>([])
   const options = ref<DataOptions>({
@@ -34,6 +38,7 @@ export function useDatatable<T>(entity: ClassConstructor<T>, baseUrl: string) {
     if (options.value.itemsPerPage >= 0) qb.setLimit(options.value.itemsPerPage)
 
     try {
+      qbFn(qb)
       const response = await $axios.get(`${baseUrl}?${qb.query()}`)
       const data = response.data
       items.value = plainToClass(entity, data.data) as any

@@ -1,5 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsISO8601, IsNumber, IsString } from 'class-validator';
+import {
+  IsBoolean,
+  IsISO8601,
+  IsNumberString,
+  IsString,
+} from 'class-validator';
 import { User } from 'src/user/entities/user.entity';
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { Category } from './category.entity';
@@ -15,19 +20,19 @@ export class Item {
   name: string;
 
   @ApiProperty({ required: true })
-  @IsNumber()
-  @Column()
-  price: number;
+  @IsNumberString()
+  @Column({ type: 'decimal' })
+  price: string;
 
   @ApiProperty({ required: true })
-  @IsNumber()
-  @Column()
-  quantity: number;
+  @IsNumberString()
+  @Column({ type: 'decimal' })
+  quantity: string;
 
   @ApiProperty({ required: true })
-  @IsNumber()
-  @Column()
-  unitDiscount: number;
+  @IsNumberString()
+  @Column({ type: 'decimal' })
+  unitDiscount: string;
 
   @ApiProperty({ required: true })
   @IsISO8601()
@@ -39,15 +44,21 @@ export class Item {
   @Column()
   shared: boolean;
 
-  @ManyToOne(() => Category, (category) => category.items)
+  @ManyToOne(() => Category, (category) => category.items, {
+    onDelete: 'RESTRICT',
+    nullable: false,
+  })
   category: Category;
 
-  @ManyToOne(() => Shop, (shop) => shop.items)
+  @ManyToOne(() => Shop, (shop) => shop.items, {
+    onDelete: 'RESTRICT',
+    nullable: false,
+  })
   shop: Shop;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, { onDelete: 'RESTRICT', nullable: false })
   boughtBy: User;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, { onDelete: 'RESTRICT', nullable: false })
   boughtFor: User;
 }

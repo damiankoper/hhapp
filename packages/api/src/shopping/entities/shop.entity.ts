@@ -12,6 +12,9 @@ export class Shop {
   @Column()
   name: string;
 
-  @OneToMany(() => Item, (item) => item.shop)
+  @OneToMany(() => Item, (item) => item.shop, {
+    onDelete: 'RESTRICT',
+    nullable: false,
+  })
   items: Item[];
 }

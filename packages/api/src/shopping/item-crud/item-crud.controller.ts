@@ -12,6 +12,7 @@ import { ItemCrudService } from './item-crud.service';
   },
   query: {
     alwaysPaginate: true,
+    join: { category: {}, boughtBy: {}, boughtFor: {}, shop: {} },
   },
 })
 @ApiTags('shopping/items')

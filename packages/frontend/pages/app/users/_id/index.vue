@@ -34,7 +34,7 @@
 
 <script lang="ts">
 import { computed, useContext } from '@nuxtjs/composition-api'
-import { navigationStore, snackbarStore } from '~/store'
+import { navigationStore } from '~/store'
 import { useCrud } from '~/composables/useCrud'
 import { User } from '~/store/models/user.model'
 import UserForm from '~/components/user/UserForm.vue'
@@ -47,13 +47,7 @@ export default {
   },
   setup() {
     const ctx = useContext()
-    const userCrud = useCrud(
-      'users',
-      User,
-      'user',
-      snackbarStore.showSuccess,
-      snackbarStore.showError
-    )
+    const userCrud = useCrud('users', User, 'user')
     const user = userCrud.findOneResult
 
     userCrud.findOne(+ctx.route.value.params.id)

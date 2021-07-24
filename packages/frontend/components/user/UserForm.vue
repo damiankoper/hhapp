@@ -11,11 +11,11 @@
         <v-col
           cols="auto"
           class="flex-grow-1 text-h5 font-weight-bold"
-          style="line-height: 1.375rem"
+          style="line-height: 1.375rem; position: relative"
         >
           <template v-if="create"> New user </template>
           <template v-else>
-            <v-fade-transition mode="out-in">
+            <v-fade-transition leave-absolute>
               <v-skeleton-loader v-if="!user" type="text" width="300" />
               <div v-else>{{ user.firstname }} {{ user.surname }}</div>
             </v-fade-transition>
@@ -57,21 +57,21 @@
               label="Username"
               prepend-icon="mdi-text"
               :error-messages="$v.username.$errors.map((e) => e.$message)"
-              @keydown.enter="submit"
+              @keydown.enter.prevent="submit"
             />
             <v-text-field
               v-model="formUser.firstname"
               label="First name"
               prepend-icon="mdi-text"
               :error-messages="$v.firstname.$errors.map((e) => e.$message)"
-              @keydown.enter="submit"
+              @keydown.enter.prevent="submit"
             />
             <v-text-field
               v-model="formUser.surname"
               label="Surname"
               prepend-icon="mdi-text"
               :error-messages="$v.surname.$errors.map((e) => e.$message)"
-              @keydown.enter="submit"
+              @keydown.enter.prevent="submit"
             />
             <v-select
               v-model="formUser.sex"
@@ -88,7 +88,7 @@
               prepend-icon="mdi-lock"
               :error-messages="$v.password.$errors.map((e) => e.$message)"
               autocomplete="new-password"
-              @keydown.enter="submit"
+              @keydown.enter.prevent="submit"
             />
             <v-text-field
               v-if="!readonly"
@@ -98,7 +98,7 @@
               prepend-icon="mdi-lock"
               :error-messages="$v.passRepeat.$errors.map((e) => e.$message)"
               autocomplete="new-password"
-              @keydown.enter="submit"
+              @keydown.enter.prevent="submit"
             />
           </v-form>
         </v-col>
@@ -192,4 +192,12 @@ export default defineComponent({
 })
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+.v-skeleton-loader {
+  ::v-deep .v-skeleton-loader__text {
+    height: 1.5rem;
+    border-radius: 0.75rem;
+    margin-bottom: 0;
+  }
+}
+</style>

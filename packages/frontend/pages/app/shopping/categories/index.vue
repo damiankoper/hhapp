@@ -54,7 +54,7 @@ import ActionButtons from '~/components/datatable/ActionButtons.vue'
 import { useCrud } from '~/composables/useCrud'
 import { Category } from '~/store/models/category.model'
 
-const title = 'Categories'
+const title = 'Shopping categories'
 
 export default {
   components: { ActionButtons },

@@ -13,11 +13,11 @@
         <v-col
           cols="auto"
           class="flex-grow-1 text-h5 font-weight-bold mb-0"
-          style="line-height: 1.375rem"
+          style="line-height: 1.375rem; position: relative"
         >
           <template v-if="create"> New shop </template>
           <template v-else>
-            <v-fade-transition mode="out-in">
+            <v-fade-transition leave-absolute>
               <v-skeleton-loader v-if="!shop" type="text" max-width="300" />
               <span v-else>{{ shop.name }}</span>
             </v-fade-transition>
@@ -32,7 +32,7 @@
               label="Name"
               prepend-icon="mdi-text"
               :error-messages="$v.name.$errors.map((e) => e.$message)"
-              @keydown.enter="submit"
+              @keydown.enter.prevent="submit"
             />
           </v-form>
         </v-col>
@@ -110,4 +110,12 @@ export default defineComponent({
 })
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+.v-skeleton-loader {
+  ::v-deep .v-skeleton-loader__text {
+    height: 1.5rem;
+    border-radius: 0.75rem;
+    margin-bottom: 0;
+  }
+}
+</style>

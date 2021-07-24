@@ -37,7 +37,7 @@
 
 <script lang="ts">
 import { DataTableHeader } from 'vuetify'
-import { navigationStore, snackbarStore } from '~/store'
+import { navigationStore } from '~/store'
 import { useDatatable } from '~/composables/useDatatable'
 import ActionButtons from '~/components/datatable/ActionButtons.vue'
 import { useCrud } from '~/composables/useCrud'
@@ -55,13 +55,7 @@ export default {
       Shop,
       'shopping/shops'
     )
-    const shopCrud = useCrud(
-      'shopping/shops',
-      Shop,
-      'shop',
-      snackbarStore.showSuccess,
-      snackbarStore.showError
-    )
+    const shopCrud = useCrud('shopping/shops', Shop, 'shop')
 
     const headers: DataTableHeader[] = [
       {

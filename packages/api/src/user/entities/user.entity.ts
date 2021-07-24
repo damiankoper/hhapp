@@ -9,6 +9,7 @@ import * as bcryptjs from 'bcryptjs';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsHexColor, IsString } from 'class-validator';
 import { Sex } from '../enums/sex.enum';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class User {
@@ -32,6 +33,7 @@ export class User {
   @ApiProperty({ required: true })
   @IsString()
   @Column({ select: false })
+  @Exclude()
   password?: string;
 
   @ApiProperty({ required: false, default: '#ffffff' })

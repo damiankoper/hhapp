@@ -128,7 +128,7 @@ export default Vue.extend({
         },
       },
     ]
-    const title = computed(() => navigationStore.title)
+    const title = computed(() => navigationStore.title.replaceAll(' ', '_'))
     const drawer = ref(true)
     const miniVariant = ref(true)
     const user = computed(() => ctx.$auth.user as unknown as User)

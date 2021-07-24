@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col cols="12" md="6">
-      <category-form v-model="user" :loading="loading" @submit="submit" />
+      <item-form v-model="item" :loading="loading" @submit="submit" />
     </v-col>
 
     <v-col cols="12" md="6">
@@ -29,30 +29,35 @@
 
 <script lang="ts">
 import { useContext } from '@nuxtjs/composition-api'
+import { RequestQueryBuilder } from '@nestjsx/crud-request'
 import { navigationStore } from '~/store'
 import { useCrud } from '~/composables/useCrud'
-import CategoryForm from '~/components/category/CategoryForm.vue'
-import { Category } from '~/store/models/category.model'
-const title = 'Shopping categories'
+import ItemForm from '~/components/item/ItemForm.vue'
+import { Item } from '~/store/models/item.model'
+const title = 'Shopping items'
 
 export default {
-  components: { CategoryForm },
+  components: { ItemForm },
   middleware() {
     navigationStore.setTitle(title)
   },
   setup() {
     const ctx = useContext()
-    const categoryCrud = useCrud('shopping/categories', Category, 'category')
-    const user = categoryCrud.findOneResult
+    const itemCrud = useCrud('shopping/items', Item, 'item')
+    const item = itemCrud.findOneResult
 
-    categoryCrud.findOne(+ctx.route.value.params.id)
+    function qbFn(qb: RequestQueryBuilder) {
+      qb.setJoin([['category'], ['shop'], ['boughtBy'], ['boughtFor']])
+    }
+
+    itemCrud.findOne(+ctx.route.value.params.id, qbFn)
 
     return {
-      user,
-      loading: categoryCrud.loading,
-      async submit(submitCategory: Category) {
-        if (submitCategory.id) {
-          await categoryCrud.updateOne(submitCategory.id, submitCategory)
+      item,
+      loading: itemCrud.loading,
+      async submit(submitItem: Item) {
+        if (submitItem.id) {
+          await itemCrud.updateOne(submitItem.id, submitItem, qbFn)
         }
       },
     }

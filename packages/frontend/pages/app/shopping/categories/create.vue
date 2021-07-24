@@ -17,7 +17,7 @@ import { navigationStore, snackbarStore } from '~/store'
 import { useCrud } from '~/composables/useCrud'
 import CategoryForm from '~/components/category/CategoryForm.vue'
 import { Category } from '~/store/models/category.model'
-const title = 'Categories'
+const title = 'Shopping categories'
 
 export default {
   components: { CategoryForm },

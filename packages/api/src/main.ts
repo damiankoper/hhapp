@@ -2,10 +2,12 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { TypeOrmExceptionFilter } from './common/typeorm.exception-filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalFilters(new TypeOrmExceptionFilter());
   const options = new DocumentBuilder()
     .addBearerAuth()
     .setTitle('HouseholaApp API')

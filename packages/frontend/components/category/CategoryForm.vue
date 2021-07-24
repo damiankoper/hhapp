@@ -13,11 +13,11 @@
         <v-col
           cols="auto"
           class="flex-grow-1 text-h5 font-weight-bold"
-          style="line-height: 1.375rem"
+          style="line-height: 1.375rem; position: relative"
         >
           <template v-if="create"> New category </template>
           <template v-else>
-            <v-fade-transition mode="out-in">
+            <v-fade-transition leave-absolute>
               <v-skeleton-loader v-if="!category" type="text" width="300" />
               <div v-else class="mb-0">
                 {{ category.name }}
@@ -60,14 +60,14 @@
               label="Name"
               prepend-icon="mdi-text"
               :error-messages="$v.name.$errors.map((e) => e.$message)"
-              @keydown.enter="submit"
+              @keydown.enter.prevent="submit"
             />
             <v-text-field
               v-model="formCategory.icon"
               label="Icon"
               :prepend-icon="formCategory.icon"
               :error-messages="$v.icon.$errors.map((e) => e.$message)"
-              @keydown.enter="submit"
+              @keydown.enter.prevent="submit"
             />
             <v-checkbox
               v-model="formCategory.sharedByDefault"
@@ -153,4 +153,12 @@ export default defineComponent({
 })
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+.v-skeleton-loader {
+  ::v-deep .v-skeleton-loader__text {
+    height: 1.5rem;
+    border-radius: 0.75rem;
+    margin-bottom: 0;
+  }
+}
+</style>

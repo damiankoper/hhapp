@@ -59,6 +59,6 @@ export class Item {
   @ManyToOne(() => User, { onDelete: 'RESTRICT', nullable: false })
   boughtBy: User;
 
-  @ManyToOne(() => User, { onDelete: 'RESTRICT', nullable: false })
+  @ManyToOne(() => User, { onDelete: 'RESTRICT', nullable: true })
   boughtFor: User;
 }

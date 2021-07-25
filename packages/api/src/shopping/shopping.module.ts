@@ -9,11 +9,23 @@ import { Category } from './entities/category.entity';
 import { ItemCrudService } from './item-crud/item-crud.service';
 import { ItemCrudController } from './item-crud/item-crud.controller';
 import { Item } from './entities/item.entity';
+import { ItemService } from './item/item.service';
+import { ItemController } from './item/item.controller';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Shop, Category, Item])],
-  providers: [CategoryCrudService, ShopCrudService, ItemCrudService],
-  controllers: [CategoryCrudController, ShopCrudController, ItemCrudController],
+  providers: [
+    CategoryCrudService,
+    ShopCrudService,
+    ItemCrudService,
+    ItemService,
+  ],
+  controllers: [
+    CategoryCrudController,
+    ShopCrudController,
+    ItemController,
+    ItemCrudController,
+  ],
   exports: [TypeOrmModule.forFeature([Shop, Category, Item])],
 })
 export class ShoppingModule {}

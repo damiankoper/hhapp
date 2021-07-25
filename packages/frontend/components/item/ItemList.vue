@@ -6,6 +6,7 @@
       {{ currency(sum(items)) }}
     </v-card-title>
     <v-list>
+      <!-- TODO: list-item transition group -->
       <template v-for="(itemsShop, id, n) in byShop">
         <v-divider v-if="n > 0" :key="id + 'd'" />
         <v-subheader :key="id">
@@ -72,7 +73,11 @@
                 </v-icon>
                 {{ item.boughtBy.firstname }}
                 {{ item.boughtBy.surname }}
-                <template v-if="item.boughtBy.id !== item.boughtFor.id">
+                <template
+                  v-if="
+                    item.boughtFor && item.boughtBy.id !== item.boughtFor.id
+                  "
+                >
                   <b class="mx-1">&#183;</b>
                   <v-icon x-small>mdi-account-arrow-left</v-icon>
                   {{ item.boughtFor.firstname }}
@@ -109,7 +114,7 @@ export default defineComponent({
           price: '120.00',
           quantity: '1',
           unitDiscount: '0',
-          date: '2021-07-25T00:00:00.000Z',
+          date: '2021-07-25',
           shared: false,
           category: {
             id: 2,
@@ -142,7 +147,7 @@ export default defineComponent({
           price: '0.69',
           quantity: '2137',
           unitDiscount: '0.3',
-          date: '2021-07-23T00:00:00.000Z',
+          date: '2021-07-23',
           shared: true,
           category: {
             id: 1,

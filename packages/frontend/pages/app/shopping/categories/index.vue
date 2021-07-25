@@ -5,6 +5,7 @@
       :items="items"
       :options.sync="options"
       :loading="loading"
+      :server-items-length="serverItemsLength"
       @dblclick:row="
         (e, { item }) => $router.push(categoryCrud.showOne(item.id))
       "

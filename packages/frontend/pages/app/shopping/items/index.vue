@@ -5,6 +5,7 @@
       :items="items"
       :options.sync="options"
       :loading="loading"
+      :server-items-length="serverItemsLength"
       @dblclick:row="(e, { item }) => $router.push(itemCrud.showOne(item.id))"
     >
       <!-- TODO: Ellpisis -->
@@ -50,17 +51,19 @@
         {{ item.boughtBy.firstname }}
         {{ item.boughtBy.surname }}
         <br />
-        <v-btn
-          title="Bought for"
-          icon
-          x-small
-          nuxt
-          :to="userCrud.showOne(item.boughtFor.id)"
-        >
-          <v-icon>mdi-account-arrow-left</v-icon>
-        </v-btn>
-        {{ item.boughtFor.firstname }}
-        {{ item.boughtFor.surname }}
+        <template v-if="item.boughtFor">
+          <v-btn
+            title="Bought for"
+            icon
+            x-small
+            nuxt
+            :to="userCrud.showOne(item.boughtFor.id)"
+          >
+            <v-icon>mdi-account-arrow-left</v-icon>
+          </v-btn>
+          {{ item.boughtFor.firstname }}
+          {{ item.boughtFor.surname }}
+        </template>
       </template>
       <template #[`item.date`]="{ item }">
         {{ isoDate(item.date) }}

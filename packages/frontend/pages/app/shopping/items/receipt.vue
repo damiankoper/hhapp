@@ -1,16 +1,23 @@
 <template>
   <v-row>
     <v-col :cols="12" :md="6">
-      <item-form v-model="item" :loading="loading" create @submit="submit" />
+      <item-form
+        v-model="item"
+        :loading="loading"
+        :create="!item.id"
+        @submit="submit"
+      />
     </v-col>
     <v-col :cols="12" :md="6">
-      <item-list v-model="item" :loading="loading" create @submit="submit" />
+      <item-list :items="items" :loading="loading" @click="itemClick" />
     </v-col>
   </v-row>
 </template>
 
 <script lang="ts">
-import { useContext } from '@nuxtjs/composition-api'
+import { ref } from '@nuxtjs/composition-api'
+import _ from 'lodash'
+import { RequestQueryBuilder } from '@nestjsx/crud-request'
 import { navigationStore, snackbarStore } from '~/store'
 import { useCrud } from '~/composables/useCrud'
 import ItemForm from '~/components/item/ItemForm.vue'
@@ -24,7 +31,9 @@ export default {
     navigationStore.setTitle(title)
   },
   setup() {
-    const { app } = useContext()
+    function qbFn(qb: RequestQueryBuilder) {
+      qb.setJoin([['category'], ['shop'], ['boughtBy'], ['boughtFor']])
+    }
     const itemCrud = useCrud(
       'shopping/items',
       Item,
@@ -32,15 +41,38 @@ export default {
       snackbarStore.showSuccess,
       snackbarStore.showError
     )
-    const item = new Item()
+    const item = ref(new Item())
+    const items = ref<Item[]>([])
 
     return {
       item,
+      items,
       loading: itemCrud.loading,
+      itemClick(clicked: Item) {
+        item.value = clicked
+      },
       async submit(submitItem: Item) {
-        await itemCrud.createOne(submitItem)
-        app.router?.push(
-          itemCrud.showOne(itemCrud.findOneResult.value?.id || 0)
+        if (submitItem.id) {
+          await itemCrud.updateOne(submitItem.id, submitItem, qbFn)
+          const index = items.value.findIndex((i) => i.id === submitItem.id)
+          if (index >= 0)
+            Object.assign(items.value[index], itemCrud.findOneResult.value)
+        } else {
+          await itemCrud.createOne(submitItem, qbFn)
+          if (itemCrud.findOneResult.value)
+            items.value.push(itemCrud.findOneResult.value)
+        }
+        item.value = Object.assign(
+          new Item(),
+          _.pick(
+            submitItem,
+            'boughtBy',
+            'boughtFor',
+            'shop',
+            'category',
+            'date',
+            'shared'
+          )
         )
       },
     }

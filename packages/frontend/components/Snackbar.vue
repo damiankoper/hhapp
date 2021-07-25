@@ -4,6 +4,7 @@
     <v-snackbar
       :value="visible"
       :color="type"
+      :timeout="timeout"
       top
       @input="(v) => setVisible(v)"
     >

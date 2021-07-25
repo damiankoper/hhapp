@@ -34,6 +34,7 @@ export function useCrud<T>(
           'Cannot perform this action because of conflict with other entities!'
         )
       } else onError(error(entityName))
+      throw e
     }
     loading.value = false
   }
@@ -72,10 +73,15 @@ export function useCrud<T>(
       loading.value = false
     },
 
-    async createOne(newModel: T) {
+    async createOne(
+      newModel: T,
+      qbFn: (qb: RequestQueryBuilder) => void = () => {}
+    ) {
       await actionWrapper(
         async () => {
-          const response = await $axios.post(`${url}`, newModel)
+          const qb = new RequestQueryBuilder()
+          qbFn(qb)
+          const response = await $axios.post(`${url}?${qb.query()}`, newModel)
           const model = plainToClass(entity, response.data)
           findOneResult.value = model
         },

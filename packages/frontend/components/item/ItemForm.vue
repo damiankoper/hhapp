@@ -31,14 +31,35 @@
           <v-form :readonly="readonly">
             <v-row>
               <v-col :cols="12">
-                <v-text-field
+                <v-combobox
                   ref="nameInput"
                   v-model="formItem.name"
                   label="Name"
                   prepend-icon="mdi-text"
                   :error-messages="$v.name.$errors.map((e) => e.$message)"
-                  @keydown.enter.prevent="submit"
-                />
+                  :search-input.sync="nameSearch"
+                  :items="nameSearchResult"
+                  :loading="nameSearchLoading"
+                  item-text="name"
+                  item-value="name"
+                  no-filter
+                  @change="onAutocomplete"
+                >
+                  <template #item="{ item }">
+                    <v-list-item-avatar :color="item.category.color">
+                      <v-icon color="white" size="1.75rem">
+                        {{ item.category.icon }}
+                      </v-icon>
+                    </v-list-item-avatar>
+                    {{ item.name }}
+                    <span class="grey--text">
+                      <b class="mx-1">&#183;</b>
+                      {{ item.shop.name }}
+                      <b class="mx-1">&#183;</b>
+                      {{ currency(item.price) }}
+                    </span>
+                  </template>
+                </v-combobox>
               </v-col>
               <v-col :md="6" :cols="12">
                 <v-text-field
@@ -59,6 +80,7 @@
               </v-col>
               <v-col :md="6" :cols="12">
                 <v-text-field
+                  ref="quantityInput"
                   v-model="formItem.quantity"
                   label="Quantity"
                   type="number"
@@ -223,6 +245,7 @@ import {
   defineComponent,
   onMounted,
   reactive,
+  Ref,
   ref,
   toRef,
   useContext,
@@ -231,11 +254,13 @@ import {
 import _ from 'lodash'
 import { VueComponent } from '@nuxtjs/auth-next'
 import { DateTime } from 'luxon'
+import { plainToClass } from 'class-transformer'
 import { Item } from '~/store/models/item.model'
 import { Category } from '~/store/models/category.model'
 import { Shop } from '~/store/models/shop.model'
 import { User } from '~/store/models/user.model'
 import { useCrud } from '~/composables/useCrud'
+import { useFilters } from '~/composables/useFilters'
 export default defineComponent({
   props: {
     value: {
@@ -260,12 +285,34 @@ export default defineComponent({
     },
   },
   setup(props, { emit }) {
-    const { $auth } = useContext()
+    const { $auth, $axios } = useContext()
     const item = toRef(props, 'value')
     const formItem = reactive<Item>(Object.assign(new Item()))
     watch(item, () => Object.assign(formItem, item.value))
 
     const nameInput = ref<VueComponent | null>(null)
+    const quantityInput = ref<VueComponent | null>(null)
+    const nameSearch = ref('')
+    const nameSearchResult = ref<Item[]>([]) as Ref<Item[]>
+    const nameSearchLoading = ref(false)
+    async function nameSearchFn() {
+      const names = nameSearchResult.value.map((n) => n.name)
+      if (
+        props.create &&
+        nameSearch.value &&
+        !names.includes(nameSearch.value)
+      ) {
+        nameSearchLoading.value = true
+        try {
+          const result = await $axios.get('/shopping/items/autocomplete', {
+            params: { name: nameSearch.value },
+          })
+          nameSearchResult.value = plainToClass(Item, result.data as Item[])
+        } catch (e) {}
+        nameSearchLoading.value = false
+      }
+    }
+    watch(nameSearch, _.debounce(nameSearchFn, 500))
 
     const shopCrud = useCrud('shopping/shops', Shop, 'shop')
     const categoryCrud = useCrud('shopping/categories', Category, 'category')
@@ -306,9 +353,14 @@ export default defineComponent({
     )
     return {
       $v,
+      ...useFilters(),
       item,
       formItem,
       nameInput,
+      quantityInput,
+      nameSearch,
+      nameSearchResult,
+      nameSearchLoading,
       categoryCrudLoading: categoryCrud.loading,
       categoryCrudFindManyResult: categoryCrud.findManyResult,
       shopCrudLoading: shopCrud.loading,
@@ -333,6 +385,18 @@ export default defineComponent({
           emit('submit', submitItem)
           isDiscountOverall.value = false
           $v.value.$reset()
+        }
+      },
+      onAutocomplete(data: string | Item) {
+        if (!_.isString(data)) {
+          Object.assign(formItem, _.omit(data, 'id', 'date', 'quantity'))
+          formItem.date = formItem.date
+            ? formItem.date
+            : DateTime.now().toISODate()
+          if (quantityInput.value) {
+            const el = (quantityInput.value as any).$el
+            el.querySelector('input')?.focus()
+          }
         }
       },
     }

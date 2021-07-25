@@ -13,7 +13,7 @@ export class Item {
   unitDiscount?: number = undefined
 
   @Transform(({ value }) => DateTime.fromISO(value).toISODate(), {})
-  date?: Date = undefined
+  date?: string = undefined
 
   category?: Category = undefined
   shop?: Shop = undefined

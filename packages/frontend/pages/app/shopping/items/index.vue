@@ -74,12 +74,31 @@
         />
       </template>
     </v-data-table>
-    <v-btn color="primary" absolute top right fab :to="createUrl">
+
+    <v-btn
+      color="primary"
+      absolute
+      top
+      right
+      fab
+      to="/app/shopping/items/receipt"
+    >
+      <v-icon>mdi-text-box-plus</v-icon>
+    </v-btn>
+    <v-btn
+      color="primary"
+      style="margin-right: 72px"
+      absolute
+      top
+      right
+      fab
+      :to="createUrl"
+    >
       <v-icon>mdi-plus</v-icon>
     </v-btn>
     <v-btn
       color="primary lighten-2"
-      style="margin-right: 72px"
+      style="margin-right: 144px"
       small
       absolute
       top
@@ -171,12 +190,14 @@ export default {
       {
         text: 'Shop',
         value: 'shop.name',
+        cellClass: 'text-no-wrap',
       },
 
       {
         text: 'Bought',
         value: 'bought',
         sortable: false,
+        cellClass: 'text-no-wrap',
       },
 
       {

@@ -1,20 +1,19 @@
 <template>
   <v-card :loading="loading" :disabled="loading">
     <v-card-text>
-      <v-row align="center">
+      <v-row align="center" style="flex-wrap: nowrap">
         <v-col cols="auto">
           <v-fade-transition leave-absolute tag="span">
             <v-skeleton-loader v-if="!item" type="avatar" width="48" />
             <v-avatar v-else color="primary">
-              <v-icon v-if="item.category" color="white" size="210%">
+              <v-icon v-if="item.category" color="white" size="2rem">
                 {{ item.category.icon }}
               </v-icon>
-              <v-icon v-else color="white" size="210%"> mdi-storefront </v-icon>
+              <v-icon v-else color="white" size="2rem"> mdi-storefront </v-icon>
             </v-avatar>
           </v-fade-transition>
         </v-col>
         <v-col
-          cols="auto"
           class="flex-grow-1 text-h5 font-weight-bold mb-0"
           style="line-height: 1.375rem; position: relative"
         >
@@ -121,7 +120,15 @@
                 />
               </v-col>
               <v-col :md="6" :cols="12">
-                <v-switch v-model="formItem.shared" label="Shared" />
+                <v-switch
+                  v-model="formItem.shared"
+                  label="Shared"
+                  @change="
+                    () => {
+                      if (formItem.shared) formItem.boughtFor = undefined
+                    }
+                  "
+                />
               </v-col>
               <v-col :md="6" :cols="12">
                 <v-autocomplete
@@ -134,6 +141,7 @@
                   :items="shopCrudFindManyResult"
                   item-text="name"
                   return-object
+                  @focus="(e) => e.target.click()"
                 />
               </v-col>
               <v-col :md="6" :cols="12">
@@ -147,6 +155,7 @@
                   :items="categoryCrudFindManyResult"
                   item-text="name"
                   return-object
+                  @focus="(e) => e.target.click()"
                 >
                   <template #item="{ item }">
                     <v-icon :color="item.color" class="mr-2">
@@ -167,6 +176,7 @@
                   :items="userCrudFindManyResult"
                   :item-text="(o) => `${o.firstname} ${o.surname}`"
                   return-object
+                  @focus="(e) => e.target.click()"
                   @change="
                     (e) => {
                       formItem.boughtFor = formItem.boughtFor
@@ -179,6 +189,7 @@
               <v-col :md="6" :cols="12">
                 <v-autocomplete
                   v-model="formItem.boughtFor"
+                  :disabled="formItem.shared"
                   prepend-icon="mdi-account-arrow-left"
                   label="Bought for"
                   cache-items
@@ -187,6 +198,7 @@
                   :items="userCrudFindManyResult"
                   :item-text="(o) => `${o.firstname} ${o.surname}`"
                   return-object
+                  @focus="(e) => e.target.click()"
                 />
               </v-col>
             </v-row>
@@ -206,17 +218,17 @@
 
 <script lang="ts">
 import useVuelidate from '@vuelidate/core'
-import { required } from '@vuelidate/validators'
+import { required, requiredIf } from '@vuelidate/validators'
 import {
   defineComponent,
   onMounted,
   reactive,
   ref,
   toRef,
+  useContext,
   watch,
 } from '@nuxtjs/composition-api'
 import _ from 'lodash'
-import { Component } from 'vue'
 import { VueComponent } from '@nuxtjs/auth-next'
 import { DateTime } from 'luxon'
 import { Item } from '~/store/models/item.model'
@@ -248,6 +260,7 @@ export default defineComponent({
     },
   },
   setup(props, { emit }) {
+    const { $auth } = useContext()
     const item = toRef(props, 'value')
     const formItem = reactive<Item>(Object.assign(new Item()))
     watch(item, () => Object.assign(formItem, item.value))
@@ -257,14 +270,17 @@ export default defineComponent({
     const shopCrud = useCrud('shopping/shops', Shop, 'shop')
     const categoryCrud = useCrud('shopping/categories', Category, 'category')
     const userCrud = useCrud('users', User, 'user')
-    onMounted(() => {
-      shopCrud.findMany()
-      categoryCrud.findMany()
-      userCrud.findMany()
+    onMounted(async () => {
       if (props.create && nameInput.value) {
         const el = (nameInput.value as any).$el
         el.querySelector('input')?.focus()
       }
+      shopCrud.findMany()
+      categoryCrud.findMany()
+      await userCrud.findMany()
+      formItem.boughtBy = userCrud.findManyResult.value.find(
+        (u) => u.id === $auth.user?.id
+      )
     })
 
     const isDiscountOverall = ref(false)
@@ -284,7 +300,7 @@ export default defineComponent({
         shop: { required },
         category: { required },
         boughtBy: { required },
-        boughtFor: { required },
+        boughtFor: { requiredIf: requiredIf(() => !formItem.shared) },
       },
       formItem
     )
@@ -315,6 +331,7 @@ export default defineComponent({
             submitItem.unitDiscount /= submitItem.quantity
           }
           emit('submit', submitItem)
+          isDiscountOverall.value = false
           $v.value.$reset()
         }
       },

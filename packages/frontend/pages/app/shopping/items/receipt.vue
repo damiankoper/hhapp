@@ -3,6 +3,9 @@
     <v-col :cols="12" :md="6">
       <item-form v-model="item" :loading="loading" create @submit="submit" />
     </v-col>
+    <v-col :cols="12" :md="6">
+      <item-list v-model="item" :loading="loading" create @submit="submit" />
+    </v-col>
   </v-row>
 </template>
 
@@ -11,11 +14,12 @@ import { useContext } from '@nuxtjs/composition-api'
 import { navigationStore, snackbarStore } from '~/store'
 import { useCrud } from '~/composables/useCrud'
 import ItemForm from '~/components/item/ItemForm.vue'
+import ItemList from '~/components/item/ItemList.vue'
 import { Item } from '~/store/models/item.model'
 const title = 'Shopping items'
 
 export default {
-  components: { ItemForm },
+  components: { ItemForm, ItemList },
   middleware() {
     navigationStore.setTitle(title)
   },

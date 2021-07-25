@@ -1,7 +1,7 @@
 <template>
   <v-card :loading="loading" :disabled="loading">
     <v-card-text>
-      <v-row align="center">
+      <v-row align="center" style="flex-wrap: nowrap">
         <v-col cols="auto">
           <v-fade-transition leave-absolute tag="span">
             <v-skeleton-loader v-if="!user" type="avatar" width="48" />
@@ -9,7 +9,6 @@
           </v-fade-transition>
         </v-col>
         <v-col
-          cols="auto"
           class="flex-grow-1 text-h5 font-weight-bold"
           style="line-height: 1.375rem; position: relative"
         >

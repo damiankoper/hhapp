@@ -98,6 +98,13 @@
           </v-list-item>
         </template>
       </template>
+      <v-list-item v-if="!byShop.length">
+        <v-list-item-content>
+          <v-list-item-title class="text-center">
+            Create item to see summary of submited items.
+          </v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
     </v-list>
     <v-card-actions> </v-card-actions>
   </v-card>

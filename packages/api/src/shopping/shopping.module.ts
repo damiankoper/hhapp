@@ -26,6 +26,6 @@ import { ItemController } from './item/item.controller';
     ItemController,
     ItemCrudController,
   ],
-  exports: [TypeOrmModule.forFeature([Shop, Category, Item])],
+  exports: [TypeOrmModule.forFeature([Shop, Category, Item]), ItemService],
 })
 export class ShoppingModule {}

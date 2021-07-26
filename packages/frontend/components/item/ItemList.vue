@@ -68,7 +68,12 @@
                 <br />
 
                 <v-icon x-small>mdi-account-arrow-right</v-icon>
-                <v-icon v-if="item.boughtBy.id === item.boughtFor.id" x-small>
+                <v-icon
+                  v-if="
+                    item.boughtFor && item.boughtBy.id === item.boughtFor.id
+                  "
+                  x-small
+                >
                   mdi-account-arrow-left
                 </v-icon>
                 {{ item.boughtBy.firstname }}

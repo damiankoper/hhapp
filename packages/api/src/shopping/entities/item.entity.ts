@@ -6,13 +6,23 @@ import {
   IsString,
 } from 'class-validator';
 import { User } from 'src/user/entities/user.entity';
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  CreateDateColumn,
+} from 'typeorm';
 import { Category } from './category.entity';
 import { Shop } from './shop.entity';
 
 @Entity()
 export class Item {
   @PrimaryGeneratedColumn() id: number;
+
+  @ApiProperty({ readOnly: true })
+  @CreateDateColumn()
+  createdAt: Date;
 
   @ApiProperty({ required: true })
   @IsString()

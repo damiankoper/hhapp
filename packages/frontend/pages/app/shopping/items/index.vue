@@ -137,6 +137,7 @@ export default {
   setup() {
     function qbFn(qb: RequestQueryBuilder) {
       qb.setJoin([['category'], ['shop'], ['boughtBy'], ['boughtFor']])
+      qb.sortBy(['createdAt', 'DESC'])
     }
     const { items, fetch, loading, serverItemsLength, options } = useDatatable(
       Item,
@@ -145,6 +146,7 @@ export default {
     )
     options.value.sortBy.push('date')
     options.value.sortDesc.push(true)
+
     const itemCrud = useCrud('shopping/items', Item, 'item')
     const categoryCrud = useCrud('shopping/categories', Category, 'category')
     const shopCrud = useCrud('shopping/shops', Shop, 'shop')
@@ -160,36 +162,36 @@ export default {
       {
         text: 'Name',
         value: 'name',
+        width: '100%',
+        class: 'text-no-wrap',
       },
 
       {
         text: 'Price',
         value: 'price',
         align: 'end',
+        class: 'text-no-wrap',
       },
       {
         text: 'Quantity',
         value: 'quantity',
         align: 'end',
+        class: 'text-no-wrap',
       },
       {
-        text: 'Unit discount',
+        text: 'U. d.',
         value: 'unitDiscount',
         align: 'end',
+        class: 'text-no-wrap',
       },
       {
         text: 'Total',
         value: 'total',
         align: 'end',
         sortable: false,
+        class: 'text-no-wrap',
       },
-      {
-        text: 'Shared',
-        value: 'shared',
-        align: 'center',
-        width: 80,
-        sortable: false,
-      },
+
       {
         text: 'Shop',
         value: 'shop.name',
@@ -202,11 +204,19 @@ export default {
         sortable: false,
         cellClass: 'text-no-wrap',
       },
-
+      {
+        text: 'Shared',
+        value: 'shared',
+        align: 'center',
+        width: 80,
+        sortable: false,
+        class: 'text-no-wrap',
+      },
       {
         text: 'Date',
         value: 'date',
         width: 110,
+        class: 'text-no-wrap',
       },
       {
         text: 'Actions',

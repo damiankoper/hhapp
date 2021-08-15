@@ -12,7 +12,7 @@
           class="flex-grow-1 text-h5 font-weight-bold"
           style="line-height: 1.375rem; position: relative"
         >
-          <template v-if="create"> New user </template>
+          <div v-if="create">New user</div>
           <template v-else>
             <v-fade-transition leave-absolute>
               <v-skeleton-loader v-if="!user" type="text" width="300" />

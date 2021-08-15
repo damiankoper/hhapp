@@ -24,37 +24,14 @@
     <v-col :lg="6" :cols="12">
       <expenses-monthly-card />
     </v-col>
-    <v-col :lg="6" :cols="12"> Expenses by user </v-col>
-    <v-col :cols="12">
-      <v-card
-        height="400px"
-        class="tradingview-widget-container"
-        style="overflow: hidden; height: 400px"
-      >
-        <div
-          id="tradingview_a3175"
-          style="overflow: hidden; height: 400px"
-        ></div>
-        <script
-          type="text/javascript"
-          src="https://s3.tradingview.com/tv.js"
-        ></script>
-        <script type="text/javascript">
-          new TradingView.widget({
-            autosize: true,
-            symbol: 'NYSE:NOK',
-            interval: 'D',
-            timezone: 'Etc/UTC',
-            theme: 'dark',
-            style: '1',
-            locale: 'en',
-            toolbar_bg: '#f1f3f6',
-            enable_publishing: false,
-            allow_symbol_change: true,
-            container_id: 'tradingview_a3175',
-          })
-        </script>
-      </v-card>
+    <v-col :lg="6" :cols="12">
+      <expenses-by-user-card />
+    </v-col>
+    <v-col :lg="6" :cols="12">
+      <expenses-by-category-card />
+    </v-col>
+    <v-col :lg="6" :cols="12">
+      <debts-card />
     </v-col>
   </v-row>
 </template>
@@ -64,6 +41,9 @@ import { computed, defineComponent, onMounted } from '@nuxtjs/composition-api'
 import { DateTime } from 'luxon'
 import Counter from '~/components/dashboard/Counter.vue'
 import ExpensesMonthlyCard from '~/components/dashboard/ExpensesMonthlyCard.vue'
+import ExpensesByUserCard from '~/components/dashboard/ExpensesByUserCard.vue'
+import ExpensesByCategoryCard from '~/components/dashboard/ExpensesByCategoryCard.vue'
+import DebtsCard from '~/components/dashboard/DebtsCard.vue'
 import { useApi } from '~/composables/useApi'
 import { navigationStore } from '~/store'
 
@@ -74,7 +54,13 @@ interface Counters {
 }
 
 export default defineComponent({
-  components: { Counter, ExpensesMonthlyCard },
+  components: {
+    Counter,
+    ExpensesMonthlyCard,
+    ExpensesByUserCard,
+    ExpensesByCategoryCard,
+    DebtsCard,
+  },
   middleware() {
     navigationStore.setTitle('App')
   },

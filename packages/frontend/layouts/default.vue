@@ -75,7 +75,7 @@
       </v-container>
     </v-main>
     <Snackbar />
-    <v-footer absolute app>
+    <v-footer app>
       <span>Copyright © Damian Koper {{ new Date().getFullYear() }}</span>
     </v-footer>
   </v-app>

@@ -14,7 +14,7 @@
           class="flex-grow-1 text-h5 font-weight-bold"
           style="line-height: 1.375rem; position: relative"
         >
-          <template v-if="create"> New category </template>
+          <div v-if="create">New category</div>
           <template v-else>
             <v-fade-transition leave-absolute>
               <v-skeleton-loader v-if="!category" type="text" width="300" />

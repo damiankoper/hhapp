@@ -17,13 +17,15 @@
           class="flex-grow-1 text-h5 font-weight-bold mb-0"
           style="line-height: 1.375rem; position: relative"
         >
-          <template v-if="create"> New item </template>
-          <template v-else>
-            <v-fade-transition leave-absolute>
-              <v-skeleton-loader v-if="!item" type="text" max-width="300" />
-              <span v-else>{{ item.name }}</span>
-            </v-fade-transition>
-          </template>
+          <v-fade-transition leave-absolute>
+            <span v-if="create">New item</span>
+            <template v-else>
+              <v-fade-transition leave-absolute>
+                <v-skeleton-loader v-if="!item" type="text" max-width="300" />
+                <span v-else style="width: 100%">{{ item.name }}</span>
+              </v-fade-transition>
+            </template>
+          </v-fade-transition>
         </v-col>
       </v-row>
       <v-row>
@@ -147,7 +149,7 @@
                   label="Shared"
                   @change="
                     () => {
-                      if (formItem.shared) formItem.boughtFor = undefined
+                      if (formItem.shared) formItem.boughtFor = null
                     }
                   "
                 />

@@ -1,6 +1,6 @@
 <template>
   <v-card :loading="loading">
-    <v-card-title> Expenses monthly </v-card-title>
+    <v-card-title> Expenses monthly by user</v-card-title>
     <v-card-text>
       <line-chart :data="data" :options="options" class="mb-4" />
       <v-row justify="end">
@@ -37,27 +37,26 @@ import {
   defineComponent,
   onMounted,
   ref,
-  useContext,
   watch,
 } from '@nuxtjs/composition-api'
 import { ChartData } from 'chart.js'
 import { DateTime } from 'luxon'
 import _ from 'lodash'
-import Color from 'color'
 import DatePicker from '../form/DatePicker.vue'
 import LineChart from '~/components/dashboard/LineChart.vue'
 import { useApi } from '~/composables/useApi'
 import { useChartCommon } from '~/composables/useChartCommon'
-
+import { useFilters } from '~/composables/useFilters'
 export default defineComponent({
   components: { LineChart, DatePicker },
   setup() {
+    const { currency } = useFilters()
     const month = DateTime.now().startOf('month')
     const from = ref(month.minus({ month: 5 }).toISODate())
     const to = ref(month.toISODate())
 
     const { data, loading, fetch } = useApi<ChartData<'line'>>(
-      '/dashboard/monthly/',
+      '/dashboard/by-user',
       () => ({
         params: {
           from: from.value,
@@ -78,24 +77,30 @@ export default defineComponent({
       constFetch()
     })
 
-    const {
-      $vuetify: { theme },
-    } = useContext()
-
     const { expensesOptions: options } = useChartCommon()
 
     return {
       from,
       to,
-      options: computed(() => _.merge(options, { plugins: { legend: false } })),
+      options: computed(() =>
+        _.merge(options, {
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: (v: any) =>
+                  ` ${v.dataset.label}: ${currency(
+                    (v.raw as { y: string }).y
+                  )}`,
+              },
+            },
+          },
+        })
+      ),
       loading,
       data: computed(() => {
         const c = _.cloneDeep(data.value)
         c?.datasets.forEach((dataset) => {
-          const color = Color(theme.currentTheme.primary)
           Object.assign(dataset, {
-            backgroundColor: color.fade(0.8).string(),
-            borderColor: color.string(),
             fill: true,
             borderWidth: 4,
             tension: 0.1,

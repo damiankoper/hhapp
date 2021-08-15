@@ -6,7 +6,6 @@
       {{ currency(sum(items)) }}
     </v-card-title>
     <v-list>
-      <!-- TODO: list-item transition group -->
       <template v-for="(itemsShop, id, n) in byShop">
         <v-divider v-if="n > 0" :key="id + 'd'" />
         <v-subheader :key="id">
@@ -17,7 +16,13 @@
           {{ currency(sum(itemsShop)) }}
         </v-subheader>
         <template v-for="item in itemsShop">
-          <v-list-item :key="item.id" three-line @click="$emit('click', item)">
+          <v-list-item
+            :key="item.id"
+            :class="{ 'grey lighten-4 elevation-8': item.id === current.id }"
+            three-line
+            class="tr"
+            @click="$emit('click', item)"
+          >
             <v-list-item-avatar
               style="overflow: visible"
               :color="item.category.color"
@@ -42,7 +47,7 @@
                     "
                     v-on="on"
                   >
-                    <v-icon small> mdi-home-heart </v-icon>
+                    <v-icon color="primary" small> mdi-home-heart </v-icon>
                   </v-sheet>
                 </template>
                 <span> Shared </span>
@@ -98,7 +103,7 @@
           </v-list-item>
         </template>
       </template>
-      <v-list-item v-if="!byShop.length">
+      <v-list-item v-if="!items.length">
         <v-list-item-content>
           <v-list-item-title class="text-center">
             Create item to see summary of submited items.
@@ -119,75 +124,12 @@ export default defineComponent({
   props: {
     items: {
       required: false,
-      default: () => [
-        {
-          id: 4,
-          name: 'Bardzo długa nazwa produktu heheh hehehe heheh',
-          price: '120.00',
-          quantity: '1',
-          unitDiscount: '0',
-          date: '2021-07-25',
-          shared: false,
-          category: {
-            id: 2,
-            name: 'Domestic items and detergents',
-            icon: 'mdi-spray-bottle',
-            color: '#555BDA',
-            sharedByDefault: true,
-          },
-          shop: { id: 5, name: 'Frog Shop' },
-          boughtBy: {
-            id: 1,
-            firstname: 'Damian',
-            surname: 'Koper',
-            username: 'damiankoper',
-            color: '#bada55',
-            sex: 'MALE',
-          },
-          boughtFor: {
-            id: 1,
-            firstname: 'Damian',
-            surname: 'Koper',
-            username: 'damiankoper',
-            color: '#bada55',
-            sex: 'MALE',
-          },
-        },
-        {
-          id: 2,
-          name: 'Bułka hajzerka',
-          price: '0.69',
-          quantity: '2137',
-          unitDiscount: '0.3',
-          date: '2021-07-23',
-          shared: true,
-          category: {
-            id: 1,
-            name: 'Groceries',
-            icon: 'mdi-food-apple',
-            color: '#FF2474',
-            sharedByDefault: true,
-          },
-          shop: { id: 5, name: 'Frog Shop' },
-          boughtBy: {
-            id: 1,
-            firstname: 'Damian',
-            surname: 'Koper',
-            username: 'damiankoper',
-            color: '#bada55',
-            sex: 'MALE',
-          },
-          boughtFor: {
-            id: 1,
-            firstname: 'Damian',
-            surname: 'Koper',
-            username: 'damiankoper',
-            color: '#bada55',
-            sex: 'MALE',
-          },
-        },
-      ],
+      default: () => [],
       type: Array as PropType<Item[]>,
+    },
+    current: {
+      default: () => new Item(),
+      type: Object as PropType<Item>,
     },
     readonly: {
       required: false,
@@ -215,7 +157,6 @@ export default defineComponent({
           0
         )
       },
-      // TODO: Group by shop -> date
       byShop: computed(() => _.groupBy(props.items, 'shop.id')),
     }
   },
@@ -229,5 +170,8 @@ export default defineComponent({
     border-radius: 0.75rem;
     margin-bottom: 0;
   }
+}
+.tr {
+  transition: box-shadow 0.3s, background-color 0.3s;
 }
 </style>

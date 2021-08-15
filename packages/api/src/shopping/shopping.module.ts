@@ -11,9 +11,10 @@ import { ItemCrudController } from './item-crud/item-crud.controller';
 import { Item } from './entities/item.entity';
 import { ItemService } from './item/item.service';
 import { ItemController } from './item/item.controller';
+import { UserModule } from 'src/user/user.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Shop, Category, Item])],
+  imports: [TypeOrmModule.forFeature([Shop, Category, Item]), UserModule],
   providers: [
     CategoryCrudService,
     ShopCrudService,

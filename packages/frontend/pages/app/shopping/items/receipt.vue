@@ -9,7 +9,13 @@
       />
     </v-col>
     <v-col :cols="12" :md="6">
-      <item-list :items="items" :loading="loading" @click="itemClick" />
+      <item-list
+        :current="item"
+        :items="items"
+        :loading="loading"
+        @click="itemClick"
+        @delete="itemDelete"
+      />
     </v-col>
   </v-row>
 </template>
@@ -44,12 +50,38 @@ export default {
     const item = ref(new Item())
     const items = ref<Item[]>([])
 
+    function resetItem() {
+      item.value = Object.assign(
+        new Item(),
+        _.pick(
+          item.value,
+          'boughtBy',
+          'boughtFor',
+          'shop',
+          'category',
+          'date',
+          'shared'
+        )
+      )
+    }
+
     return {
       item,
       items,
       loading: itemCrud.loading,
       itemClick(clicked: Item) {
         item.value = clicked
+      },
+      async itemDelete(clicked: Item) {
+        if (clicked.id) {
+          try {
+            await itemCrud.deleteOne(clicked.id)
+            items.value = items.value.filter((item) => item.id !== clicked.id)
+            resetItem()
+          } catch (e) {
+            /** */
+          }
+        }
       },
       async submit(submitItem: Item) {
         if (submitItem.id) {
@@ -62,18 +94,7 @@ export default {
           if (itemCrud.findOneResult.value)
             items.value.push(itemCrud.findOneResult.value)
         }
-        item.value = Object.assign(
-          new Item(),
-          _.pick(
-            submitItem,
-            'boughtBy',
-            'boughtFor',
-            'shop',
-            'category',
-            'date',
-            'shared'
-          )
-        )
+        resetItem()
       },
     }
   },

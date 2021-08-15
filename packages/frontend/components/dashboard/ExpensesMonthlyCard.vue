@@ -66,7 +66,7 @@ export default defineComponent({
       })
     )
 
-    const constFetch = _.debounce(() => {
+    const constFetch = _.throttle(() => {
       fetch()
     }, 300)
 

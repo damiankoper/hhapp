@@ -1,5 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { JwtModuleOptions, JwtOptionsFactory } from '@nestjs/jwt';
+import {
+  ClientProvider,
+  ClientsModuleOptionsFactory,
+  Transport,
+} from '@nestjs/microservices';
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
 import { Category } from 'src/shopping/entities/category.entity';
 import { Item } from 'src/shopping/entities/item.entity';
@@ -7,7 +12,12 @@ import { Shop } from 'src/shopping/entities/shop.entity';
 import { User } from 'src/user/entities/user.entity';
 
 @Injectable()
-export class ConfigService implements TypeOrmOptionsFactory, JwtOptionsFactory {
+export class ConfigService
+  implements
+    TypeOrmOptionsFactory,
+    JwtOptionsFactory,
+    ClientsModuleOptionsFactory
+{
   createJwtSecretOptions() {
     return {
       secret: process.env.JWT_SECRET || 'secret0',
@@ -40,6 +50,12 @@ export class ConfigService implements TypeOrmOptionsFactory, JwtOptionsFactory {
         process.env.NODE_ENV !== 'production'
           ? 'all'
           : ['error', 'warn', 'info', 'log', 'migration'],
+    };
+  }
+
+  createClientOptions(): ClientProvider {
+    return {
+      transport: Transport.MQTT,
     };
   }
 }

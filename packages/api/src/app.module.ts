@@ -6,6 +6,7 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { ShoppingModule } from './shopping/shopping.module';
 import { DashboardModule } from './dashboard/dashboard.module';
+import { IotModule } from './iot/iot.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
     AuthModule,
     ShoppingModule,
     DashboardModule,
+    IotModule,
   ],
   controllers: [],
   providers: [],

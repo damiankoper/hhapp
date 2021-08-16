@@ -1,5 +1,6 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { MqttOptions, Transport } from '@nestjs/microservices';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { TypeOrmExceptionFilter } from './common/typeorm.exception-filter';
@@ -17,6 +18,15 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
 
   app.enableCors();
+
+  app.connectMicroservice<MqttOptions>({
+    transport: Transport.MQTT,
+    options: {
+      url: 'mqtt://mqtt-broker:1883',
+    },
+  });
+
+  await app.startAllMicroservices();
   await app.listen(3000);
 }
 bootstrap();

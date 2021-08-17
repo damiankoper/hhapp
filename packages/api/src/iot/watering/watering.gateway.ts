@@ -1,32 +1,45 @@
+import { Inject } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
 import {
   OnGatewayConnection,
   SubscribeMessage,
   WebSocketGateway,
-  WsException,
+  WebSocketServer,
 } from '@nestjs/websockets';
 import * as jwt from 'jsonwebtoken';
-import { Socket } from 'socket.io';
+import { Socket, Server } from 'socket.io';
 import { ConfigService } from 'src/config/config.service';
+import { IotMqttClient } from '../constants';
 
 @WebSocketGateway({ cors: true })
 export class WateringGateway implements OnGatewayConnection {
-  constructor(protected readonly configService: ConfigService) {}
+  constructor(
+    protected readonly configService: ConfigService,
+    @Inject(IotMqttClient) private mqttClient: ClientProxy,
+  ) {}
+
+  @WebSocketServer()
+  public wsServer: Server;
 
   handleConnection(client: Socket) {
     const authToken = client.handshake.auth.token;
     try {
-      jwt.verify(authToken, this.configService.createJwtSecretOptions().secret);
+      if (this.configService.isProd()) {
+        jwt.verify(
+          authToken,
+          this.configService.createJwtSecretOptions().secret,
+        );
+      }
     } catch (e) {
       client.emit('error', 'Not authorized!');
       client.disconnect(true);
-      console.log('client disconnected');
     }
 
     return client;
   }
 
-  @SubscribeMessage('message')
-  handleMessage(client: any, payload: any) {
-    return ['Hello world!'];
+  @SubscribeMessage('iot/watering/toggle')
+  toggle() {
+    this.mqttClient.emit('iot/watering/toggle', '');
   }
 }

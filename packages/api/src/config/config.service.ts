@@ -18,6 +18,12 @@ export class ConfigService
     JwtOptionsFactory,
     ClientsModuleOptionsFactory
 {
+  isDev() {
+    return process.env.NODE_ENV !== 'production';
+  }
+  isProd() {
+    return process.env.NODE_ENV === 'production';
+  }
   createJwtSecretOptions() {
     return {
       secret: process.env.JWT_SECRET || 'secret0',

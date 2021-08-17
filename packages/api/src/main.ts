@@ -19,12 +19,13 @@ async function bootstrap() {
 
   app.enableCors();
 
-  app.connectMicroservice<MqttOptions>({
+  const microservice = app.connectMicroservice<MqttOptions>({
     transport: Transport.MQTT,
     options: {
       url: 'mqtt://mqtt-broker:1883',
     },
   });
+  microservice.useGlobalPipes(new ValidationPipe({ transform: true }));
 
   await app.startAllMicroservices();
   await app.listen(3000);

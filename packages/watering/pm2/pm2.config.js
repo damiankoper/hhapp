@@ -21,7 +21,7 @@ module.exports = {
       repo: 'git@github.com:damiankoper/hhapp.git',
       path: '/home/pi/iot/watering/production',
       'post-deploy':
-        'npx lerna bootstrap --scope watering --scope api && nest build && pm2 reload pm2/pm2.config.js --env production',
+        'npx lerna bootstrap --scope watering --scope api && npm run build && pm2 reload pm2/pm2.config.js --env production',
     },
   },
 };

@@ -1,11 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { IotMqttClient } from './config/constants';
-import { WateringStatus } from 'api';
 import { ConfigService } from './config/config.service';
 import getMAC from 'getmac';
 import { Gpio } from 'pigpio';
 import { Cron } from '@nestjs/schedule';
+import { WateringStatus } from './models/watering-status.model';
 @Injectable()
 export class AppService {
   private status: WateringStatus = new WateringStatus();

@@ -26,7 +26,6 @@
     "@nestjs/microservices": "^8.0.6",
     "@nestjs/platform-express": "^8.0.0",
     "@nestjs/schedule": "^1.0.1",
-    "api": "*",
     "class-transformer": "^0.4.0",
     "dotenv": "^10.0.0",
     "getmac": "^5.20.0",

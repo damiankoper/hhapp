@@ -1,9 +1,11 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { MqttOptions, Transport } from '@nestjs/microservices';
+import { MqttOptions } from '@nestjs/microservices';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { TypeOrmExceptionFilter } from './common/typeorm.exception-filter';
+import { ConfigService } from './config/config.service';
+import { WateringStatus } from './iot/watering/models/watering-status.model';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -19,15 +21,14 @@ async function bootstrap() {
 
   app.enableCors();
 
-  const microservice = app.connectMicroservice<MqttOptions>({
-    transport: Transport.MQTT,
-    options: {
-      url: 'mqtt://mqtt-broker:1883',
-    },
-  });
+  const microservice = app.connectMicroservice<MqttOptions>(
+    app.get(ConfigService).createClientOptions(),
+  );
   microservice.useGlobalPipes(new ValidationPipe({ transform: true }));
 
   await app.startAllMicroservices();
   await app.listen(3000);
 }
 bootstrap();
+
+export { WateringStatus };

@@ -3,6 +3,7 @@ import { JwtModuleOptions, JwtOptionsFactory } from '@nestjs/jwt';
 import {
   ClientProvider,
   ClientsModuleOptionsFactory,
+  MqttOptions,
   Transport,
 } from '@nestjs/microservices';
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
@@ -59,9 +60,12 @@ export class ConfigService
     };
   }
 
-  createClientOptions(): ClientProvider {
+  createClientOptions(): ClientProvider & MqttOptions {
     return {
       transport: Transport.MQTT,
+      options: {
+        url: process.env.MQTT_BROKER_URL || 'mqtt://mqtt-broker:1883',
+      },
     };
   }
 }

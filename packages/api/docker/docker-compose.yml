@@ -20,9 +20,10 @@ services:
       - ./mqtt/mosquitto.conf:/mosquitto/config/mosquitto.conf
       - mqtt-broker-data:/mosquitto/data
       - mqtt-broker-log:/mosquitto/log
+    restart: 'unless-stopped'
     ports:
-      - 1883
-      - 9001
+      - 1883:1883
+      - 9001:9001
 
 
   database:

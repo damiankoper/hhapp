@@ -19,7 +19,6 @@ export class AppService {
     this.status.id = 'WTR_01_LIVING_ROOM';
     this.status.name = 'Watering';
     this.status.mac = getMAC();
-    this.turnOff();
 
     if (configService.isProd())
       this.pomp = new Gpio(configService.getRelayPin(), 'out');
@@ -31,6 +30,7 @@ export class AppService {
       } as Gpio;
     }
 
+    this.turnOff();
     this.emitStatus();
   }
 
@@ -54,7 +54,7 @@ export class AppService {
     this.status.enabled = false;
     this.status.pompOn = false;
     await this.wait(500);
-    this.pomp.writeSync(0);
+    this.pomp.writeSync(1);
     this.emitStatus();
   }
 
@@ -65,11 +65,11 @@ export class AppService {
   }
 
   private async loop() {
-    this.pomp.writeSync(1);
+    this.pomp.writeSync(0);
     this.status.pompOn = true;
     this.emitStatus();
     await this.wait(100);
-    this.pomp.writeSync(0);
+    this.pomp.writeSync(1);
     this.status.pompOn = false;
     this.emitStatus();
     await this.wait(200);

@@ -3,9 +3,10 @@ import { ClientProxy } from '@nestjs/microservices';
 import { IotMqttClient } from './config/constants';
 import { ConfigService } from './config/config.service';
 import getMAC from 'getmac';
-import { Gpio } from 'pigpio';
 import { Cron } from '@nestjs/schedule';
 import { WateringStatus } from './models/watering-status.model';
+import { BinaryValue, Gpio } from 'onoff';
+
 @Injectable()
 export class AppService {
   private status: WateringStatus = new WateringStatus();
@@ -15,16 +16,16 @@ export class AppService {
     @Inject(IotMqttClient) private mqttClient: ClientProxy,
     private readonly configService: ConfigService,
   ) {
-    this.status.id = 'WTR_01_LIVING_ROOM ';
+    this.status.id = 'WTR_01_LIVING_ROOM';
     this.status.name = 'Watering';
     this.status.mac = getMAC();
     this.turnOff();
 
     if (configService.isProd())
-      this.pomp = new Gpio(configService.getRelayPin(), { mode: Gpio.OUTPUT });
+      this.pomp = new Gpio(configService.getRelayPin(), 'out');
     else {
       this.pomp = {
-        digitalWrite: ((n) => {
+        writeSync: ((n: BinaryValue) => {
           console.log('GPIO Write', n);
         }) as any,
       } as Gpio;
@@ -53,7 +54,7 @@ export class AppService {
     this.status.enabled = false;
     this.status.pompOn = false;
     await this.wait(500);
-    this.pomp.digitalWrite(0);
+    this.pomp.writeSync(0);
     this.emitStatus();
   }
 
@@ -64,11 +65,11 @@ export class AppService {
   }
 
   private async loop() {
-    this.pomp.digitalWrite(1);
+    this.pomp.writeSync(1);
     this.status.pompOn = true;
     this.emitStatus();
     await this.wait(100);
-    this.pomp.digitalWrite(0);
+    this.pomp.writeSync(0);
     this.status.pompOn = false;
     this.emitStatus();
     await this.wait(200);

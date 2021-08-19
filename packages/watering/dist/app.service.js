@@ -18,23 +18,23 @@ const microservices_1 = require("@nestjs/microservices");
 const constants_1 = require("./config/constants");
 const config_service_1 = require("./config/config.service");
 const getmac_1 = require("getmac");
-const pigpio_1 = require("pigpio");
 const schedule_1 = require("@nestjs/schedule");
 const watering_status_model_1 = require("./models/watering-status.model");
+const onoff_1 = require("onoff");
 let AppService = class AppService {
     constructor(mqttClient, configService) {
         this.mqttClient = mqttClient;
         this.configService = configService;
         this.status = new watering_status_model_1.WateringStatus();
-        this.status.id = 'WTR_01_LIVING_ROOM ';
+        this.status.id = 'WTR_01_LIVING_ROOM';
         this.status.name = 'Watering';
         this.status.mac = getmac_1.default();
         this.turnOff();
         if (configService.isProd())
-            this.pomp = new pigpio_1.Gpio(configService.getRelayPin(), { mode: pigpio_1.Gpio.OUTPUT });
+            this.pomp = new onoff_1.Gpio(configService.getRelayPin(), 'out');
         else {
             this.pomp = {
-                digitalWrite: ((n) => {
+                writeSync: ((n) => {
                     console.log('GPIO Write', n);
                 }),
             };
@@ -61,7 +61,7 @@ let AppService = class AppService {
         this.status.enabled = false;
         this.status.pompOn = false;
         await this.wait(500);
-        this.pomp.digitalWrite(0);
+        this.pomp.writeSync(0);
         this.emitStatus();
     }
     async turnOn() {
@@ -70,11 +70,11 @@ let AppService = class AppService {
         this.loop();
     }
     async loop() {
-        this.pomp.digitalWrite(1);
+        this.pomp.writeSync(1);
         this.status.pompOn = true;
         this.emitStatus();
         await this.wait(100);
-        this.pomp.digitalWrite(0);
+        this.pomp.writeSync(0);
         this.status.pompOn = false;
         this.emitStatus();
         await this.wait(200);

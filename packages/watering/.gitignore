@@ -1,5 +1,7 @@
 # compiled output
-/dist
+# /dist - cannot build on slow raspi zero
+/dist/**/*.d.ts
+/dist/**/*.js.map
 /node_modules
 
 # Logs

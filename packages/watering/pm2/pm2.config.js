@@ -7,7 +7,7 @@ module.exports = {
   apps: [
     {
       name: 'Watering',
-      script: 'dist/main.js',
+      script: 'packages/watering/dist/main.js',
       env_production: dotenv.parse(
         readFileSync(join(__dirname, '.env.production')),
       ),
@@ -22,9 +22,9 @@ module.exports = {
       host: '192.168.0.106',
       ref: 'origin/main',
       repo: 'git@github.com:damiankoper/hhapp.git',
-      path: '/home/pi/iot/watering/production',
+      path: '/home/pi/iot/watering/development',
       'post-deploy':
-        'npx lerna bootstrap --scope watering && npm run build && pm2 reload pm2/pm2.config.js --env development',
+        'cd packages/watering && npm install --production && pm2 reload ./pm2/pm2.config.js --env development',
     },
     production: {
       user: 'pi',
@@ -33,7 +33,7 @@ module.exports = {
       repo: 'git@github.com:damiankoper/hhapp.git',
       path: '/home/pi/iot/watering/production',
       'post-deploy':
-        'npx lerna bootstrap --scope watering && npm run build && pm2 reload pm2/pm2.config.js --env production',
+        'cd packages/watering && npm install --production && pm2 reload ./pm2/pm2.config.js --env production',
     },
   },
 };

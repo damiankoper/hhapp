@@ -24,7 +24,7 @@ module.exports = {
       repo: 'git@github.com:damiankoper/hhapp.git',
       path: '/home/pi/iot/watering/development',
       'post-deploy':
-        'cd packages/watering && npm install --production && pm2 reload ./pm2/pm2.config.js --env development',
+        'cd packages/watering && npm install --production && cd ../../ && pm2 reload ./pm2/pm2.config.js --env production',
     },
     production: {
       user: 'pi',

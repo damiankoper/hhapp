@@ -37,8 +37,15 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted } from '@nuxtjs/composition-api'
+import {
+  computed,
+  defineComponent,
+  onMounted,
+  onUnmounted,
+  useContext,
+} from '@nuxtjs/composition-api'
 import { DateTime } from 'luxon'
+import { NuxtSocketOpts } from 'nuxt-socket-io'
 import Counter from '~/components/dashboard/Counter.vue'
 import ExpensesMonthlyCard from '~/components/dashboard/ExpensesMonthlyCard.vue'
 import ExpensesByUserCard from '~/components/dashboard/ExpensesByUserCard.vue'
@@ -74,6 +81,13 @@ export default defineComponent({
         date: DateTime.now().toISODate(),
       },
     })
+
+    const ctx = useContext()
+    const { $nuxtSocket, $auth } = ctx
+
+    const socket = ctx.$nuxtSocket({
+      auth: { token: ($auth.strategy as any).token.get() },
+    } as NuxtSocketOpts)
 
     onMounted(() => {
       fetch()

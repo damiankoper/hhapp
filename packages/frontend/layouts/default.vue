@@ -113,6 +113,12 @@ export default Vue.extend({
         to: '/app/shopping/items',
       },
       { divider: true },
+      {
+        icon: 'mdi-hubspot',
+        title: 'IoT',
+        to: '/app/iot',
+      },
+      { divider: true },
       { header: 'System' },
       {
         icon: 'mdi-account',

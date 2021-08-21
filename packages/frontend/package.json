@@ -1,5 +1,5 @@
 {
-  "name": "household-app",
+  "name": "frontend",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -24,6 +24,7 @@
     "@vuelidate/core": "^2.0.0-alpha.24",
     "@vuelidate/validators": "^2.0.0-alpha.21",
     "animejs": "^3.2.1",
+    "api": "^0.0.1",
     "axios": "^0.21.1",
     "chart.js": "^3.5.0",
     "chartjs-adapter-luxon": "^1.1.0",
@@ -36,6 +37,7 @@
     "lodash": "^4.17.21",
     "luxon": "^2.0.2",
     "nuxt": "^2.15.8",
+    "nuxt-socket-io": "^1.1.22",
     "reflect-metadata": "^0.1.13",
     "sass": "^1.37.5",
     "vue": "^2.6.14",

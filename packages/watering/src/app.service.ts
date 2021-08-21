@@ -17,7 +17,7 @@ export class AppService {
     private readonly configService: ConfigService,
   ) {
     this.status.id = 'WTR_01_LIVING_ROOM';
-    this.status.name = 'Watering';
+    this.status.name = 'Watering can';
     this.status.mac = getMAC();
 
     if (configService.isProd())

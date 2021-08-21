@@ -1,5 +1,4 @@
 // import colors from 'vuetify/es5/util/colors'
-
 export default {
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
@@ -38,11 +37,21 @@ export default {
     '@nuxtjs/auth-next',
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
+    'nuxt-socket-io',
   ],
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {
     baseURL: process.env.BASE_URL || 'http://localhost:8300/',
+  },
+
+  io: {
+    sockets: [
+      {
+        url: process.env.BASE_URL || 'http://localhost:8300/',
+        default: true,
+      },
+    ],
   },
 
   // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)

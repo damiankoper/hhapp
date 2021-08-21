@@ -20,13 +20,14 @@ export class WateringGateway implements OnGatewayConnection {
 
   @WebSocketServer()
   public wsServer: Server;
+  /** TODO: Save and emit last status on connect */
 
   handleConnection(client: Socket) {
-    const authToken = client.handshake.auth.token;
+    const authToken: string = client.handshake.auth.token;
     try {
       if (this.configService.isProd()) {
         jwt.verify(
-          authToken,
+          authToken.slice(7),
           this.configService.createJwtSecretOptions().secret,
         );
       }

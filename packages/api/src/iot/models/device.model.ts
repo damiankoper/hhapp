@@ -1,6 +1,6 @@
 export abstract class Device {
-  id: string;
-  mac?: string;
-  name = 'Undefined device';
-  timestamp: number;
+  id: string | null = null;
+  mac: string | null = null;
+  name: string | null = null;
+  timestamp = 0;
 }

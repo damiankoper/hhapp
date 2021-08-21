@@ -28,7 +28,8 @@
       "@nuxtjs/axios",
       "@nuxtjs/vuetify",
       "@nuxtjs/auth-next",
-      "@types/node"
+      "@types/node",
+      "nuxt-socket-io"
     ]
   },
   "exclude": [

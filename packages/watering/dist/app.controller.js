@@ -12,18 +12,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppController = void 0;
 const common_1 = require("@nestjs/common");
 const microservices_1 = require("@nestjs/microservices");
+const api_common_1 = require("api-common");
 const app_service_1 = require("./app.service");
 let AppController = class AppController {
     constructor(appService) {
         this.appService = appService;
     }
     toggle() {
-        console.log('Toggle');
         this.appService.toggle();
     }
 };
 __decorate([
-    microservices_1.MessagePattern('iot/watering/toggle'),
+    microservices_1.MessagePattern(`iot/${api_common_1.DeviceType.WATERING_CAN}/toggle`),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)

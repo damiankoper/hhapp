@@ -37,6 +37,7 @@
     "@nestjs/websockets": "^8.0.6",
     "@nestjsx/crud": "v5.0.0-alpha.3",
     "@nestjsx/crud-typeorm": "v5.0.0-alpha.3",
+    "api-common": "^0.0.1",
     "bcryptjs": "^2.4.3",
     "chart.js": "^3.5.0",
     "class-transformer": "^0.4.0",

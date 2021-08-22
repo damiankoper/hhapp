@@ -2,24 +2,22 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { IotMqttClient } from './config/constants';
 import { ConfigService } from './config/config.service';
-import getMAC from 'getmac';
 import { Cron } from '@nestjs/schedule';
-import { WateringStatus } from './models/watering-status.model';
 import { BinaryValue, Gpio } from 'onoff';
+import { WateringStatus } from 'api-common/src/iot/watering/models/watering-status.model';
 
 @Injectable()
 export class AppService {
-  private status: WateringStatus = new WateringStatus();
+  private status: WateringStatus = new WateringStatus(
+    'WTR_01_LIVING_ROOM',
+    'Watering can',
+  );
   private pomp: Gpio;
 
   constructor(
     @Inject(IotMqttClient) private mqttClient: ClientProxy,
     private readonly configService: ConfigService,
   ) {
-    this.status.id = 'WTR_01_LIVING_ROOM';
-    this.status.name = 'Watering can';
-    this.status.mac = getMAC();
-
     if (configService.isProd())
       this.pomp = new Gpio(configService.getRelayPin(), 'out');
     else {
@@ -41,7 +39,7 @@ export class AppService {
 
   public emitStatus() {
     this.status.timestamp = +new Date();
-    this.mqttClient.emit('iot/watering/status', this.status);
+    this.mqttClient.emit(`iot/${this.status.id}/status`, this.status);
     if (this.configService.isDev()) console.log(this.status);
   }
 

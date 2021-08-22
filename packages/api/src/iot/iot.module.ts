@@ -3,8 +3,8 @@ import { ClientsModule } from '@nestjs/microservices';
 import { ConfigModule } from 'src/config/config.module';
 import { ConfigService } from 'src/config/config.service';
 import { IotMqttClient } from './constants';
-import { WateringController } from './watering/watering.controller';
-import { WateringGateway } from './watering/watering.gateway';
+import { IotController } from './iot.controller';
+import { IotGateway } from './iot.gateway';
 
 @Module({
   imports: [
@@ -17,7 +17,7 @@ import { WateringGateway } from './watering/watering.gateway';
       },
     ]),
   ],
-  providers: [WateringGateway, WateringController],
-  controllers: [WateringController],
+  providers: [IotGateway, IotController],
+  controllers: [IotController],
 })
 export class IotModule {}

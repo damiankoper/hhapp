@@ -24,7 +24,7 @@ import {
   ref,
   useContext,
 } from '@nuxtjs/composition-api'
-import { WateringStatus } from 'api'
+import { WateringStatus } from 'api-common'
 import _ from 'lodash'
 export default defineComponent({
   setup() {

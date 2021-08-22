@@ -4,6 +4,9 @@
 		"path": "packages/api"
 	},
 	{
+		"path": "packages/api-common"
+	},
+	{
 		"path": "packages/frontend"
 	},
 	{
@@ -14,7 +17,7 @@
 	}
 ],
   "settings": {
-	  "jest.disabledWorkspaceFolders": ["api", "frontend", "watering", "hhapp"],
+	  "jest.disabledWorkspaceFolders": ["api","api-common", "frontend", "watering", "hhapp"],
 	  "files.watcherExclude": {
 		"**/.git/objects/**": true,
 		"**/.git/subtree-cache/**": true,

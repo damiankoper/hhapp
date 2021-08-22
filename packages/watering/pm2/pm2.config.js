@@ -24,7 +24,7 @@ module.exports = {
       repo: 'git@github.com:damiankoper/hhapp.git',
       path: '/home/pi/iot/watering/development',
       'post-deploy':
-        'lerna bootstrap --scope watering -- --production && pm2 reload packages/watering/pm2/pm2.config.js --env development',
+        'lerna bootstrap --scope api-common --scope watering -- --production && pm2 reload packages/watering/pm2/pm2.config.js --env development',
     },
     production: {
       user: 'pi',
@@ -33,7 +33,7 @@ module.exports = {
       repo: 'git@github.com:damiankoper/hhapp.git',
       path: '/home/pi/iot/watering/production',
       'post-deploy':
-        'lerna bootstrap --scope watering -- --production && pm2 reload packages/watering/pm2/pm2.config.js --env production',
+        'lerna bootstrap --scope api-common --scope watering -- --production && pm2 reload packages/watering/pm2/pm2.config.js --env production',
     },
   },
 };

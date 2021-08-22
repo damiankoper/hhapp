@@ -1,4 +1,4 @@
-import { DeviceType } from "../enums/device-type.enum";
+import { DeviceType } from '../enums/device-type.enum';
 export interface IDevice {
     id: string;
     mac: string;

@@ -70,19 +70,24 @@
                   Pomp on/off
                 </v-col>
                 <v-col :cols="12">
-                  <v-sheet
-                    rounded
-                    :color="status.pompOn ? 'green' : 'red'"
-                    class="pa-2 mr-1"
-                    style="display: inline-block"
-                  >
-                    <v-icon color="white">
-                      {{
-                        status.pompOn ? 'mdi-lightbulb-on' : 'mdi-lightbulb-off'
-                      }}
-                    </v-icon>
-                  </v-sheet>
-                  Pomp on/off
+                  <v-tooltip right>
+                    <template #activator="{ on, attrs }">
+                      <v-sheet
+                        rounded
+                        color="grey"
+                        class="pa-2 mr-1"
+                        style="display: inline-block"
+                        v-bind="attrs"
+                        v-on="on"
+                      >
+                        <v-icon color="white"> mdi-home-search </v-icon>
+                      </v-sheet>
+                    </template>
+                    <b>ID:</b> {{ status.id }} <br />
+                    <b>MAC:</b> {{ status.mac }} <br />
+                    <b>Type:</b> {{ status.type }}
+                  </v-tooltip>
+                  Details
                 </v-col>
               </v-row>
             </v-col>

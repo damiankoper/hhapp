@@ -18,16 +18,16 @@ let AppController = class AppController {
     constructor(appService) {
         this.appService = appService;
     }
-    toggle() {
+    action() {
         this.appService.toggle();
     }
 };
 __decorate([
-    microservices_1.MessagePattern(`iot/${api_common_1.DeviceType.WATERING_CAN}/toggle`),
+    microservices_1.MessagePattern(`iot/${api_common_1.DeviceType.WATERING_CAN}/action`),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
-], AppController.prototype, "toggle", null);
+], AppController.prototype, "action", null);
 AppController = __decorate([
     common_1.Controller(),
     __metadata("design:paramtypes", [app_service_1.AppService])

@@ -5,4 +5,4 @@ RUN apk add --no-cache git postgresql-client && \
     npm install -g typeorm && \
     npm install -g wait-on
 
-WORKDIR /app
+WORKDIR /app/packages/api

@@ -1,48 +1,127 @@
 <template>
   <v-card elevation="2" style="overflow: hidden">
     <v-row no-gutters>
-      <v-col class="" :cols="3">
+      <v-col
+        v-if="$vuetify.breakpoint.smAndUp"
+        :cols="12"
+        :sm="3"
+        style="position: relative"
+      >
         <v-img
           class="elevation-4"
+          style="position: absolute"
           :src="require('~/assets/watering-can.jpg')"
-          aspect-ratio="1"
         />
       </v-col>
-      <v-col class="pa-4">
-        <h1 class="text-h4">{{ status.name }}</h1>
-        {{ status }}
+      <v-col class="grey lighten-4">
+        <v-toolbar height="48" elevation="4">
+          <v-toolbar-title> {{ status.displayName }}</v-toolbar-title>
+          <v-spacer />
+          <v-tooltip left>
+            <template #activator="{ on, attrs }">
+              <v-sheet
+                rounded
+                :color="on ? 'green' : 'red'"
+                class="pa-1"
+                v-bind="attrs"
+                v-on="on"
+              >
+                <v-icon size="1.5em" color="white">
+                  {{ on ? 'mdi-lightbulb-on' : 'mdi-lightbulb-off' }}
+                </v-icon>
+              </v-sheet>
+            </template>
+            <b>Connected!</b> Last update: <br />
+            {{ lastStatusTime }}
+          </v-tooltip>
+        </v-toolbar>
+        <v-container>
+          <v-row class="font-weight-bold">
+            <v-col cols="auto">
+              <v-btn
+                v-ripple
+                color="white"
+                height="100"
+                width="100"
+                elevation="4"
+                @click="emitAction"
+              >
+                <v-icon size="6em" :color="status.enabled ? 'green' : 'red'">
+                  mdi-power
+                </v-icon>
+                <br />
+              </v-btn>
+            </v-col>
+            <v-col>
+              <v-row dense>
+                <v-col :cols="12">
+                  <v-sheet
+                    rounded
+                    :color="status.pompOn ? 'green' : 'red'"
+                    class="pa-2 mr-1"
+                    style="display: inline-block"
+                  >
+                    <v-icon color="white">
+                      {{
+                        status.pompOn ? 'mdi-lightbulb-on' : 'mdi-lightbulb-off'
+                      }}
+                    </v-icon>
+                  </v-sheet>
+                  Pomp on/off
+                </v-col>
+                <v-col :cols="12">
+                  <v-sheet
+                    rounded
+                    :color="status.pompOn ? 'green' : 'red'"
+                    class="pa-2 mr-1"
+                    style="display: inline-block"
+                  >
+                    <v-icon color="white">
+                      {{
+                        status.pompOn ? 'mdi-lightbulb-on' : 'mdi-lightbulb-off'
+                      }}
+                    </v-icon>
+                  </v-sheet>
+                  Pomp on/off
+                </v-col>
+              </v-row>
+            </v-col>
+          </v-row>
+        </v-container>
       </v-col>
     </v-row>
   </v-card>
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  onMounted,
-  onUnmounted,
-  ref,
-  useContext,
-} from '@nuxtjs/composition-api'
-import { WateringStatus } from 'api-common'
-import _ from 'lodash'
+import { computed, defineComponent, PropType } from '@nuxtjs/composition-api'
+import { DeviceType, IWateringStatus } from 'api-common'
+import { DateTime } from 'luxon'
 export default defineComponent({
-  setup() {
-    const status = ref(new WateringStatus())
-    const ctx = useContext()
-    const { $auth } = ctx
-    // @ts-ignore
-    ctx.onUnmounted = onUnmounted
-    const socket = ctx.$nuxtSocket({
-      auth: { token: ($auth.strategy as any).token.get() },
-    } as any)
-    onMounted(() => {
-      socket.on('iot/watering/status', (data) => {
-        Object.assign(status.value, data)
-      })
+  props: {
+    status: {
+      type: Object as PropType<IWateringStatus>,
+      required: true,
+    },
+  },
+  setup(props, { emit }) {
+    const on = computed(() => {
+      const timestamp = DateTime.fromSeconds(props.status.timestamp / 1000)
+      return timestamp.plus({ minutes: 1 }) > DateTime.now()
     })
-
-    return { status }
+    const lastStatusTime = computed(() => {
+      const timestamp = DateTime.fromSeconds(props.status.timestamp / 1000)
+      return timestamp.toLocaleString(DateTime.DATETIME_FULL_WITH_SECONDS)
+    })
+    return {
+      on,
+      lastStatusTime,
+      emitAction() {
+        emit('action', {
+          event: `iot/${DeviceType.WATERING_CAN}/action`,
+        })
+      },
+    }
   },
 })
 </script>

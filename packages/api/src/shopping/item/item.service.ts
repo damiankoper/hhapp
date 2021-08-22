@@ -12,7 +12,7 @@ import { Category } from '../entities/category.entity';
 
 type ExpenseData = { x: string; y: number };
 
-interface Debt {
+export interface Debt {
   from: User;
   to: User;
   debt: number;

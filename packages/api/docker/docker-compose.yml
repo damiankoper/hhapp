@@ -3,13 +3,13 @@ services:
   api:
     image: kopernick/hhapp-api
     build:  
-      context: ..
-      dockerfile: ./docker/api/Dockerfile
+      context: ../../../
+      dockerfile: packages/api/docker/api/Dockerfile
     ports:
       - 8300:3000
       - 9229:9229 # Node debug
     volumes:
-      - '..:/app'
+      - '../../../:/app'
     command: sh -c 'wait-on tcp:database:5432 && npm run start:debug'
     restart: 'unless-stopped'
     env_file: '.env'

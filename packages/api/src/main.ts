@@ -5,7 +5,6 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { TypeOrmExceptionFilter } from './common/typeorm.exception-filter';
 import { ConfigService } from './config/config.service';
-import { WateringStatus } from './iot/watering/models/watering-status.model';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -30,5 +29,3 @@ async function bootstrap() {
   await app.listen(3000);
 }
 bootstrap();
-
-export { WateringStatus };

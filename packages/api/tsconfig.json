@@ -12,7 +12,9 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true,
+    "preserveSymlinks": true,
     "esModuleInterop": true,
-    "preserveWatchOutput": true
+    "preserveWatchOutput": true,
+    "composite": true
   }
 }

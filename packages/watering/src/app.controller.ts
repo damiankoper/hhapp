@@ -7,8 +7,8 @@ import { AppService } from './app.service';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @MessagePattern(`iot/${DeviceType.WATERING_CAN}/toggle`)
-  public toggle() {
+  @MessagePattern(`iot/${DeviceType.WATERING_CAN}/action`)
+  public action() {
     this.appService.toggle();
   }
 }

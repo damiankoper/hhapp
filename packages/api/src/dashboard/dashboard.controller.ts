@@ -1,7 +1,6 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { DateTime } from 'luxon';
 import { ItemService } from 'src/shopping/item/item.service';
-import { UserService } from 'src/user/user.service';
 
 @Controller('dashboard')
 export class DashboardController {

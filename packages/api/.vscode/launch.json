@@ -19,7 +19,7 @@
       "port": 9229,
       "sourceMaps": true,
       "localRoot": "${workspaceFolder}",
-      "remoteRoot": "/app",
+      "remoteRoot": "/app/packages/api",
       "restart": true
     },
     {

@@ -1,7 +1,8 @@
 import { DeviceType } from '../enums/device-type.enum';
 import getMAC from 'getmac';
+import { IDevice } from '../interfaces/device.interface';
 
-export abstract class Device {
+export abstract class Device implements IDevice{
   id: string;
   mac: string;
   abstract type: DeviceType;

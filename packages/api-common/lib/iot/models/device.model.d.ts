@@ -1,5 +1,6 @@
 import { DeviceType } from '../enums/device-type.enum';
-export declare abstract class Device {
+import { IDevice } from '../interfaces/device.interface';
+export declare abstract class Device implements IDevice {
     id: string;
     mac: string;
     abstract type: DeviceType;

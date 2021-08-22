@@ -19,12 +19,12 @@ const constants_1 = require("./config/constants");
 const config_service_1 = require("./config/config.service");
 const schedule_1 = require("@nestjs/schedule");
 const onoff_1 = require("onoff");
-const watering_status_model_1 = require("api-common/src/iot/watering/models/watering-status.model");
+const api_common_1 = require("api-common");
 let AppService = class AppService {
     constructor(mqttClient, configService) {
         this.mqttClient = mqttClient;
         this.configService = configService;
-        this.status = new watering_status_model_1.WateringStatus('WTR_01_LIVING_ROOM', 'Watering can');
+        this.status = new api_common_1.WateringStatus('WTR_01_LIVING_ROOM', 'Watering can');
         if (configService.isProd())
             this.pomp = new onoff_1.Gpio(configService.getRelayPin(), 'out');
         else {

@@ -4,7 +4,7 @@ import { IotMqttClient } from './config/constants';
 import { ConfigService } from './config/config.service';
 import { Cron } from '@nestjs/schedule';
 import { BinaryValue, Gpio } from 'onoff';
-import { WateringStatus } from 'api-common/src/iot/watering/models/watering-status.model';
+import { WateringStatus } from 'api-common';
 
 @Injectable()
 export class AppService {

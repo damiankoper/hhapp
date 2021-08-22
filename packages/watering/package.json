@@ -30,7 +30,8 @@
     "mqtt": "^4.2.8",
     "onoff": "^6.0.3",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.2.0"
+    "rxjs": "^7.2.0",
+    "api-common": "^0.0.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^8.0.0",
@@ -43,7 +44,6 @@
     "@types/supertest": "^2.0.11",
     "@typescript-eslint/eslint-plugin": "^4.28.2",
     "@typescript-eslint/parser": "^4.28.2",
-    "api-common": "^0.0.1",
     "eslint": "^7.30.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",

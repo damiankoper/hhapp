@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { ShoppingModule } from './shopping/shopping.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { IotModule } from './iot/iot.module';
+import { ListModule } from './list/list.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { IotModule } from './iot/iot.module';
     ShoppingModule,
     DashboardModule,
     IotModule,
+    ListModule,
   ],
   controllers: [],
   providers: [],

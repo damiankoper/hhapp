@@ -94,7 +94,16 @@ export default Vue.extend({
     const ctx = useContext()
     const items = [
       { icon: 'mdi-apps', title: 'Dashboard', to: '/app' },
-
+      {
+        icon: 'mdi-format-list-checks',
+        title: 'Lists',
+        to: '/app/lists',
+      },
+      {
+        icon: 'mdi-hubspot',
+        title: 'IoT',
+        to: '/app/iot',
+      },
       { divider: true },
       { header: 'Shopping' },
       {
@@ -111,12 +120,6 @@ export default Vue.extend({
         icon: 'mdi-basket',
         title: 'Items',
         to: '/app/shopping/items',
-      },
-      { divider: true },
-      {
-        icon: 'mdi-hubspot',
-        title: 'IoT',
-        to: '/app/iot',
       },
       { divider: true },
       { header: 'System' },

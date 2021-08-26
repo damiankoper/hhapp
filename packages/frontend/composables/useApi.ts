@@ -3,7 +3,7 @@ import { AxiosError, AxiosRequestConfig } from 'axios'
 
 export function useApi<T>(
   url: string | (() => string),
-  params: AxiosRequestConfig | (() => AxiosRequestConfig)
+  params: AxiosRequestConfig | (() => AxiosRequestConfig) = {}
 ) {
   const { $axios } = useContext()
   const data = ref<T | null>(null)

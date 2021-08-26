@@ -7,6 +7,8 @@ import {
   Transport,
 } from '@nestjs/microservices';
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
+import { List } from 'src/list/entities/list.entity';
+import { ListItem } from 'src/list/items/entities/list-item.entity';
 import { Category } from 'src/shopping/entities/category.entity';
 import { Item } from 'src/shopping/entities/item.entity';
 import { Shop } from 'src/shopping/entities/shop.entity';
@@ -51,7 +53,7 @@ export class ConfigService
       username: process.env.DB_USERNAME || 'root',
       password: process.env.DB_PASSWORD || 'password',
       database: process.env.DB_DATABASE || 'main',
-      entities: [User, Shop, Category, Item],
+      entities: [User, Shop, Category, Item, List, ListItem],
       synchronize: true,
       logging:
         process.env.NODE_ENV !== 'production'

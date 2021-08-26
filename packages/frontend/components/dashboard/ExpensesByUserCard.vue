@@ -52,7 +52,7 @@ export default defineComponent({
   setup() {
     const { currency } = useFilters()
     const month = DateTime.now().startOf('month')
-    const from = ref(month.minus({ month: 5 }).toISODate())
+    const from = ref(month.minus({ months: 5 }).toISODate())
     const to = ref(month.toISODate())
 
     const { data, loading, fetch } = useApi<ChartData<'line'>>(

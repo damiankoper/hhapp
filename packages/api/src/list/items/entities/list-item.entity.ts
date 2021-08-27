@@ -32,6 +32,10 @@ export class ListItem {
   @Column()
   checked: boolean;
 
-  @ManyToOne(() => List, { onDelete: 'CASCADE', nullable: false })
+  @ManyToOne(() => List, (list) => list.items, {
+    nullable: false,
+    onDelete: 'CASCADE',
+    orphanedRowAction: 'delete',
+  })
   list: List;
 }

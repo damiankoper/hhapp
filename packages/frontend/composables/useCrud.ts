@@ -35,8 +35,9 @@ export function useCrud<T>(
         )
       } else onError(error(entityName))
       throw e
+    } finally {
+      loading.value = false
     }
-    loading.value = false
   }
 
   return {

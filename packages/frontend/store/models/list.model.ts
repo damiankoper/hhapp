@@ -12,11 +12,11 @@ export class List {
   name: string = ''
 
   @Type(() => ListItem)
-  items: ListItem[] = [new ListItem(), new ListItem(), new ListItem()]
+  items: ListItem[] = []
 
-  @Type(() => Shop)
-  shop: Shop | null = null
+  /*   @Type(() => Shop)
+  shop: Shop | null = null */
 
   @Type(() => User)
-  createdBy?: User = undefined
+  createdBy: User | null = null
 }

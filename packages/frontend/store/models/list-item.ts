@@ -11,5 +11,5 @@ export class ListItem {
   checked = false
 
   @Type(() => List)
-  list?: List = undefined
+  list?: List | null
 }

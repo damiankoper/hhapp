@@ -11,8 +11,21 @@
         append-icon="mdi-close"
         hide-details
         :persistent-hint="false"
-        @click:append="() => {}"
-      />
+        @click:append="$emit('delete')"
+      >
+        <template #prepend-inner>
+          <Avatar
+            :color="model.createdBy.color"
+            :sex="model.createdBy.sex"
+            class="mr-2 my-2"
+            :size="20"
+            tooltip="right"
+          >
+            {{ model.createdBy.firstname }}
+            {{ model.createdBy.surname }}
+          </Avatar>
+        </template>
+      </v-text-field>
     </v-card-title>
     <v-card-text>
       <v-text-field
@@ -23,9 +36,6 @@
         dense
         style="overflow: visible"
         append-icon="mdi-close"
-        :error-messages="
-          $v.items.$each.$response.$errors[n].text.map((e) => e.$message)
-        "
         hide-details
         :persistent-hint="false"
         @click:append="removeItem(n)"
@@ -44,6 +54,7 @@
         >
         </v-text-field>
       </div>
+      {{ model }}
     </v-card-text>
   </v-card>
 </template>
@@ -56,13 +67,16 @@ import {
   toRef,
   watch,
   nextTick,
+  onMounted,
 } from '@nuxtjs/composition-api'
 import useVuelidate from '@vuelidate/core'
 import { helpers, required } from '@vuelidate/validators'
 import _ from 'lodash'
+import Avatar from '../Avatar.vue'
 import { ListItem } from '~/store/models/list-item'
 import { List } from '~/store/models/list.model'
 export default defineComponent({
+  components: { Avatar },
   props: {
     list: {
       type: Object as PropType<List>,
@@ -72,36 +86,47 @@ export default defineComponent({
   setup(props, { emit, refs }) {
     const list = toRef(props, 'list')
     const model = reactive<List>(new List())
-    watch(list, () => _.merge(model, props.list))
+    watch(list, (list) => _.merge(model, list), { immediate: true })
     watch(
       model,
-      _.debounce((n, o) => {
+      () => {
         $v.value.$touch()
-        if (!_.isEqual(n, o)) emit('update:list', model)
-      }, 500),
+        emit('update:list', model)
+      },
       { deep: true }
     )
+
+    watch(model, () => emit('updateQueued'), { deep: true })
 
     const $v = useVuelidate(
       {
         name: { required },
-        items: {
+        createdAt: {},
+        updatedAt: {},
+        /*   items: {
           $each: helpers.forEach({
             id: {},
             text: { required },
             checked: {},
-            list: {},
+            createdAt: {},
+            updatedAt: {},
           }) as any,
-        },
+        }, */
       },
       model as any
     )
+
+    onMounted(() => {
+      const title = refs.title as HTMLInputElement
+      if (model.name.length === 0) title.focus()
+    })
 
     return {
       model,
       $v,
       async addItem() {
-        model.items.push(new ListItem())
+        const item = new ListItem()
+        model.items.push(item)
         await nextTick()
         const items = refs.items as HTMLInputElement[]
         ;(items[items.length - 1] as HTMLInputElement).focus()

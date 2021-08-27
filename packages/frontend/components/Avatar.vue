@@ -1,35 +1,42 @@
 <template>
-  <div
-    class="avatar-container"
-    :style="{
-      width: size + 'px',
-      height: size + 'px',
-    }"
-  >
-    <div
-      class="avatar"
-      :style="{
-        width: size + 'px',
-        height: size + 'px',
-        borderWidth: 4 * resizeFactor + 'px',
-      }"
-    >
-      <img v-if="isMale" src="@/assets/icons/boy.svg" />
-      <img v-else src="@/assets/icons/girl.svg" />
-    </div>
-    <div
-      class="color-circle"
-      :style="{
-        borderColor: color,
-        width: size / 2 + 'px',
-        height: size / 2 + 'px',
+  <v-tooltip :disabled="!tooltip" v-bind="{ [tooltip]: true }">
+    <template #activator="{ on, attrs }">
+      <div
+        class="avatar-container"
+        :style="{
+          width: size + 'px',
+          height: size + 'px',
+        }"
+        v-bind="attrs"
+        v-on="on"
+      >
+        <div
+          class="avatar"
+          :style="{
+            width: size + 'px',
+            height: size + 'px',
+            borderWidth: 4 * resizeFactor + 'px',
+          }"
+        >
+          <img v-if="isMale" src="@/assets/icons/boy.svg" />
+          <img v-else src="@/assets/icons/girl.svg" />
+        </div>
+        <div
+          class="color-circle"
+          :style="{
+            borderColor: color,
+            width: size / 2 + 'px',
+            height: size / 2 + 'px',
 
-        right: -1 * resizeFactor + 'px',
-        bottom: -1 * resizeFactor + 'px',
-        borderWidth: 6 * resizeFactor + 'px',
-      }"
-    ></div>
-  </div>
+            right: -1 * resizeFactor + 'px',
+            bottom: -1 * resizeFactor + 'px',
+            borderWidth: 6 * resizeFactor + 'px',
+          }"
+        ></div>
+      </div>
+    </template>
+    <slot />
+  </v-tooltip>
 </template>
 
 <script lang="ts">
@@ -48,6 +55,10 @@ export default defineComponent({
     sex: {
       default: Sex.MALE,
       type: String as PropType<Sex>,
+    },
+    tooltip: {
+      default: null,
+      type: String,
     },
   },
   setup(props) {

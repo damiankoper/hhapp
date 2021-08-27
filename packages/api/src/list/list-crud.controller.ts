@@ -1,6 +1,14 @@
 import { Controller, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { Crud, CrudController } from '@nestjsx/crud';
+import {
+  Crud,
+  CrudController,
+  CrudRequest,
+  CrudRequestInterceptor,
+  Override,
+  ParsedBody,
+  ParsedRequest,
+} from '@nestjsx/crud';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { List } from './entities/list.entity';
 import { ListCrudService } from './list-crud.service';
@@ -11,6 +19,10 @@ import { ListCrudService } from './list-crud.service';
   },
   query: {
     alwaysPaginate: true,
+    join: {
+      createdBy: {},
+      items: {},
+    },
   },
 })
 @ApiTags('lists')

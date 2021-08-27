@@ -30,7 +30,11 @@ export class List {
   @Column()
   name: string;
 
-  @OneToMany(() => ListItem, (item) => item.list, { cascade: true })
+  @OneToMany(() => ListItem, (item) => item.list, {
+    cascade: true,
+    onDelete: 'CASCADE',
+    orphanedRowAction: 'delete',
+  })
   items: ListItem[];
 
   @ManyToOne(() => Shop, { onDelete: 'RESTRICT', nullable: true })

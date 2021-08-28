@@ -9,6 +9,7 @@ export class ListItem {
 
   text: string = ''
   checked = false
+  order = 0
 
   @Type(() => List)
   list?: List | null

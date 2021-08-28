@@ -10,6 +10,7 @@ export class List {
   updatedAt?: Date
 
   name: string = ''
+  order = 0
 
   @Type(() => ListItem)
   items: ListItem[] = []

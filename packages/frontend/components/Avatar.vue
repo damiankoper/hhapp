@@ -1,15 +1,13 @@
 <template>
-  <v-tooltip :disabled="!tooltip" v-bind="{ [tooltip]: true }">
-    <template #activator="{ on, attrs }">
-      <div
-        class="avatar-container"
-        :style="{
-          width: size + 'px',
-          height: size + 'px',
-        }"
-        v-bind="attrs"
-        v-on="on"
-      >
+  <div
+    class="avatar-container"
+    :style="{
+      width: size + 'px',
+      height: size + 'px',
+    }"
+  >
+    <v-tooltip :disabled="!tooltip" v-bind="{ [tooltip]: true }">
+      <template #activator="{ on, attrs }">
         <div
           class="avatar"
           :style="{
@@ -17,6 +15,8 @@
             height: size + 'px',
             borderWidth: 4 * resizeFactor + 'px',
           }"
+          v-bind="attrs"
+          v-on="on"
         >
           <img v-if="isMale" src="@/assets/icons/boy.svg" />
           <img v-else src="@/assets/icons/girl.svg" />
@@ -33,10 +33,10 @@
             borderWidth: 6 * resizeFactor + 'px',
           }"
         ></div>
-      </div>
-    </template>
-    <slot />
-  </v-tooltip>
+      </template>
+      <slot />
+    </v-tooltip>
+  </div>
 </template>
 
 <script lang="ts">

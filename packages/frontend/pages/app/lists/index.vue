@@ -12,13 +12,14 @@
       fab
       :loading="loading"
       style="margin-right: 72px"
+      @click="fetchLists"
     >
       <v-icon>{{ syncIcon }}</v-icon>
     </v-btn>
-    <v-row>
+    <v-slide-y-transition group class="row" leave-absolute>
       <v-col
         v-for="(list, n) in localData"
-        :key="list.id || n"
+        :key="list.order"
         :cols="12"
         :md="6"
       >
@@ -26,11 +27,11 @@
           :list="list"
           @delete="deleteList(list, n)"
           @update:list="(list) => updateList(list, n)"
-          @updateQueued="queueUpdate"
         />
       </v-col>
       <v-row
         v-if="localData.length == 0"
+        key="nodata"
         no-gutters
         justify="center"
         class="mt-4"
@@ -43,7 +44,7 @@
           <div class="text-subtitle-1">Add one using top right button.</div>
         </v-col>
       </v-row>
-    </v-row>
+    </v-slide-y-transition>
   </div>
 </template>
 
@@ -94,17 +95,17 @@ export default defineComponent({
 
     const {
       loading,
-      error,
       findManyResult,
       findMany,
       updateOne,
       createOne,
       deleteOne,
-    } = useCrud('/lists', List, 'list')
+    } = useCrud('/lists', List, 'list', () => {})
 
     async function fetchLists() {
       await findMany((qb) => {
-        qb.sortBy(['createdAt', 'DESC'])
+        qb.sortBy(['order', 'DESC'])
+        qb.sortBy(['items.order', 'ASC'])
         qb.setJoin(['createdBy'])
         qb.setJoin(['items'])
       })
@@ -141,16 +142,16 @@ export default defineComponent({
       syncIcon,
       localData,
       loading,
-      queueUpdate() {
-        syncStatus.value = Status.QUEUED
-      },
+      fetchLists,
       addList() {
         const list = new List()
         list.createdBy = $auth.user as unknown as User
-        localData.value.push(list)
+        list.order = Math.max(0, ...localData.value.map((i) => i.order)) + 1
+        localData.value.unshift(list)
       },
       updateList(list: List, n: number) {
         Vue.set(localData.value, n, list)
+        syncStatus.value = Status.QUEUED
         updateListsDebounced()
       },
       deleteList(list: List, n: number) {

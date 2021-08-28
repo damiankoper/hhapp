@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsString } from 'class-validator';
+import { IsBoolean, IsNumber, IsString } from 'class-validator';
 import { List } from 'src/list/entities/list.entity';
 import {
   Entity,
@@ -31,6 +31,11 @@ export class ListItem {
   @IsBoolean()
   @Column()
   checked: boolean;
+
+  @ApiProperty({ readOnly: true })
+  @IsNumber()
+  @Column()
+  order: number;
 
   @ManyToOne(() => List, (list) => list.items, {
     nullable: false,

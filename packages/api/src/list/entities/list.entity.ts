@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
+import { IsNumber, IsString } from 'class-validator';
 import { Shop } from 'src/shopping/entities/shop.entity';
 import { User } from 'src/user/entities/user.entity';
 import {
@@ -29,6 +29,11 @@ export class List {
   @IsString()
   @Column()
   name: string;
+
+  @ApiProperty({ readOnly: true })
+  @IsNumber()
+  @Column()
+  order: number;
 
   @OneToMany(() => ListItem, (item) => item.list, {
     cascade: true,

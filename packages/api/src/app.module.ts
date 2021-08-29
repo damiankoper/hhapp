@@ -24,6 +24,5 @@ import { ListModule } from './list/list.module';
     ListModule,
   ],
   controllers: [],
-  providers: [],
 })
 export class AppModule {}

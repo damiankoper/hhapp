@@ -6,12 +6,17 @@
       :options.sync="options"
       :loading="loading"
       :server-items-length="serverItemsLength"
+      :footer-props="{
+        'items-per-page-options': [10, 50, 100, 500],
+      }"
       @dblclick:row="(e, { item }) => $router.push(itemCrud.showOne(item.id))"
     >
       <!-- TODO: Ellpisis -->
       <template #[`item.category.icon`]="{ item }">
-        <v-btn nuxt icon :to="categoryCrud.showOne(item.category.id)">
-          <v-icon :color="item.category.color">{{ item.category.icon }}</v-icon>
+        <v-btn icon :to="categoryCrud.showOne(item.category.id)">
+          <v-avatar :color="item.category.color" :size="32">
+            <v-icon color="white">{{ item.category.icon }}</v-icon>
+          </v-avatar>
         </v-btn>
       </template>
       <template #[`item.price`]="{ item }">

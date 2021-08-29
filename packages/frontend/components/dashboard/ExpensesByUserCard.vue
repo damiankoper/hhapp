@@ -52,7 +52,7 @@ export default defineComponent({
   setup() {
     const { currency } = useFilters()
     const month = DateTime.now().startOf('month')
-    const from = ref(month.minus({ months: 5 }).toISODate())
+    const from = ref(month.minus({ months: 11 }).toISODate())
     const to = ref(month.toISODate())
 
     const { data, loading, fetch } = useApi<ChartData<'line'>>(
@@ -103,7 +103,7 @@ export default defineComponent({
           Object.assign(dataset, {
             fill: true,
             borderWidth: 4,
-            tension: 0.1,
+            tension: 0.4,
           })
         })
         return c as ChartData

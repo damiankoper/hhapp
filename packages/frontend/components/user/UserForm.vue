@@ -153,7 +153,12 @@ export default defineComponent({
   setup(props: any, { emit }) {
     const user = toRef(props, 'value')
     const formUser = reactive<FormUser>(Object.assign(new FormUser()))
-    watch(user, () => Object.assign(formUser, user.value))
+    watch(user, () => {
+      console.log(user.value)
+      console.log(formUser)
+
+      Object.assign(formUser, user.value)
+    })
 
     const $v = useVuelidate(
       {
@@ -179,8 +184,8 @@ export default defineComponent({
           if (submitUser.password === '') delete submitUser.password
           delete submitUser.passRepeat
 
-          formUser.password = ''
-          formUser.passRepeat = ''
+          formUser.password = undefined
+          formUser.passRepeat = undefined
 
           emit('submit', submitUser)
           $v.value.$reset()

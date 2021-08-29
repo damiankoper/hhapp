@@ -1,0 +1,26 @@
+FROM node:lts-alpine
+
+RUN apk add --no-cache postgresql-client && \
+    npm install -g npm lerna wait-on
+
+WORKDIR /app
+
+COPY --chown=node package*.json ./
+COPY --chown=node lerna.json ./
+
+COPY packages/api-common/package*.json packages/api-common/
+COPY packages/api/package*.json packages/api/
+RUN chown -R  node:node /app
+USER node
+
+RUN lerna bootstrap --scope api --scope api-common
+
+
+COPY --chown=node packages/api-common packages/api-common
+COPY --chown=node packages/api packages/api
+RUN lerna run --stream --scope api-common build
+
+RUN lerna run --stream --scope api build
+
+
+CMD ["node", "packages/api/dist/src/main.js" ]

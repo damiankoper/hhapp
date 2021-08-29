@@ -1,19 +1,34 @@
 <template>
-  <v-row>
-    <v-col v-for="status in statuses" :key="status.id" :cols="12" :lg="6">
-      <component
-        :is="mapComponent(status.type)"
-        :status="status"
-        @action="emitAction"
-      />
-    </v-col>
-  </v-row>
+  <div style="position: relative" class="pt-8 mt-8">
+    <v-slide-y-transition group class="row" leave-absolute>
+      <v-col v-for="status in statuses" :key="status.id" :cols="12" :lg="6">
+        <component
+          :is="mapComponent(status.type)"
+          :status="status"
+          @action="emitAction"
+        />
+      </v-col>
+      <v-row
+        v-if="statuses.length == 0"
+        key="nodata"
+        no-gutters
+        justify="center"
+        class="mt-4"
+      >
+        <v-col cols="auto">
+          <v-img src="/box.svg" aspect-ratio="1" max-width="100" />
+        </v-col>
+        <v-col cols="12" class="text-center">
+          <div class="text-h4">No devices found!</div>
+        </v-col>
+      </v-row>
+    </v-slide-y-transition>
+  </div>
 </template>
 
 <script lang="ts">
 import {
   defineComponent,
-  onMounted,
   onUnmounted,
   ref,
   useContext,
@@ -48,7 +63,6 @@ export default defineComponent({
     })
 
     socket.connect()
-    onMounted(() => {})
 
     return {
       statuses,

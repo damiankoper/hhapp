@@ -7,7 +7,7 @@
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
-    "target": "es2017",
+    "target": "ESNext",
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
@@ -15,6 +15,6 @@
     "preserveSymlinks": true,
     "esModuleInterop": true,
     "preserveWatchOutput": true,
-    "composite": true
+    "composite": true,
   }
 }

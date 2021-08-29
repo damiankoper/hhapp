@@ -1,0 +1,25 @@
+FROM node:lts-alpine
+
+RUN npm install -g npm lerna wait-on
+
+WORKDIR /app
+
+COPY --chown=node package*.json ./
+COPY --chown=node lerna.json ./
+
+COPY packages/frontend/package*.json packages/frontend/
+COPY packages/api-common/package*.json packages/api-common/
+RUN chown -R  node:node /app
+USER node
+
+RUN lerna bootstrap --scope frontend --scope api-common
+
+COPY --chown=node packages/api-common packages/api-common
+RUN lerna run --stream --scope api-common build
+
+COPY --chown=node packages/frontend packages/frontend
+RUN lerna run --stream --scope frontend build
+
+WORKDIR /app/packages/frontend
+
+CMD ["npm", "start"]

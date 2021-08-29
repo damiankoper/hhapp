@@ -43,7 +43,7 @@ export class ItemService {
         storeFields: fields,
       });
       miniSearch.addAll(names);
-      const results = miniSearch.search(name, { fuzzy: 0.5 }).map((r) => r.id);
+      const results = miniSearch.search(name, { fuzzy: 0.8 }).map((r) => r.id);
 
       const items = this.itemRepository.find({
         relations: ['category', 'shop', 'boughtBy', 'boughtFor'],
@@ -77,8 +77,8 @@ export class ItemService {
         })
         .getRawOne()) || { sum: 0 };
       dataset.data.push({ x: fromLoop.toISODate(), y: item.sum });
-      fromLoop = fromLoop.plus({ month: 1 });
-    } while (to.diff(fromLoop, 'month').months >= 0);
+      fromLoop = fromLoop.plus({ months: 1 });
+    } while (to.diff(fromLoop, 'months').months >= 0);
 
     return { datasets: [dataset] };
   }
@@ -108,8 +108,8 @@ export class ItemService {
           .andWhere('"boughtById" = :id', { id: user.id })
           .getRawOne()) || { sum: 0 };
         dataset.data.push({ x: fromLoop.toISODate(), y: item.sum });
-        fromLoop = fromLoop.plus({ month: 1 });
-      } while (to.diff(fromLoop, 'month').months >= 0);
+        fromLoop = fromLoop.plus({ months: 1 });
+      } while (to.diff(fromLoop, 'months').months >= 0);
 
       datasets.push(dataset);
     }
@@ -187,7 +187,7 @@ export class ItemService {
 
     if (isLastMonthNow) items.shift();
 
-    const sum = items.reduce((a, b) => a + b.sum, 0);
+    const sum = items.reduce((a, b) => +a + +b.sum, 0);
     return {
       avgMonth: sum / items.length,
       lastMonth,

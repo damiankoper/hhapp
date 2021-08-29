@@ -3,7 +3,6 @@
     ref="menu"
     v-model="menuV"
     :close-on-content-click="false"
-    :close-on-click="false"
     :return-value.sync="dateModel"
     transition="scale-transition"
     offset-y
@@ -29,8 +28,9 @@
       v-bind="$attrs"
       show-current
       :type="type"
+      @input="$refs.menu.save(date)"
     >
-      <v-spacer />
+      <!--  <v-spacer />
       <v-btn
         text
         color="primary"
@@ -41,7 +41,7 @@
       >
         Cancel
       </v-btn>
-      <v-btn text color="primary" @click="$refs.menu.save(date)"> OK </v-btn>
+      <v-btn text color="primary" @click="$refs.menu.save(date)"> OK </v-btn> -->
     </v-date-picker>
   </v-menu>
 </template>

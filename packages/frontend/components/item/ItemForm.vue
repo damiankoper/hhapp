@@ -5,7 +5,10 @@
         <v-col cols="auto">
           <v-fade-transition leave-absolute tag="span">
             <v-skeleton-loader v-if="!item" type="avatar" width="48" />
-            <v-avatar v-else color="primary">
+            <v-avatar
+              v-else
+              :color="item.category ? item.category.color : 'promary'"
+            >
               <v-icon v-if="item.category" color="white" size="2rem">
                 {{ item.category.icon }}
               </v-icon>

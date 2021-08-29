@@ -37,8 +37,13 @@ export function useChartCommon() {
         tooltip: {
           callbacks: {
             label: (v: any) => ` ${v.dataset.label}: ${currency(v.raw)}`,
-            footer: (items: any[]) =>
-              'Total: ' + currency(items.reduce((a, b) => a + b.parsed.y, 0)),
+            footer: (items: any[]) => {
+              let sum = 0
+              for (let i = 0; i < items[0].chart.data.datasets.length; i++) {
+                sum += items[0].parsed._stacks.y[i]
+              }
+              return 'Total: ' + currency(String(sum))
+            },
           },
         },
       },

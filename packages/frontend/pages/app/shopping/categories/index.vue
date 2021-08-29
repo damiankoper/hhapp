@@ -11,7 +11,9 @@
       "
     >
       <template #[`item.icon`]="{ item }">
-        <v-icon color="primary">{{ item.icon }}</v-icon>
+        <v-avatar :color="item.color" :size="32">
+          <v-icon color="white">{{ item.icon }}</v-icon>
+        </v-avatar>
       </template>
       <template #[`item.color`]="{ item }">
         <v-icon :color="item.color">mdi-checkbox-blank</v-icon>

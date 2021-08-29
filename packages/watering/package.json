@@ -3,7 +3,6 @@
   "version": "0.0.1",
   "description": "",
   "author": "",
-  "private": true,
   "license": "UNLICENSED",
   "scripts": {
     "prebuild": "rimraf dist",
@@ -26,12 +25,12 @@
     "@nestjs/microservices": "^8.0.6",
     "@nestjs/platform-express": "^8.0.0",
     "@nestjs/schedule": "^1.0.1",
+    "api-common": "^0.0.1",
     "dotenv": "^10.0.0",
     "mqtt": "^4.2.8",
     "onoff": "^6.0.3",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.2.0",
-    "api-common": "^0.0.1"
+    "rxjs": "^7.2.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^8.0.0",

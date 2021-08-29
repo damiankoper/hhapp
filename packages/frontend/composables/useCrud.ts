@@ -34,7 +34,6 @@ export function useCrud<T>(
           'Cannot perform this action because of conflict with other entities!'
         )
       } else onError(error(entityName))
-      throw e
     } finally {
       loading.value = false
     }

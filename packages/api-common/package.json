@@ -26,9 +26,9 @@
   },
   "dependencies": {
     "class-transformer": "^0.4.0",
+    "getmac": "^5.20.0",
     "reflect-metadata": "^0.1.13",
-    "typescript": "^4.3.5",
-    "getmac": "^5.20.0"
+    "typescript": "^4.3.5"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.29.1",

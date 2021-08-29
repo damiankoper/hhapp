@@ -1,6 +1,7 @@
 FROM node:lts-alpine
 
-RUN npm install -g npm lerna wait-on
+RUN aps add gcc g++ make python && \
+    npm install -g npm lerna
 
 WORKDIR /app
 

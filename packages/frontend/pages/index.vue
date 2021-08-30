@@ -50,6 +50,7 @@ import {
 } from '@nuxtjs/composition-api'
 import { required } from '@vuelidate/validators'
 import { useVuelidate } from '@vuelidate/core'
+import { AxiosError } from 'axios'
 
 export default Vue.extend({
   layout: 'login',
@@ -103,8 +104,9 @@ export default Vue.extend({
             },
           })
         } catch (e) {
+          const err = e as AxiosError
           alertVisible.value = true
-          if (e.response.status === 404) {
+          if (err.response && err.response.status === 404) {
             alertText.value = 'Invalid username or password'
           } else {
             alertText.value = 'Server error'

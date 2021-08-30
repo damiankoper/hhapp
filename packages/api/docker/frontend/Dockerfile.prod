@@ -16,7 +16,7 @@ COPY packages/api-common/package*.json packages/api-common/
 RUN chown -R  node:node /app
 USER node
 
-RUN lerna bootstrap --stream --scope frontend --scope api-common
+RUN lerna bootstrap --scope frontend --scope api-common
 
 COPY --chown=node packages/api-common packages/api-common
 RUN lerna run --stream --scope api-common build

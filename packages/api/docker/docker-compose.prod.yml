@@ -9,7 +9,6 @@ services:
       - backend
     ports:
       - 8300:3000
-      - 9229:9229 # Node debug
     command: sh -c 'wait-on tcp:database:5432 && node packages/api/dist/src/main.js'
     restart: 'unless-stopped'
     env_file: '.env'

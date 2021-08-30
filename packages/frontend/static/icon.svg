@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="400"
+   height="400"
+   viewBox="0 0 105.83333 105.83333"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.1 (ce6663b3b7, 2021-05-25)"
+   sodipodi:docname="icon.svg"
+   inkscape:export-filename="/home/damian_koper/Documents/GitHub/hhapp/packages/frontend/static/icon.png"
+   inkscape:export-xdpi="300"
+   inkscape:export-ydpi="300"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="px"
+     showgrid="false"
+     inkscape:zoom="2.56"
+     inkscape:cx="285.15625"
+     inkscape:cy="287.89063"
+     inkscape:window-width="3840"
+     inkscape:window-height="2123"
+     inkscape:window-x="1920"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:70.5555px;line-height:1.55;font-family:sans-serif;letter-spacing:-5.29167px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="1.7473541"
+       y="78.281189"
+       id="text2388"><tspan
+         sodipodi:role="line"
+         id="tspan2386"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:70.5555px;font-family:'Open Sans';-inkscape-font-specification:'Open Sans Bold';stroke-width:0.264583"
+         x="1.7473541"
+         y="78.281189"
+         rotate="0 359.70001 0"><tspan
+   style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:70.5555px;font-family:'Open Sans';-inkscape-font-specification:'Open Sans Bold';fill:#f56d1e;fill-opacity:1"
+   id="tspan23882"
+   dx="-0.02"
+   dy="-0.039999999"
+   rotate="359.70001 0">H</tspan>H</tspan></text>
+  </g>
+</svg>

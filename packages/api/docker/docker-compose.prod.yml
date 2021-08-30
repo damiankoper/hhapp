@@ -26,7 +26,7 @@ services:
     command: sh -c 'npm start'
     restart: 'unless-stopped'
     environment: 
-      - BASE_URL=http://householdapp.pl
+      - BASE_URL=http://householdapp.pl:3000
       - NODE_ENV=production
     env_file: '.env'
 

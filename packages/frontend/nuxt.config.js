@@ -123,7 +123,7 @@ export default {
   io: {
     sockets: [
       {
-        url: 'http://localhost:8300/',
+        url: process.env.BASE_URL || 'http://localhost:8300/',
         default: true,
       },
     ],
@@ -132,14 +132,6 @@ export default {
   publicRuntimeConfig: {
     axios: {
       baseURL: process.env.BASE_URL,
-    },
-
-    io: {
-      sockets: [
-        {
-          url: process.env.BASE_URL,
-        },
-      ],
     },
   },
 

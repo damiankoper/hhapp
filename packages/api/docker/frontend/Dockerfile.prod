@@ -1,5 +1,8 @@
 FROM node:14-alpine
 
+# nuxt socket io config
+ENV BASE_URL http://householdapp.pl:8300
+
 RUN apk add gcc g++ make python && \
     npm install -g npm lerna
 

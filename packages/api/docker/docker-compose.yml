@@ -10,7 +10,7 @@ services:
       - 9229:9229 # Node debug
     volumes:
       - '../../../:/app'
-    command: sh -c 'wait-on tcp:database:5432 && npm run start:debug'
+    command: sh -c 'wait-on tcp:database:5432 && cd packages/api && npm run start:debug'
     restart: 'unless-stopped'
     env_file: '.env'
 

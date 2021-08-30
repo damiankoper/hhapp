@@ -6,7 +6,7 @@ services:
       context: ../../../
       dockerfile: packages/api/docker/api/Dockerfile.prod
     networks: 
-      - default
+      - backend
     ports:
       - 8300:3000
       - 9229:9229 # Node debug
@@ -20,7 +20,7 @@ services:
       context: ../../../
       dockerfile: packages/api/docker/frontend/Dockerfile.prod
     networks: 
-      - default
+      - backend
     ports:
       - 80:3000
     command: sh -c 'npm start'
@@ -33,7 +33,7 @@ services:
   mqtt-broker:
     image: eclipse-mosquitto:2
     networks: 
-      - default
+      - backend
     volumes: 
       - ./mqtt/mosquitto.conf:/mosquitto/config/mosquitto.conf
       - mqtt-broker-data:/mosquitto/data
@@ -48,7 +48,7 @@ services:
     image: postgres:13-alpine
     restart: 'unless-stopped'
     networks: 
-      - default
+      - backend
     volumes:
       - 'database:/var/lib/postgresql/data'
     env_file: '.env'
@@ -56,7 +56,7 @@ services:
       - '5432'
 
 networks: 
-  default:
+  backend:
     attachable: true
 
 volumes:

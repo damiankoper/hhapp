@@ -1,5 +1,7 @@
 <template>
-  <canvas ref="canvas" />
+  <div style="min-height: 200px; max-height: 400px">
+    <canvas ref="canvas" />
+  </div>
 </template>
 
 <script lang="ts">

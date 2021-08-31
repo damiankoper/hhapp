@@ -29,8 +29,8 @@ export function useChartCommon() {
           },
         },
       },
-      aspectRatio: 2.5,
       responsive: true,
+      maintainAspectRatio: false,
     } as ChartOptions,
     categoriesOptions: {
       plugins: {
@@ -57,7 +57,7 @@ export function useChartCommon() {
         },
       },
       responsive: true,
-      aspectRatio: 2.5,
+      maintainAspectRatio: false,
     } as ChartOptions<'bar'>,
   }
 }

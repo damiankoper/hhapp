@@ -32,14 +32,15 @@
         <v-text-field
           v-for="(item, n) in model.items"
           :key="item.order"
-          ref="items"
           v-model="item.text"
+          :class="`item-${model.order}`"
           dense
           style="overflow: visible"
           append-icon="mdi-close"
           hide-details
           :persistent-hint="false"
           @click:append="removeItem(n)"
+          @keypress.enter="addItem(n, false)"
         >
           <template #prepend-inner>
             <v-simple-checkbox v-model="item.checked" color="primary" />
@@ -52,7 +53,8 @@
           prepend-inner-icon="mdi-plus"
           readonly
           value="Create item"
-          @focus="addItem"
+          :disabled="loading"
+          @click="addItem"
         >
         </v-text-field>
       </v-slide-y-transition>
@@ -80,6 +82,10 @@ export default defineComponent({
     list: {
       type: Object as PropType<List>,
       required: true,
+    },
+    loading: {
+      type: Boolean,
+      default: false,
     },
   },
   setup(props, { emit, refs }) {
@@ -112,14 +118,23 @@ export default defineComponent({
 
     return {
       model,
-      addItem: _.debounce(async () => {
-        const item = new ListItem()
-        item.order = Math.max(0, ...model.value.items.map((i) => i.order)) + 1
-        model.value.items.push(item)
-        await nextTick()
-        const items = refs.items as HTMLInputElement[]
-        ;(items[items.length - 1] as HTMLInputElement).focus()
-      }, 100),
+      addItem: _.throttle(async (n: number, force: boolean = true) => {
+        const checked = model.value.items.filter((i) => i.checked).length
+        if (n + 1 - checked === model.value.items.length || force) {
+          const item = new ListItem()
+          item.order = Math.max(0, ...model.value.items.map((i) => i.order)) + 1
+          model.value.items.push(item)
+          await nextTick()
+
+          const items = document.querySelectorAll(
+            `.item-${model.value.order} input`
+          )
+
+          setImmediate(() => {
+            ;(items[model.value.items.length - 1] as HTMLInputElement).focus()
+          })
+        }
+      }, 500),
       removeItem(n: number) {
         model.value.items.splice(n, 1)
       },

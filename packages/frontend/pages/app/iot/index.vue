@@ -9,7 +9,7 @@
         />
       </v-col>
       <v-row
-        v-if="statuses.length == 0"
+        v-if="statuses.length == 0 && !awaitingStatus"
         key="nodata"
         no-gutters
         justify="center"
@@ -29,6 +29,7 @@
 <script lang="ts">
 import {
   defineComponent,
+  onMounted,
   onUnmounted,
   ref,
   useContext,
@@ -44,7 +45,8 @@ export default defineComponent({
   middleware() {
     navigationStore.setTitle('iot')
   },
-  setup() {
+
+  setup(_, { root }) {
     const statuses = ref<IDevice[]>([])
 
     const ctx = useContext()
@@ -62,10 +64,22 @@ export default defineComponent({
       else statuses.value.push(data)
     })
 
+    const awaitingStatus = ref(true)
+    onMounted(() => {
+      root.$nuxt.$loading.start()
+      socket.on('connect', () => {
+        setTimeout(() => {
+          awaitingStatus.value = false
+          root.$nuxt.$loading.finish()
+        }, 300)
+      })
+    })
+
     socket.connect()
 
     return {
       statuses,
+      awaitingStatus,
       mapComponent(type: DeviceType) {
         switch (type) {
           case DeviceType.WATERING_CAN:

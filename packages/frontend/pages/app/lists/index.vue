@@ -25,12 +25,13 @@
       >
         <list-card
           :list="list"
+          :loading="loading"
           @delete="deleteList(list, n)"
           @update:list="(list) => updateList(list, n)"
         />
       </v-col>
       <v-row
-        v-if="localData.length == 0"
+        v-if="localData.length == 0 && !awaitingFetch"
         key="nodata"
         no-gutters
         justify="center"
@@ -105,17 +106,20 @@ export default defineComponent({
     async function fetchLists() {
       await findMany((qb) => {
         qb.sortBy(['order', 'DESC'])
+        qb.sortBy(['items.checked', 'ASC'])
         qb.sortBy(['items.order', 'ASC'])
         qb.setJoin(['createdBy'])
         qb.setJoin(['items'])
       })
     }
 
+    const awaitingFetch = ref(true)
     onMounted(() => {
       fetchLists()
     })
 
     watch(findManyResult, (result: List[]) => {
+      awaitingFetch.value = false
       localData.value = result
     })
 
@@ -143,6 +147,7 @@ export default defineComponent({
       localData,
       loading,
       fetchLists,
+      awaitingFetch,
       addList() {
         const list = new List()
         list.createdBy = $auth.user as unknown as User
@@ -152,6 +157,15 @@ export default defineComponent({
       updateList(list: List, n: number) {
         Vue.set(localData.value, n, list)
         syncStatus.value = Status.QUEUED
+        localData.value.forEach((list) => {
+          list.items = list.items.sort((a, b) => {
+            return a.checked === b.checked
+              ? a.order - b.order
+              : !a.checked
+              ? -1
+              : 1
+          })
+        })
         updateListsDebounced()
       },
       deleteList(list: List, n: number) {

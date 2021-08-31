@@ -6,6 +6,7 @@
     :return-value.sync="dateModel"
     transition="scale-transition"
     offset-y
+    left
     min-width="auto"
     @close="date = value"
   >
@@ -30,18 +31,6 @@
       :type="type"
       @input="$refs.menu.save(date)"
     >
-      <!--  <v-spacer />
-      <v-btn
-        text
-        color="primary"
-        @click="
-          menuV = false
-          date = value
-        "
-      >
-        Cancel
-      </v-btn>
-      <v-btn text color="primary" @click="$refs.menu.save(date)"> OK </v-btn> -->
     </v-date-picker>
   </v-menu>
 </template>

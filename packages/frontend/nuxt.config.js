@@ -86,6 +86,11 @@ export default {
       { rel: 'manifest', href: '/manifest.json' },
     ],
   },
+  loading: {
+    color: '#f56d1e',
+    height: '5px',
+    continuous: true,
+  },
 
   // Global CSS (https://go.nuxtjs.dev/config-css)
   css: [],

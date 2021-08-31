@@ -45,8 +45,7 @@
                   :search-input.sync="nameSearch"
                   :items="nameSearchResult"
                   :loading="nameSearchLoading"
-                  item-text="name"
-                  item-value="name"
+                  return-object
                   no-filter
                   @change="onAutocomplete"
                 >
@@ -293,7 +292,10 @@ export default defineComponent({
     const { $auth, $axios } = useContext()
     const item = toRef(props, 'value')
     const formItem = reactive<Item>(Object.assign(new Item()))
-    watch(item, () => Object.assign(formItem, item.value))
+    watch(item, () => {
+      Object.assign(formItem, item.value)
+      focusName()
+    })
 
     const nameInput = ref<VueComponent | null>(null)
     const quantityInput = ref<VueComponent | null>(null)
@@ -322,11 +324,15 @@ export default defineComponent({
     const shopCrud = useCrud('shopping/shops', Shop, 'shop')
     const categoryCrud = useCrud('shopping/categories', Category, 'category')
     const userCrud = useCrud('users', User, 'user')
-    onMounted(async () => {
+
+    function focusName() {
       if (props.create && nameInput.value) {
         const el = (nameInput.value as any).$el
         el.querySelector('input')?.focus()
       }
+    }
+    onMounted(async () => {
+      focusName()
       shopCrud.findMany()
       categoryCrud.findMany()
       await userCrud.findMany()

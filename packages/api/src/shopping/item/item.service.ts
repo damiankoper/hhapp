@@ -30,31 +30,34 @@ export class ItemService {
     if (name.length) {
       const fields = ['id', 'name'];
       const names: {
+        id: number;
         name: string;
       }[] = await this.itemRepository
         .createQueryBuilder('item')
-        .select([...fields, 'date'])
-        .orderBy('date', 'DESC')
-        .distinct()
+        .select([...fields])
         .getRawMany();
 
       const miniSearch = new MiniSearch({
-        fields: fields,
+        fields: ['name'],
         storeFields: fields,
       });
       miniSearch.addAll(names);
-      const results = miniSearch.search(name, { fuzzy: 0.8 }).map((r) => r.id);
+      const results = miniSearch
+        .search(name, { fuzzy: 0.8 })
+        .slice(0, 10)
+        .map((r) => r.id);
 
-      const items = this.itemRepository.find({
+      const items = await this.itemRepository.find({
         relations: ['category', 'shop', 'boughtBy', 'boughtFor'],
         where: {
           id: In(results),
         },
       });
-
-      return (await items).sort(function (a, b) {
+      const sorted = items.sort(function (a, b) {
         return results.indexOf(a.id) - results.indexOf(b.id);
       });
+
+      return sorted;
     }
     return [];
   }

@@ -11,7 +11,10 @@ export class ItemController {
   constructor(private readonly itemService: ItemService) {}
 
   @Get('autocomplete')
-  public autocomplete(@Query('name') name: string) {
-    return this.itemService.autocomplete(name, 5);
+  public autocomplete(
+    @Query('name') name: string,
+    @Query('shopId') shopId?: number,
+  ) {
+    return this.itemService.autocomplete(name, 10, shopId);
   }
 }

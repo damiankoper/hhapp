@@ -26,35 +26,40 @@ export class ItemService {
     private readonly categoryRepository: Repository<Category>,
   ) {}
 
-  public async autocomplete(name: string, n: number): Promise<Item[]> {
+  public async autocomplete(
+    name: string,
+    n: number,
+    shopId?: number,
+  ): Promise<Item[]> {
     if (name.length) {
       const fields = ['id', 'name'];
+
+      const namesBuilder = this.itemRepository
+        .createQueryBuilder('item')
+        .select([...fields]);
+
+      if (shopId) namesBuilder.where('"shopId" = :shopId', { shopId });
+
       const names: {
         id: number;
         name: string;
-      }[] = await this.itemRepository
-        .createQueryBuilder('item')
-        .select([...fields])
-        .getRawMany();
+      }[] = await namesBuilder.getRawMany();
 
-      const miniSearch = new MiniSearch({
-        fields: ['name'],
-        storeFields: fields,
-      });
+      const miniSearch = new MiniSearch({ fields: ['name'] });
       miniSearch.addAll(names);
-      const results = miniSearch
-        .search(name, { fuzzy: 0.8 })
-        .slice(0, 10)
-        .map((r) => r.id);
+
+      const results = miniSearch.search(name, { fuzzy: 0.9 });
+
+      const sliced = results.slice(0, n).map((r) => r.id);
 
       const items = await this.itemRepository.find({
         relations: ['category', 'shop', 'boughtBy', 'boughtFor'],
         where: {
-          id: In(results),
+          id: In(sliced),
         },
       });
       const sorted = items.sort(function (a, b) {
-        return results.indexOf(a.id) - results.indexOf(b.id);
+        return +b.date - +a.date;
       });
 
       return sorted;

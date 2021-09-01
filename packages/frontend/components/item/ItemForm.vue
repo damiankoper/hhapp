@@ -7,7 +7,7 @@
             <v-skeleton-loader v-if="!item" type="avatar" width="48" />
             <v-avatar
               v-else
-              :color="item.category ? item.category.color : 'promary'"
+              :color="item.category ? item.category.color : 'primary'"
             >
               <v-icon v-if="item.category" color="white" size="2rem">
                 {{ item.category.icon }}
@@ -45,7 +45,7 @@
                   :search-input.sync="nameSearch"
                   :items="nameSearchResult"
                   :loading="nameSearchLoading"
-                  return-object
+                  item-text="name"
                   no-filter
                   @change="onAutocomplete"
                 >
@@ -61,6 +61,8 @@
                       {{ item.shop.name }}
                       <b class="mx-1">&#183;</b>
                       {{ currency(item.price) }}
+                      <b class="mx-1">&#183;</b>
+                      {{ isoDate(item.date) }}
                     </span>
                   </template>
                 </v-combobox>
@@ -205,7 +207,9 @@
                   @focus="(e) => e.target.click()"
                   @change="
                     (e) => {
-                      formItem.boughtFor = formItem.boughtFor
+                      formItem.boughtFor = formItem.shared
+                        ? null
+                        : formItem.boughtFor
                         ? formItem.boughtFor
                         : formItem.boughtBy
                     }
@@ -243,7 +247,7 @@
 </template>
 
 <script lang="ts">
-import useVuelidate from '@vuelidate/core'
+import { useVuelidate } from '@vuelidate/core'
 import { required, requiredIf } from '@vuelidate/validators'
 import {
   defineComponent,
@@ -312,7 +316,10 @@ export default defineComponent({
         nameSearchLoading.value = true
         try {
           const result = await $axios.get('/shopping/items/autocomplete', {
-            params: { name: nameSearch.value },
+            params: {
+              name: nameSearch.value,
+              shopId: formItem.shop?.id,
+            },
           })
           nameSearchResult.value = plainToClass(Item, result.data as Item[])
         } catch (e) {}

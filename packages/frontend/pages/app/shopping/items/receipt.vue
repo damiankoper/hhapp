@@ -84,6 +84,7 @@ export default {
         }
       },
       async submit(submitItem: Item) {
+        item.value = submitItem
         if (submitItem.id) {
           await itemCrud.updateOne(submitItem.id, submitItem, qbFn)
           const index = items.value.findIndex((i) => i.id === submitItem.id)

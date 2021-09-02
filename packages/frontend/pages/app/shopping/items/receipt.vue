@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts">
-import { ref } from '@nuxtjs/composition-api'
+import { onMounted, ref, useContext } from '@nuxtjs/composition-api'
 import _ from 'lodash'
 import { RequestQueryBuilder } from '@nestjsx/crud-request'
 import { navigationStore, snackbarStore } from '~/store'
@@ -29,6 +29,7 @@ import { useCrud } from '~/composables/useCrud'
 import ItemForm from '~/components/item/ItemForm.vue'
 import ItemList from '~/components/item/ItemList.vue'
 import { Item } from '~/store/models/item.model'
+import { User } from '~/store/models/user.model'
 const title = 'Shopping items'
 
 export default {
@@ -37,6 +38,7 @@ export default {
     navigationStore.setTitle(title)
   },
   setup() {
+    const { $auth } = useContext()
     function qbFn(qb: RequestQueryBuilder) {
       qb.setJoin([['category'], ['shop'], ['boughtBy'], ['boughtFor']])
     }
@@ -50,18 +52,15 @@ export default {
     const item = ref(new Item())
     const items = ref<Item[]>([])
 
+    onMounted(() => {
+      item.value.boughtBy = $auth.user as unknown as User
+      item.value.boughtFor = $auth.user as unknown as User
+    })
+
     function resetItem() {
       item.value = Object.assign(
         new Item(),
-        _.pick(
-          item.value,
-          'boughtBy',
-          'boughtFor',
-          'shop',
-          'category',
-          'date',
-          'shared'
-        )
+        _.pick(item.value, 'shop', 'category', 'date')
       )
     }
 

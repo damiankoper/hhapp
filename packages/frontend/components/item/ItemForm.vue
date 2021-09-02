@@ -47,6 +47,9 @@
                   :loading="nameSearchLoading"
                   item-text="name"
                   no-filter
+                  :menu-props="{
+                    maxHeight: $vuetify.breakpoint.smAndUp ? 304 : 135,
+                  }"
                   @change="onAutocomplete"
                 >
                   <template #item="{ item }">
@@ -55,15 +58,18 @@
                         {{ item.category.icon }}
                       </v-icon>
                     </v-list-item-avatar>
-                    {{ item.name }}
-                    <span class="grey--text">
-                      <b class="mx-1">&#183;</b>
-                      {{ item.shop.name }}
-                      <b class="mx-1">&#183;</b>
-                      {{ currency(item.price) }}
-                      <b class="mx-1">&#183;</b>
-                      {{ isoDate(item.date) }}
-                    </span>
+                    <v-list-item-content>
+                      <v-list-item-title>
+                        {{ item.name }}
+                      </v-list-item-title>
+                      <v-list-item-subtitle class="grey--text">
+                        {{ item.shop.name }}
+                        <b class="mx-1">&#183;</b>
+                        {{ currency(item.price) }}
+                        <b class="mx-1">&#183;</b>
+                        {{ isoDate(item.date) }}
+                      </v-list-item-subtitle>
+                    </v-list-item-content>
                   </template>
                 </v-combobox>
               </v-col>
@@ -293,7 +299,7 @@ export default defineComponent({
     },
   },
   setup(props, { emit }) {
-    const { $auth, $axios } = useContext()
+    const { $auth, $axios, $vuetify } = useContext()
     const item = toRef(props, 'value')
     const formItem = reactive<Item>(Object.assign(new Item()))
     watch(item, () => {
@@ -401,13 +407,17 @@ export default defineComponent({
             submitItem.unitDiscount /= submitItem.quantity
           }
           emit('submit', submitItem)
+          if (nameInput.value) $vuetify.goTo(nameInput.value as unknown as Vue)
           isDiscountOverall.value = false
           $v.value.$reset()
         }
       },
       onAutocomplete(data: string | Item) {
         if (!_.isString(data)) {
-          Object.assign(formItem, _.omit(data, 'id', 'date', 'quantity'))
+          Object.assign(
+            formItem,
+            _.omit(data, 'id', 'date', 'quantity', 'boughtBy', 'boughtFor')
+          )
           formItem.date = formItem.date
             ? formItem.date
             : DateTime.now().toISODate()

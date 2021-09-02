@@ -90,6 +90,7 @@ import { User } from '~/store/models/user.model'
 
 export default Vue.extend({
   components: { Snackbar },
+  middleware: 'auth',
   setup() {
     const ctx = useContext()
     const items = [
@@ -138,7 +139,7 @@ export default Vue.extend({
       },
     ]
     const title = computed(() => navigationStore.title.replaceAll(' ', '_'))
-    const drawer = ref(false)
+    const drawer = ref(ctx.$vuetify.breakpoint.lgAndUp)
     const miniVariant = ref(true)
     const user = computed(() => ctx.$auth.user as unknown as User)
     return { title, drawer, miniVariant, items, user }

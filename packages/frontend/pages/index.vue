@@ -66,12 +66,14 @@ export default Vue.extend({
     ]
     const titleNum = ref(0)
     let interval: NodeJS.Timeout
-    onMounted(
-      () =>
-        (interval = setInterval(() => {
-          titleNum.value = (titleNum.value + 1) % titles.length
-        }, 3000))
-    )
+
+    onMounted(() => {
+      if ($auth.loggedIn) router?.replace('/app')
+
+      interval = setInterval(() => {
+        titleNum.value = (titleNum.value + 1) % titles.length
+      }, 3000)
+    })
     onBeforeUnmount(() => {
       clearInterval(interval)
     })
@@ -90,7 +92,7 @@ export default Vue.extend({
     )
     const {
       $auth,
-      app: { vuetify },
+      app: { vuetify, router },
     } = useContext()
     async function submit() {
       $v.value.$touch()

@@ -8,7 +8,7 @@ import { Module, Mutation, VuexModule } from 'vuex-module-decorators'
 export default class Snackbar extends VuexModule {
   text = ''
   visible = false
-  timeout = 3000
+  timeout = 1500
   type = 'success'
 
   @Mutation

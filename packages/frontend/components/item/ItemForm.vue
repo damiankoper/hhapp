@@ -407,7 +407,7 @@ export default defineComponent({
             submitItem.unitDiscount /= submitItem.quantity
           }
           emit('submit', submitItem)
-          if (nameInput.value) $vuetify.goTo(nameInput.value as unknown as Vue)
+          if (nameInput.value) $vuetify.goTo(0)
           isDiscountOverall.value = false
           $v.value.$reset()
         }

@@ -123,8 +123,6 @@
 <script lang="ts">
 import { DataTableHeader } from 'vuetify'
 import { RequestQueryBuilder } from '@nestjsx/crud-request'
-import { onBeforeMount } from 'vue-demi'
-import { useContext } from '@nuxtjs/composition-api'
 import { navigationStore } from '~/store'
 import { useDatatable } from '~/composables/useDatatable'
 import { useFilters } from '~/composables/useFilters'

@@ -25,7 +25,7 @@
       >
         <list-card
           :list="list"
-          :loading="loading"
+          :loading="loadingComputed"
           @delete="deleteList(list, n)"
           @update:list="(list) => updateList(list, n)"
         />
@@ -96,12 +96,14 @@ export default defineComponent({
 
     const {
       loading,
+      cancel,
       findManyResult,
       findMany,
       updateOne,
       createOne,
       deleteOne,
     } = useCrud('/lists', List, 'list', () => {})
+    const loadingCombined = ref(false)
 
     async function fetchLists() {
       await findMany((qb) => {
@@ -126,6 +128,7 @@ export default defineComponent({
     const updateListsDebounced = _.debounce(async () => {
       for (const list of localData.value) {
         try {
+          loadingCombined.value = true
           if (list.id) {
             await updateOne(list.id, list)
           } else {
@@ -136,6 +139,8 @@ export default defineComponent({
           syncStatus.value = Status.SYNCED
         } catch (e) {
           syncStatus.value = Status.ERROR
+        } finally {
+          loadingCombined.value = false
         }
       }
     }, 1000)
@@ -145,7 +150,7 @@ export default defineComponent({
       syncStatus,
       syncIcon,
       localData,
-      loading,
+      loadingComputed: computed(() => loading.value || loadingCombined.value),
       fetchLists,
       awaitingFetch,
       addList() {
@@ -166,6 +171,7 @@ export default defineComponent({
               : 1
           })
         })
+        cancel()
         updateListsDebounced()
       },
       deleteList(list: List, n: number) {

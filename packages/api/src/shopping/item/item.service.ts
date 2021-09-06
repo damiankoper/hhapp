@@ -48,7 +48,7 @@ export class ItemService {
       const miniSearch = new MiniSearch({ fields: ['name'] });
       miniSearch.addAll(names);
 
-      const results = miniSearch.search(name, { fuzzy: 0.9 });
+      const results = miniSearch.search(name, { fuzzy: 0.4 });
 
       const sliced = results.slice(0, n).map((r) => r.id);
 

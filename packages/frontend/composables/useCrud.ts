@@ -1,6 +1,6 @@
 import { RequestQueryBuilder } from '@nestjsx/crud-request'
 import { computed, Ref, ref, useContext } from '@nuxtjs/composition-api'
-import { AxiosError } from 'axios'
+import { AxiosError, Canceler } from 'axios'
 import { ClassConstructor, plainToClass } from 'class-transformer'
 import _ from 'lodash'
 import { snackbarStore } from '~/store'
@@ -14,6 +14,14 @@ export function useCrud<T>(
   const { $axios } = useContext()
   const loading = ref(false)
   const error = ref(false)
+  const cancelFns: Canceler[] = []
+  function cancelToken() {
+    const cancelToken = new $axios.CancelToken((c) => cancelFns.push(c))
+    return { cancelToken }
+  }
+  function cancel() {
+    cancelFns.forEach((fn) => fn())
+  }
 
   const findOneResult = ref<T>()
   const findManyResult = ref<T[]>([]) as unknown as Ref<T[]>
@@ -28,12 +36,15 @@ export function useCrud<T>(
       await cb()
       onSuccess(success(entityName))
     } catch (e) {
-      const response = (e as AxiosError).response
-      if (response?.status === 409) {
-        onError(
-          'Cannot perform this action because of conflict with other entities!'
-        )
-      } else onError(error(entityName))
+      if (!$axios.isCancel(e)) {
+        const err = e as AxiosError
+        const response = err.response
+        if (response?.status === 409) {
+          onError(
+            'Cannot perform this action because of conflict with other entities!'
+          )
+        } else onError(error(entityName))
+      }
     } finally {
       loading.value = false
     }
@@ -42,6 +53,7 @@ export function useCrud<T>(
   return {
     loading,
     error,
+    cancel,
     findOneResult,
     findManyResult,
     createUrl: computed(() => `/app/${url}/create`),
@@ -52,22 +64,25 @@ export function useCrud<T>(
 
     async findOne(
       id: number,
-      qbFn: (qb: RequestQueryBuilder) => void = () => {}
+      qbFn: (qb: RequestQueryBuilder) => void = () => { }
     ) {
       const qb = new RequestQueryBuilder()
       qbFn(qb)
       loading.value = true
-      const response = await $axios.get(`${url}/${id}?${qb.query()}`)
+      const response = await $axios.get(
+        `${url}/${id}?${qb.query()}`,
+        cancelToken()
+      )
       const model = plainToClass(entity, response.data)
       findOneResult.value = model
       loading.value = false
     },
 
-    async findMany(qbFn: (qb: RequestQueryBuilder) => void = () => {}) {
+    async findMany(qbFn: (qb: RequestQueryBuilder) => void = () => { }) {
       const qb = new RequestQueryBuilder()
       qbFn(qb)
       loading.value = true
-      const response = await $axios.get(`${url}?${qb.query()}`)
+      const response = await $axios.get(`${url}?${qb.query()}`, cancelToken())
       const model = plainToClass(entity, response.data.data as T[])
       findManyResult.value = model
       loading.value = false
@@ -75,13 +90,17 @@ export function useCrud<T>(
 
     async createOne(
       newModel: T,
-      qbFn: (qb: RequestQueryBuilder) => void = () => {}
+      qbFn: (qb: RequestQueryBuilder) => void = () => { }
     ) {
       await actionWrapper(
         async () => {
           const qb = new RequestQueryBuilder()
           qbFn(qb)
-          const response = await $axios.post(`${url}?${qb.query()}`, newModel)
+          const response = await $axios.post(
+            `${url}?${qb.query()}`,
+            newModel,
+            cancelToken()
+          )
           const model = plainToClass(entity, response.data)
           findOneResult.value = model
         },
@@ -93,7 +112,7 @@ export function useCrud<T>(
     async updateOne(
       id: number,
       updatedModel: T,
-      qbFn: (qb: RequestQueryBuilder) => void = () => {}
+      qbFn: (qb: RequestQueryBuilder) => void = () => { }
     ) {
       await actionWrapper(
         async () => {
@@ -101,7 +120,8 @@ export function useCrud<T>(
           qbFn(qb)
           const response = await $axios.patch(
             `${url}/${id}?${qb.query()}`,
-            updatedModel
+            updatedModel,
+            cancelToken()
           )
           const model = plainToClass(entity, response.data)
           findOneResult.value = model
@@ -114,7 +134,7 @@ export function useCrud<T>(
     async deleteOne(id: number) {
       await actionWrapper(
         async () => {
-          const response = await $axios.delete(`${url}/${id}`)
+          const response = await $axios.delete(`${url}/${id}`, cancelToken())
           const model = plainToClass(entity, response.data)
           findOneResult.value = model
         },

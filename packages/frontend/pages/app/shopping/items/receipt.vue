@@ -60,7 +60,8 @@ export default {
     function resetItem() {
       item.value = Object.assign(
         new Item(),
-        _.pick(item.value, 'shop', 'category', 'date')
+        _.pick(item.value, 'shop', 'category', 'date', 'boughtBy', 'shared'),
+        { quantity: 1 }
       )
     }
 

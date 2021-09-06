@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card :loading="loading">
     <v-card-title style="flex-wrap: nowrap">
       <Avatar
         :color="model.createdBy.color"
@@ -24,6 +24,7 @@
         hide-details
         :persistent-hint="false"
         @click:append="$emit('delete')"
+        @keypress.enter="addItem(-1, false)"
       >
       </v-text-field>
     </v-card-title>
@@ -53,7 +54,6 @@
           prepend-inner-icon="mdi-plus"
           readonly
           value="Create item"
-          :disabled="loading"
           @click="addItem"
         >
         </v-text-field>

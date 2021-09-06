@@ -17,10 +17,9 @@ import { User } from 'src/user/entities/user.entity';
 @Injectable()
 export class ConfigService
   implements
-    TypeOrmOptionsFactory,
-    JwtOptionsFactory,
-    ClientsModuleOptionsFactory
-{
+  TypeOrmOptionsFactory,
+  JwtOptionsFactory,
+  ClientsModuleOptionsFactory {
   isDev() {
     return process.env.NODE_ENV !== 'production';
   }
@@ -54,7 +53,7 @@ export class ConfigService
       password: process.env.DB_PASSWORD || 'password',
       database: process.env.DB_DATABASE || 'main',
       entities: [User, Shop, Category, Item, List, ListItem],
-      synchronize: true,
+      synchronize: false,
       logging:
         process.env.NODE_ENV !== 'production'
           ? 'all'

@@ -33,7 +33,6 @@ export class User {
   @ApiProperty({ required: true })
   @IsString()
   @Column({ select: false })
-  @Exclude()
   password?: string;
 
   @ApiProperty({ required: false, default: '#ffffff' })

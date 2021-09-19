@@ -11,7 +11,7 @@ export class AuthService {
     private configsService: ConfigService,
     private usersService: UserService,
     private jwtService: JwtService,
-  ) {}
+  ) { }
 
   async validateUser(username: string, pass: string): Promise<User> {
     const user = await this.usersService.findOneWithPass(username);
@@ -46,6 +46,7 @@ export class AuthService {
   }
 
   async refresh(token: string) {
+    // TODO: User still exists check
     const payload = this.jwtService.decode(token);
     if (typeof payload == 'object') {
       return await this.login(payload.sub, payload.rememberMe);
